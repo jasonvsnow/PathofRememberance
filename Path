@@ -1,0 +1,1545 @@
+import java.util.*;
+
+
+public class Path {
+	public static void main(String[] args) throws InterruptedException {
+		Scanner input = new Scanner(System.in);
+		// variables to be chekced/used later
+		int choice = 0;
+		int hold = 0;
+		/*
+		stats = (0)Shield, (1)health, (2)mana, (3)essence, (4)weapon, (5)Potions, (6)Cloak, (7)IDk, (8)choice, (9)spared, (10)killed, (11) room, (12) Key 1 (13) Key 2, (14) Squid
+		weapon 1 = dagger, 2 sword, 3 axe, 4 spear, 5 Rope Hook.
+		*/
+		int[] stats = {0, 30, 10, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+		//introduction
+		
+		//print title array
+		String[][] title = {
+		{" _____      _   _              __   _____                               _                               "},
+		{"|  __ \\    | | | |            / _| |  __ \\                             | |                             "},
+		{"| |__) |_ _| |_| |__     ___ | |_  | |__) |___ _ __ ___   ___ _ __ ___ | |__  _ __ __ _ _ __   ___ ___ "},
+		{"|  ___/ _` | __| '_ \\   / _ \\|  _| |  _  // _ \\ '_ ` _ \\ / _ \\ '_ ` _ \\| '_ \\| '__/ _` | '_ \\ / __/ _ \\"},
+		{"| |  | (_| | |_| | | | | (_) | |   | | \\ \\  __/ | | | | |  __/ | | | | | |_) | | | (_| | | | | (_|  __/"},
+		{"|_|   \\__,_|\\__|_| |_|  \\___/|_|   |_|  \\_\\___|_| |_| |_|\\___|_| |_| |_|_.__/|_|  \\__,_|_| |_|\\___\\___|"},
+		};
+		printArray(title);
+		
+		println("");
+		//print intro
+		slowPrintln("You come to conciousness and feel yourself lying upon something hard. You are surrounded by darkness, unable to see anything.");
+		println("");
+		boolean dark = true;
+		while (dark == true) {
+			println("1) Make a light(Mana -1)");
+			println("2) Do nothing.");
+			print("> ");
+			stats[8] = input.nextInt(); 
+			println("");
+			if (stats[8] == 1) {
+				slowPrintln("You summon a power within and a small ball of light appears in your hand, illuminating the room.");
+				stats[2] -= 1;
+				printStats(stats);
+				println("");
+				println("");
+				dark = false;
+			}
+			else if (stats[8] == 2) {
+				slowPrintln("You lay there, doing nothing. It's unlikely this will get you anywhere.");
+			}
+			else println("Invalid choice. Try again.");
+		}
+		
+		//set variables for room 1
+		slowPrintln("With the orb of light in your hand, you are able to see the rest of the room clearly. You lay upon a stone table, dressed in plain clothing and a cloak, in the center of this small room which is little more than four walls, floor, and roof all stone. There is a wooden table against the eastern wall(and it strikes you now that you know perfectly which directions north, east, south, and west are) and upon it are serveral items. There is a door to the north. You also realize, as you think upon your uncanny sense of direction and how you got it, that you remeber nothing. Your name, why you're here, nothing. Perhaps the answers are elsewhere.");
+		println("");
+		boolean room1 = true;
+		boolean key1 = false;
+		while (room1 == true) {
+			println("1) Investigate the table.");
+			println("2) Leave through northern, wooden door.");
+			print("> ");
+			stats[8] = input.nextInt();
+			println("");
+			if (stats[8] == 1) {
+				if (key1 == false) {
+					slowPrintln("You find upon the table a dagger, a key, and a page that seems ripped from a book. You take the key and dagger, a feeling in your gut telling you they will be useful later.");
+					stats[4] = 1;
+				}
+				else slowPrintln("You return to the table and find the page upon the table still.");
+				boolean invest = true;
+				while (invest == true) {
+					println("1) Read the page.");
+					println("2) Leave the table.");
+					print("> ");
+					stats[8] = input.nextInt();
+					println("");
+					if (stats[8] == 1) {
+						slowPrintln("You take the pages and begin to read: ");
+						slowPrintln("\"It presses upon us presently, as constant as ever. We shall not escape this, but all hope is not lost. We place our faith in our greatest warrior to deliever us from this.\"");
+						slowPrintln("The rest of the page has been smeared and torn, rendering it illegiable.");
+					}
+					else if (stats[8] == 2) {
+						invest = false;
+					}
+					else println("Invalid choice. Try again.");
+						
+				}
+				key1 = true;
+			}
+			else if (stats[8] == 2) {
+				if (key1 == true) room1 = false;
+				else slowPrintln("You attempt to leave through the door but find the handle will not budge: the door is locked.");
+			}
+			else println("Invalid choice. Try again!");
+		}
+		//reset choice holder
+		stats[8] = 0;
+		//introduce damage and stats
+		slowPrintln("Using the key you found upon the table, you unlock the door and swing it open with a rusty creak. Beyond there is a stone tunnel similar to the room you just came from. As you enter it, you see something move in the darkness." );
+		println("");
+
+		stats = combat(stats, 1);
+		
+		if (stats[1] > 0) slowPrintln("With the shade dealt with, you are able to proceed forward and find yourself in another room."); 
+		stats[11] = 2;
+		boolean playing = true;
+		while (playing == true) {
+			while (stats[11] != 15 && stats[1] > 0) {
+				stats = rooms(stats);
+			}
+			if (stats[1] > 0 && stats[11] == 15) {
+				slowPrintln("To be continued...");
+				System.out.printf("");
+				playing = false;
+				printStats(stats);
+			}
+			else if (stats[1] <= 0) {
+				slowPrintln("You have fallen...");
+				println("1) Rise again.");
+				println("2) Give in to the darkness.");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					slowPrintln("Opening your eyes, you find a simple wooden door before you. You push it open and step out, ready to try again.");
+					int[] restartStats = {0, 30, 10, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+					stats = restartStats;
+					stats[11] = 2;
+					playing = true;
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You exhale one final time and close your eyes, letting the darkness take you.");
+					playing = false;
+					println("");
+					slowPrintln("Thank you for playing.");
+				}
+				else println("Invalid choce. Try again.");
+			}
+		}
+	}
+	
+	
+	public static int[] rooms(int[] stats) throws InterruptedException {
+		Scanner input = new Scanner(System.in);
+		if (stats[11] == 1) {
+			slowPrintln("You once again enter the room where you awoke, just as you left it.");
+			int determine = (int)(Math.random() * 3) +1;
+			stats = combat(stats, determine);
+			boolean room1 = true;
+			while (room1 == true && stats[1] > 0) {
+				println("1) Investigate Table");
+				println("2) Leave through north door(Armory)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					slowPrintln("You return to the table and find the page upon the table still.");
+					boolean invest = true;
+					while (invest == true) {
+						println("1) Read the page.");
+						println("2) Leave the table.");
+						print("> ");
+						stats[8] = input.nextInt();
+						println("");
+						if (stats[8] == 1) {
+							slowPrintln("You take the pages and begin to read: ");
+							slowPrintln("\"It presses upon us presently, as constant as ever. We shall not escape this, but all hope is not lost. We place our faith in our greatest warrior to deliever us from this.\"");
+							slowPrintln("The rest of the page has been smeared and torn, rendering it illegiable.");
+						}
+						else if (stats[8] == 2) {
+							invest = false;
+						}
+						else println("Invalid choice. Try again.");	
+					}
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You leave through the north door, making your way through the hallway back to the armory.");
+					stats[11] = 2;
+					room1 = false;
+				}
+				else println("Invalid choice. Try again.");
+			}
+			
+		}
+		else if (stats[11] == 2) {
+			slowPrintln("You enter an armory. Weapons rest upon racks, a table sits in the center with a few plates and cups upon it, and several chairs are about the table. There is a door to the east, a door to the west, and a door to the south. You seem to know where all the doors lead.");
+			boolean room2 = true;
+			while (room2 == true && stats[1] > 0) {
+				println("1) Investigate the weapons");
+				println("2) Leave through east door(East Barracks)");
+				println("3) Leave through south door(Awakening)");
+				println("4) Leave through west door(West Barracks)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					//weapon swappin choice
+					if (stats[4] == 1) {
+						slowPrintln("You find a sword, an axe, and a spear in prime conidtion. What will you take?");
+						println("1) The sword");
+						println("2) The axe");
+						println("3) The spear");
+						println("4) Nothing");
+						print("> ");
+						stats[8] = input.nextInt();
+						println("");
+						if (stats[8] == 1) {
+							slowPrintln("You take the sword, leaving your dagger.");
+							stats[4] = 2;
+						}
+						else if (stats[8] == 2) {
+							slowPrintln("You take the axe, leaving your dagger.");
+							stats[4] = 3;
+						}
+						else if (stats[8] == 3) {
+							slowPrintln("You take the spear, leaving your dagger.");
+							stats[4] = 4;
+						}
+						else if (stats[8] == 4) {
+							slowPrintln("You take nothing. Your current weapon works fine.");
+						}
+					}
+					else if (stats[4] == 2) {
+						slowPrintln("You find a dagger, an axe, and a spear in prime conidtion. What will you take?");
+						println("1) The dagger");
+						println("2) The axe");
+						println("3) The spear");
+						println("4) Nothing");
+						print("> ");
+						stats[8] = input.nextInt();
+						println("");
+						if (stats[8] == 1) {
+							slowPrintln("You take the dagger, leaving your sword.");
+							stats[4] = 1;
+						}
+						else if (stats[8] == 2) {
+							slowPrintln("You take the axe, leaving your sword.");
+							stats[4] = 3;
+						}
+						else if (stats[8] == 3) {
+							slowPrintln("You take the spear, leaving your sword.");
+							stats[4] = 4;
+						}
+						else if (stats[8] == 4) {
+							slowPrintln("You take nothing. Your current weapon works fine.");
+						}
+					}
+					else if (stats[4] == 3) {
+						slowPrintln("You find a sword, a dagger, and a spear in prime conidtion. What will you take?");
+						println("1) The sword");
+						println("2) The dagger");
+						println("3) The spear");
+						println("4) Nothing");
+						print("> ");
+						stats[8] = input.nextInt();
+						println("");
+						if (stats[8] == 1) {
+							slowPrintln("You take the sword, leaving your axe.");
+							stats[4] = 2;
+						}
+						else if (stats[8] == 2) {
+							slowPrintln("You take the dagger, leaving your axe.");
+							stats[4] = 1;
+						}
+						else if (stats[8] == 3) {
+							slowPrintln("You take the spear, leaving your axe.");
+							stats[4] = 4;
+						}
+						else if (stats[8] == 4) {
+							slowPrintln("You take nothing. Your current weapon works fine.");
+						}
+					}
+					else if (stats[4] == 4) {
+						slowPrintln("You find a sword, an axe, and a dagger in prime conidtion. What will you take?");
+						println("1) The sword");
+						println("2) The axe");
+						println("3) The dagger");
+						println("4) Nothing");
+						print("> ");
+						stats[8] = input.nextInt();
+						println("");
+						if (stats[8] == 1) {
+							slowPrintln("You take the sword, leaving your spear.");
+							stats[4] = 2;
+						}
+						else if (stats[8] == 2) {
+							slowPrintln("You take the dagger, leaving your spear.");
+							stats[4] = 1;
+						}
+						else if (stats[8] == 3) {
+							slowPrintln("You take the dagger, leaving your spear.");
+							stats[4] = 1;
+						}
+						else if (stats[8] == 4) {
+							slowPrintln("You take nothing. Your current weapon works fine.");
+						}
+					}
+					else if (stats[4] == 5) {
+						slowPrintln("Despite the weapons from earlier still being here, regardless of which you take they become your new light blade.");
+					}
+					println("");
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You exit via the eastern door into what you know is the East Barracks.");
+					stats[11] = 3;
+					room2 = false;
+				}
+				else if (stats[8] == 3) {
+					slowPrintln("You exit the armory, returning back down the stone hallway that leads to the room your awoke in.");
+					stats[11] = 1;
+					room2 = false;
+				}
+				else if (stats[8] == 4) {
+					if (stats[12] == 1) {
+						slowPrintln("You exit via the western door into what you know is the western Barracks.");
+						stats[11] = 4;
+						room2 = false;
+					}
+					else slowPrintln("You attempt to leave through the western door but find it locked. You will need a key.");
+				}
+				else println("Invalid option. Try again.");
+			}
+		}
+		else if (stats[11] == 3) {
+		slowPrintln("You enter the East Barracks. There are four doors leading out of this room, one in each direction. The one to the north doesn't seem to stick in your memory as the others here have, as if it does not belong. Bunks fill the room in rows, two sets of bunks two high with a dresser between them, each dresser holding four drawers. The beds are in disarray, there are clothes handing out of unclosed drawers. There are even some stray items upon beds, left out as if people had simply forgotten them.");
+		if (stats[7] == 0) {
+			stats = combat(stats, 2);
+			stats[7] += 1;
+		}
+		else {
+			int determine = (int)(Math.random() * 3) +1;
+			stats = combat(stats, determine);
+		}
+		boolean room3 = true;
+			while (room3 == true && stats[1] > 0) {
+				println("1) Investigate the room");
+				println("2) Leave through north door(???)");
+				println("3) Leave through east door(Training Room)");
+				println("4) Leave through south door(East Storage)");
+				println("5) Leave through west door(Armory)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					slowPrintln("You rummage through the drawers and beds. You find a few usless items- playing cards, pictues of people you do not reocognize, a pair of glasses- but you also find a diary. The ink is smeared but you find yourself able to read some of the pages.");
+					slowPrintln("\"I am restless. Many of the men are. This talk of peace, it is a foolish hope that is sure to turn into sour ash in our mouths. The High Ones are blind to this danger and it will be their undoing.\"");
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You approach the mysterious door and push it open, entering the room beyond.");
+					stats[11] = 10;
+					room3 = false;
+				}
+				else if (stats[8] == 3) {
+					slowPrintln("You leave through the eastern door, walking down a hallway before entering the Training Room.");
+					stats[11] = 9;
+					room3 = false;
+				}
+				else if (stats[8] == 4) {
+					slowPrintln("You open the southern door, stepping into the East Storage Room.");
+					stats[11] = 5;
+					room3 = false;
+				}
+				else if (stats[8] == 5) {
+					slowPrintln("You exit through the western door, entering the Armory once again.");
+					stats[11] = 2;
+					room3 = false;
+				}
+				else println("Invalid choice. Try again.");
+			}
+		}
+
+
+		else if (stats[11] == 4) {
+			slowPrintln("You enter the West Barracks. The bunks in this room are lined against the wall, the dressesers between them and in corners. The sheets are neat, the drawers closed, the room orderly. Three doors lead out of this room, one each direction except west. Two things strike you about this room: the first that you recognize the one bunk as your own and the corresponding drawer. The second is that the room is full of light, a dark red glow that comes from a window in the western wall.");
+			boolean room4 = true;
+			while (room4 == true && stats[1] > 0) {
+				println("1) Investigate the window");
+				println("2) Investigate your area");
+				println("3) Leave through north door(Messhall)");
+				println("4) Leave through east door(Armory)");
+				println("5) Leave through south door(West Storage)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					slowPrintln("You approach the window, looking out to find a red tinted world. In the distance, tall mountains loom, the red sky blazing behind them. Black clouds blot out much of the sky, yet the red glow manages to permeate everything despite. A forest of dead trees stretches out from the mountains to a stone wall that surrounds the building you look out of. You find you are also upon an upper floor, as looking down reveals the ground some distance away, all dirt with thousands of tracks criss crossing it. You notice dark eyes peer from the shadows up at you, though as soon as you look to them directly they vanish.");
+					slowPrintln("After some time, you realize there is nothing more to be seen outside the window. As you step away, you notice the paper atop the drawer beneath the window. It is neatly arranged in the center and you pick it up to read it.");
+					slowPrintln("\"The enemy has arrived in great number, men and woman alike, even their wretched offspring. I grow more uneasy with each passing moment. Something is bound to happen, it is only a matter of time.\"");
+				}
+				else if (stats[8] == 3) {
+					slowPrintln("Opening the northern door, you find a set of stairs leading downwards into more darkness. You leave behind the red light of the Western Barracks to carefully descend the steps and enter the Mess Hall.");
+					stats[11] = 7;
+					room4 = false;
+				}
+				else if (stats[8] == 4) {
+					slowPrintln("You exit through the eastern door, entering the Armory once again.");
+					stats[11] = 2;
+					room4 = false;
+				}
+				else if (stats[8] == 5) {
+					slowPrintln("You open the southern door, stepping into the West Storage Room.");
+					stats[11] = 6;
+					room4 = false;
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You go to your bunk and look it over. The sheets and blankets bear no wrinkle, the pillow has no impression. Checking the drawer, you find it completely empty.");
+					boolean invest = true;
+					while (invest == true) {
+						println("1) Rest");
+						println("2) Leave");
+						print("> ");
+						stats[8] = input.nextInt();
+						println("");
+						if (stats[8] == 1) {
+							slowPrintln("You take a moment to lay upon your bed, resting your eyes. A sense of peace temporarily overcomes you and you open your eyes feeling refreshed. You rise, reignite your light, and smooth your bed once again completely out of habit.");
+							stats[2] = 10;
+							printStats(stats);
+							println("");
+						}
+						else if (stats[8] == 2) {
+							println("");
+							invest = false;
+						}
+						else println("Invalid choice. Try again.");
+					}
+					
+				}
+				else println("Invalid choice. Try again.");	
+		}
+	}
+		//room 5 east storage
+		else if (stats[11] == 5) {
+			slowPrintln("Stepping into the East Storage room, you find a great disarray. Everything once stored here is flung about, the palace ransacked. Racks thrown down, chests burst open, contents strewn about. Cloaks and uniforms are tossed about, which you recognize as the uniforms the husks wear. There is a number of flasks spilled, their contents long ago staining the ground, there are boots, weapons, broken weapons, personal effects, books, and even some rope. ");
+			int determine = (int)(Math.random() * 3) +1;
+			stats = combat(stats, determine);
+			boolean room5 = true;
+			while (room5 == true && stats[1] > 0) {
+				println("1) Investigate");
+				println("2) Leave through the north door(East Barracks)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					if (stats[12]  == 0) {
+						slowPrintln("You poke about the area, pushing aside the junk in a search for something useful. After some time, you find a key buried in the mess. You pocket it for later.");
+						slowPrintln("You also find a letter buried in the junk which reads: ");
+						slowPrintln("\"My Love,");
+						slowPrintln("\"\tSince last I wrote, things have worsened. The men are ever restless of this alliance, I fear many shall not support it. The Outhi have been nothing but pleasant, they have made every sacrifice, and still they meet hostility. As their captain I feel a duty to ease their worries but all my attempts have been for naught. I only pray nothing goes awry before the pact is signed. The men will see then, they will know their folly.");
+						slowPrintln("\"\tSincerely,");
+						slowPrintln("\"\tWilhem.\"");
+						slowPrintln("There is nothing else to be found here.");
+						stats[12] = 1;
+					}
+					else {
+						slowPrint("You rummage through the previously searched area and only find a ");
+						int funny = (int)(Math.random() * 5) +1;
+						if (funny == 1) {
+							slowPrintln(" very large dust bunny.");
+						}
+						else if (funny == 2) {
+							slowPrintln(" pair of scissors with blood upon them.");
+						}
+						else if (funny == 3) {
+							slowPrintln(" piece of paper with gibberish written upon it.");
+						}
+						else if (funny == 4) {
+							slowPrintln(" small stuffed dog missing its tail and left eye.");
+						}
+						else if (funny == 5) {
+							slowPrintln(" portion of a stained glass window.");
+						}
+						slowPrintln("You also find the letter from before: ");
+						slowPrintln("\"My Love,");
+						slowPrintln("\"\tSince last I wrote, things have worsened. The men are ever restless of this alliance, I fear many shall not support it. The Outhi have been nothing but pleasant, they have made every sacrifice, and still they meet hostility. As their captain I feel a duty to ease their worries but all my attempts have been for naught. I only pray nothing goes awry before the pact is signed. The men will see then, they will know their folly.");
+						slowPrintln("\tBe safe dear Olivia.");
+						slowPrintln("\"\tSincerely,");
+						slowPrintln("\"\t Wilhem.\"");
+					}
+				}   
+				else if (stats[8] == 2) {
+					slowPrintln("You exit via the northern door into what you know is the East Barracks.");
+					stats[11] = 3;
+					room5 = false;
+				}
+				else println("Invalid choice. Try again.");
+			}
+		}
+		//room 6 west storage
+		else if (stats[11] == 6) {
+			slowPrintln("Stepping into the West Storage room, you find many crates and barrels, clearly a storage for more extended periods of time. One barrle has it's bottom shattered, potatoes spilling out over the floor. A trail of these potatoes leads further into the room, between two large crates.");
+			int determine = (int)(Math.random() * 3) +1;
+			stats = combat(stats, determine);
+			boolean room6 = true;
+			while (room6 == true && stats[1] > 0) {
+				println("1) Follow the trail of potatoes.");
+				println("2) Leave through the north door(West Barracks)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					boolean squid = true;
+					if (stats[14] == 0) {
+						slowPrintln("You follow the trail of potatoes and as you approach the crates hear a faint crunching noise. Reading your weapon, you spring around the corner of the crate!");
+						slowPrintln("There is a yelp from the creature you have surprised. You see something small, no taller than 3 feet, with pink skin and tattered clothes with face that has no nose nor mouth, instead tentacles hang off the thing's face from beneath its massive, pure black eyes. It holds a potato to its chest with a three fingered, clawed hand, shivering.");
+					}
+					else if (stats[14] == 1) {
+						slowPrintln("You follow the trail once more to the place where you slew the wretch. It's body lays crumbled upon the ground, black eyes staring lifeless into the distance.");
+						squid = false;
+					}
+					else if (stats[14] == 2) {
+						slowPrintln("You follow the trail of potatoes to find the little squid creature sitting there, munching upon a potatoe with your cloak upon it. It gurgles happily upon seeing you and offers you a potato. You take some time to sit and enjoy a potatoe with the little thing. After you finish your small meal, you rise and bid the creature farewell, for now.");
+						if (stats[1] > 15) stats[1] = 15;
+						printStats(stats);
+						println("");
+						squid = false;
+					}
+					else if (stats[14] == 3) {
+						slowPrintln("You follow the trail of potatoes once more and find the shivering creature huddled back in its little crevice, watching your every move.");
+					}
+					while (squid == true) {
+						println("1) Kill the wretch");
+						println("2) Offer the shivering thing your cloak");
+						println("3) Leave it");
+						print("> ");
+						stats[14] = input.nextInt();
+						println("");
+						if (stats[14] == 1) {
+							stats = combat(stats, 14);
+							squid = false;
+						}
+						else if (stats[14] == 2) {
+							slowPrintln("You take your cloak off and offer it to the creature. It is, at first, hesitant but when you show no intention to harm it, it quickly snatches the cloak and wraps it about itself, looking up at you with a new curiosity. As its shiverings subside, the little thing picks up a potato and offers it to you. Deciding it would be rude to refuse, you accept the potato. The two of you sit together and enjoy your meal for a time. Once you are done, you rise and bid the creature farewell, for now.");
+							if (stats[1] > 15) stats[1] = 15;
+							printStats(stats);
+							println("");
+							squid = false;
+						}
+						else if (stats[14] == 3) {
+							slowPrintln("You look the pink thing over before turning away, leaving it where it shivers.");
+							squid = false;
+						}
+					}
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You exit via the northern door into what you know is the West Barracks.");
+					stats[11] = 4;
+					room6 = false;
+				}
+				else println("Invalid choice try again.");
+			}
+		}
+		//room 7 messhall
+		else if (stats[11] == 7) {
+			slowPrintln("You Descend the long set of stairs into the mess hall where some conflict seems to have ensued. Benches and tables are flipped over, arrows sticking out of nearly every surface, telling red stains litter the area. Old food rots upon the ground, discarded, unremebered. There are two doors, one to the south that leads up to the West Barracks and another that leads east to the Main Hall.");
+			int determine = (int)(Math.random() * 2) +1;
+			stats = combat(stats, determine);
+			boolean room7 = true;
+			while (room7 == true && stats[1] > 0) {
+				println("Investigate the room.");
+				println("2) Leave through east doorway(Great Hall)");
+				println("3) Leave through south doorway(West Barracks)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					slowPrintln("You rummage through the mess looking for something useful, though the only thing seems to be a torn letter that reads: ");
+					slowPrintln("The strangers arrived today. They look wrong, their faces hang in many strands. We have decided the leaders cannot be trusted. It shall happen tonight.");
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You exit via the east door, entering the Great Hall.");
+					stats[11] = 8;
+					room7 = false;
+				}
+				else if (stats[8] == 3) {
+					slowPrintln("You go through the south door, ascending the set of stairs up to the West Barracks.");
+					stats[11] = 4;
+					room7 = false;
+				}
+				else println("Invalid choice try again.");
+			}
+		}
+		//room 8 hallway
+		else if (stats[11] == 8) {
+			slowPrintln("You enter the great hall. The ceiling is far above here, a godo two stories high and curved. Faded art adorns the ceiling, which many pillars along the side of the room hold up. Great stained glass windows allow the red light from outside to filter in as many shades. Reds, blues, and greens splash across the floor, illumuninating a large symbol in the middle with a covered lump upon it. There is only one door out, back towards the messhall, all the others boarded up and blockaded.");
+			int determine = (int)(Math.random() * 2) +1;
+			stats = combat(stats, determine);
+			boolean room8 = true;
+			while (room8 == true && stats[1] > 0) {
+				println("1) Investigate the ceiling.");
+				println("2) Investigate the symbol.");
+				println("3) Leave through west doorway(Messhall)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					slowPrintln("As you look up to the ceiling to study it, you see it depicts a great war. There are men fighting a tendril faced race of great power. The tendril faced beings arrived in the world of men, taking land and things, thus conflict ensued. It rages across the ceiling from the north towards the south, though on the southern end, the ceiling is nearly bare. Only the beginnings of the work has begun and while it is hard to make out what it will become, you can understand there is not a battle depicted here as with so many of the other scenes. It is the end.");
+				}
+				else if (stats[8] == 3) {
+					slowPrintln("You leave through the west door towards Messhall.");
+					stats[11] = 7;
+					room8 = false;
+				}
+				else if (stats[8] == 2) {
+					if (stats[4] == 5) {
+						slowPrintln("As you approach the symbol and the lump, covered by a brown sheet, you realize the symbol is painted in the dark stains you found in the Messhall. It twists and bends, curves, and forms a circle with the lump in the center of it. Tugging the sheet off the lump, you find a body. It is bound by wrists and ankles to the ground, its chest and stomach split. This is not the body of a man. The skin is too pink, the eyes are massive, round, and pure black. There is no mouth or nose, instead a set of tendrils are limp down across its neck, almost looking like a very odd beard. It’s hands and feet bear only three digits each and despite the age of the corpse, having been here some time, it has not decayed nor been picked into. Beneath it, a pool of shadow ripples constantly.");
+						slowPrintln("From out of the pool, something begins to emerge.");
+						stats = combat(stats, 4);
+						if (stats[1] > 0) {
+							slowPrintln("As you stand there, victorious, the light blade tugs upon your hand, jerking towards the pool.");
+							boolean pool = true;
+							while (pool = true) {
+								println("1) Plunge the light blade into the pool");
+								println("2) Cover the body and leave.");
+								print("> ");
+								stats[8] = input.nextInt();
+								println("");
+								if (stats[8] == 1) {
+									slowPrintln("You raise your burning blade of light high and slam it down into the pool before you. A great howling fills the air as the wind kicks up, blowing your hair, buffeting you from all sides. The stained glass windows shatter and the shards are swept up in the gale, slashing across your body, leaving cuts across every inch of your skin. You stagger back, losing grip of the light blade, letting it sink into the pool of darkness which begins to glow, becoming brighter with light by the second.");
+									slowPrintln("You're suddenly thrown off your feet by a powerful blast of wind. You tumble across the floor, your back slamming against a pillar, pain shooting up through your body. You cry out, your vision becoming fuzzy, having trouble seeing shapes. The only thing you can clearly see is the pool of darkness has become a brilliant pool of light which begins to expand, slowly at first and quickly gaining speed.");
+									slowPrintln("You cry out as a wave of light and glass sweeps towards you, enveloping you entirely.");
+									slowPrintln("");
+									slowPrintln("");
+									slowPrintln("");
+									reallyslowPrintln("");
+									stats[1] = 1;
+									reallyslowPrintln("");
+									stats[11] = 15;
+									pool = false;
+									room8 = false;
+								}
+								else if (stats[8] == 2) {
+									slowPrintln("A stillness follows, nothing moving. You pull the sheet back over the body.");
+									pool = false;
+								}
+								else println("Invalid choice. Try again.");
+							}
+						}
+					}
+					else {
+						slowPrintln("As you approach the symbol and the lump, covered by a brown sheet, you realize the symbol is painted in the dark stains you found in the Messhall. It twists and bends, curves, and forms a circle with the lump in the center of it. Tugging the sheet off the lump, you find a body. It is bound by wrists and ankles to the ground, its chest and stomach split. This is not the body of a man. The skin is too pink, the eyes are massive, round, and pure black. There is no mouth or nose, instead a set of tendrils are limp down across its neck, almost looking like a very odd beard. It’s hands and feet bear only three digits each and despite the age of the corpse, having been here some time, it has not decayed nor been picked into. Beneath it, a pool of shadow ripples constantly.");
+						slowPrintln("From out of the pool, something begins to emerge.");
+						stats = combat(stats, 4);
+						slowPrintln("A stillness follows, nothing moving. You pull the sheet back over the body.");
+					}
+					
+				}
+				else println("Invalid choice try again.");
+			}
+		}
+		//room 9 training room
+		else if (stats[11] == 9) {
+			slowPrintln("Stepping into the training room, you find a sandy pit with wooden dummies scattered around, some up on stands and others set aside for later, in various states of damage. Sparring weapons lay about the area. There are seats lining the walls of the area.");
+			stats = combat(stats, 2);
+			boolean room9 = true;
+			while (room9 == true && stats[1] > 0) {
+				println("1) Investigate the room");
+				println("2) Leave through north doorway(Hallway)");
+				println("3) Leave through west door (East barracks)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					slowPrintln("You search about the room but find only a small paper sticking up in the sand.");
+					slowPrintln("\"We do it tonight. The enemy shall not deceive us any longer. Meet in the great hall.");
+					slowPrintln("\"-X\"");
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You move into the hallway that leads away from the training room.");
+					stats[11] = 11;
+					room9 = false;
+				}
+				else if (stats[8] == 3) {
+					slowPrintln("You leave through the east door towards the east barracks.");
+					stats[11] = 3;
+					room9 = false;
+				}
+				else println("Invalid choice try again.");
+			}
+		}
+		//room 10 shop
+		else if (stats[11] == 10) {
+			slowPrintln("As you enter the mysterious room, you find it lit by torches set upon the walls. A large, ornate carpet covers the ground upon which there is a wooden desk. Sitting at the desk is a hooded figure, the only visible feature a hooked nose poking out from beneath the hood along with long, stringy black hair. The figure motions with a boney hand at a chair that has suddenly appeared before the desk. You take a seat and the hooded figure rasps, \"I have some wares for you. Interested?\"");
+			printStats(stats);
+			println("");
+			boolean room10 = true;
+			while (room10 == true && stats[1] > 0) {
+				println("1) Shop");
+				println("2) Leave");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 2) {
+					slowPrintln("You shake your head and stand, push your chair in, and bid the figure farewell. You walk back out the door into the East Barracks once more.");
+					room10 = false;
+					stats[11] = 3;
+				}
+				else if (stats[8] == 1) {
+					if (stats[13] == 0) {
+						slowPrintln("You nod and the figure sets out a glass bottle full of red liquid and a key.");
+						printStats(stats);
+						println("");
+					}
+					else slowPrintln("The figure sets out the potion again to be displayed.");
+					boolean shopping = true;
+					while (shopping == true) {
+						println("1) Buy potion(-1 essence each)");
+						if (stats[13] == 0) {
+							println("2) Buy the Key(-5 essence)");
+							println("3) Leave");
+						}
+						else println("2) Leave");
+						print("> ");
+						stats[8] = input.nextInt();
+						println("");
+						if (stats[13] == 0) {
+							if (stats[8] == 1) {
+								slowPrintln("You point to the potion and the figure asks how many you'd like.");
+								boolean potion = true;
+								while (potion == true) {
+									printStats(stats);
+									println("");
+									slowPrintln("How many potions would you like to buy?(Enter a number, enter 0 to exit)");
+									print("> ");
+									int amount = input.nextInt();
+									println("");
+									if (stats[3] >= amount && amount > 0) {
+										if (amount == 1) {
+											slowPrintln("You ask for one potion. The figure extends his hand which you grasp. A cold feeling creeps up your arm and you watch a silvery subtstance slip off your arm and up the figure's sleeve. The figure then hands you the potion.");
+											stats = addEssence(stats, -amount);
+											stats[5] += amount;
+
+										}
+										else {
+											slowPrintln("You ask for " + amount + " potions. The figure extends his hand which you grasp. A cold feeling creeps up your arm and you watch a silvery subtstance slip off your arm and up the figure's sleeve. The figure then hands you the potion.");
+											stats = addEssence(stats, -amount);
+											stats[5] += amount;
+										}
+									}
+									else if (stats[3] < amount && amount > 0) {
+										slowPrintln("You do not have enough essence to buy this many potions.");
+									}
+									else if (amount == 0) {
+										slowPrintln("You decide you need no more potions.");
+										potion = false;
+									}
+									else println("Invalid amount, try again.");
+								}
+							}
+							else if (stats[8] == 2) {
+								if (stats[3] >= 5) {
+									slowPrintln("You point to the key. The figure extends his hand which you grasp. A cold feeling creeps up your arm and you watch a silvery subtstance slip off your arm and up the figure's sleeve. The figure then hands you the key.");
+									stats[13] = 1;
+									addEssence(stats, -5);
+									printStats(stats);
+									println("");
+								}
+								else slowPrintln("You point to the key but the figure shakes his head. You do not have enough to buy this.");
+							}
+							else if (stats[8] == 3) {
+								slowPrintln("You stand, pushing your chair in, and bid the figure farewell. You walk back out the door into the East Barracks once more.");
+								room10 = false;
+								shopping = false;
+								stats[11] = 3;
+							}
+							else println("Invalid choce. Try again.");
+						}
+						else {
+							if (stats[8] == 1) {
+								slowPrintln("You point to the potion and the figure asks how many you'd like.");
+								boolean potion = true;
+								while (potion == true) {
+									printStats(stats);
+									println("");
+									slowPrintln("How many potions would you like to buy?(Enter a number, enter 0 to exit)");
+									print("> ");
+									int amount = input.nextInt();
+									println("");
+									if (stats[3] >= amount && amount > 0) {
+										if (amount == 1) {
+											slowPrintln("You ask for one potion. The figure extends his hand which you grasp. A cold feeling creeps up your arm and you watch a silvery subtstance slip off your arm and up the figure's sleeve. The figure then hands you the potion.");
+											stats = addEssence(stats, -amount);
+											stats[5] += amount;
+										}
+										else {
+											slowPrintln("You ask for " + amount + " potions. The figure extends his hand which you grasp. A cold feeling creeps up your arm and you watch a silvery subtstance slip off your arm and up the figure's sleeve. The figure then hands you the potion.");
+											stats = addEssence(stats, -amount);
+											stats[5] += amount;
+										}
+									}
+									else if (stats[3] < amount && amount > 0) {
+										slowPrintln("You do not have enough essence to buy this many potions.");
+									}
+									else if (amount == 0) {
+										slowPrintln("You decide you need no more potions.");
+										potion = false;
+									}
+									else println("Invalid amount, try again.");
+								}
+							}
+							else if (stats[8] == 2) {
+								slowPrintln("You stand, pushing your chair in, and bid the figure farewell. You walk back out the door into the East Barracks once more.");
+								room10 = false;
+								shopping = false;
+								stats[11] = 3;
+							}
+							else println("Invalid choice. Try again.");
+						}
+					}
+				}
+				else println("Invalid choice try again.");
+			}
+		}
+		//room 11 minor hallway
+		else if (stats[11] == 11) {
+			slowPrintln("You enter a hallway, much like the one leading away from the Awakening room but longer and curving The walls are bare, the floor featureless.");
+			int determine = (int)(Math.random() * 3) +1;
+			stats = combat(stats, determine);
+			boolean room11 = true;
+			while (room11 == true && stats[1] > 0) {
+				println("1) Leave through east door(Captains Chamber's)");
+				println("2) Leave through south door(Training Room)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					if (stats[13] == 1) {
+						slowPrintln("You enter the Captains's Chambers.");
+						stats[11] = 12;
+						room11 = false;
+					}
+					else slowPrintln("You attempt to enter the Captain's Chambers but find the door locked. You will need a key.");
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You move into the Training Room.");
+					stats[11] = 9;
+					room11 = false;
+				}
+				else println("Invalid choice. Try again.");
+			}
+		}
+		//room 12 Captains Chamber
+		else if (stats[11] == 12) {
+			slowPrintln("You enter the Captain's Chamber. The room is sparse, only a single desk with a chair behind it, cleared. A thick red carpet covers the floor and an empty bookshelf is tucked into the corner.");
+			int determine = (int)(Math.random() * 2) +1;
+			stats = combat(stats, determine);
+			boolean room12 = true;
+			while (room12 == true && stats[1] > 0) {
+				println("1) Investigate");
+				println("2) Leave through west door(Minor Hallway)");
+				print("> ");
+				stats[8] = input.nextInt();
+				println("");
+				if (stats[8] == 1) {
+					if (stats[4] != 5) {
+						boolean puzzle = true;
+						slowPrintln("You search the room before finding a strange safe tucked behind the desk. It has a six letter combination (six dials with 27 letters each) and scratched into its side is this:");
+						slowPrintln("\"My love.\"");
+						while (puzzle == true) {
+							println("1) Attempt to unlock the safe.");
+							println("2) Leave it for now");
+							print("> ");
+							stats[8] = input.nextInt();
+							println("");
+							if (stats[8] == 1) {
+								println("Enter your guess for the six letter safe code (type it out and hit enter)");
+								print("> ");
+								String guess = input.next();
+								String answer = "Olivia";
+								if (guess.equalsIgnoreCase(answer) == true) {
+									slowPrintln("You hear a click and swing the safe open to reveal a shimmering light. You reach in and grab it at which point your own weapon begans to glow with the same light, transforming.");
+									stats[4] = 5;
+									puzzle = false;
+								}
+								else slowPrintln("You enter a guess but the safe does not open.");
+							}
+							else if (stats[8] == 2) {
+								slowPrintln("You leave.");
+								puzzle = false;
+							}
+						}
+					}
+					else slowPrintln("You find nothing new in this room, the safe already opened and the contents.");
+				}
+				else if (stats[8] == 2) {
+					slowPrintln("You head back into the hallway.");
+					stats[11] = 11;
+					room12 = false;
+				}
+				else println("Invalid choice. Try again.");
+
+			}
+			
+		}
+		return stats;
+	}
+	
+	
+	
+	
+	
+	public static int[] combat(int[] stats, int com) throws InterruptedException {
+		Scanner input = new Scanner(System.in);
+		boolean properturn = false;
+		boolean choice = false;
+		int currentAC = 16;
+		//weak shade combat
+		if (com == 1) {
+			slowPrintln("From the shadows, a frail, skeletal being shuffles, boney fingers reaching out for you, gaping mouth issuing a soft moan of despair.");
+			println("");
+			int shadeHP = 11;
+			while (shadeHP > 0 && stats[1] > 0) {
+					//run the options for your turn
+				while (properturn == false) {
+					stats = yourTurn(stats);
+					if (stats[8] == 1) {
+						int[] youAttack = attack(stats[4]);
+						if (youAttack[0] >= 12) {
+							slowPrintln("You attack the shade, doing " + youAttack[1] + " damage.");
+							shadeHP -= youAttack[1];
+						}
+						else slowPrintln("You attack the shade, but miss!");
+						properturn = true;
+					}
+					else if (stats[8] == 2) {
+						if (stats[2] >= 1) {
+							if (stats[0] == 0) slowPrintln("You channel power into the orb in your hand, expanding it into a protective bubble around yourself.");
+							else slowPrintln("You strengthen the protective bubble around yourself.");
+							stats[0] += 2;
+							stats[2] -= 1;
+							properturn = true;
+						}
+						else {
+							println("Not enough mana!");
+							properturn = false;
+						}
+					}
+					else if (stats[8] == 3) {
+						if (stats[2] >= 2) {
+							stats[2] -= 2;
+							int[] youBurst = burst();
+							if (youBurst[0] >= 12) {
+								slowPrintln("You hurl the orb in your hand, summoning another immediately, dealing " + youBurst[1] + " damage to the shade.");
+								shadeHP = shadeHP - youBurst[1];
+							}
+							else slowPrintln("You hurl the orb in your hand, summoning another immediately, but the jerky motions of the shade cause you to miss.");
+							properturn = true;
+						}
+						else {
+							slowPrintln("Insufficient mana!");
+							properturn = false;
+						}
+					}
+					else if (stats[8] == 4 && stats[5] > 0) {
+						int heal = (int)(Math.random() * 6)+1;
+						int heal2 = (int)(Math.random() * 6)+1;
+						int heal3 = -(heal + heal2 + 8);
+						takeDmg(stats, heal3);
+						stats[5] -= 1;
+						slowPrintln("You drink a potion quickly to restore" + heal3 + "health.");
+						printStats(stats);
+						println("");
+						properturn = true;
+						
+					}
+					else {
+						slowPrintln("Invalid option. Try again.");
+						properturn = false;
+					}
+				}
+				//run enemies turn
+				if (shadeHP > 0) {
+				//randomly generared chances of hitting and amounts of damage
+					int shadeHit = (int)(Math.random() * 20)+4;
+					int shadeDmg = (int)(Math.random() * 6)+2;
+					currentAC = 16;
+					if (stats[0] > 0) {
+						currentAC = 20;
+						shadeDmg -= 3;
+					}
+					if (shadeHit >= currentAC) {
+						slowPrintln("The shade lunges, boney fingers slashing across you, dealing " + shadeDmg + " damage.");
+						takeDmg(stats, shadeDmg);
+					}
+					else slowPrintln("The shade attempts to claw you, but you fend off the attack.");
+					if (stats[0] > 0) stats[0] -= 1;
+					properturn = false;
+
+				}
+				else slowPrintln("You have defeated the shade!");
+
+			}
+			if (stats[1] > 0) {
+				slowPrintln("With a final blow, the shade falls to the ground.");
+				stats[8] = 0;
+				choice = false;
+				while (choice == false) {
+					println("1) Spare the shade");
+					println("2) End the shade");
+					print("> ");
+					stats[8] = input.nextInt();
+					println("");
+					if (stats[8] == 1) {
+						slowPrintln("You hold out the orb of light towards the shade, a string of brilliance extending towards the defeated foe. Light consumes the shade before, with a gentle sigh, the light fades and the shade is gone.");
+						stats[9] += 1;
+						choice = true;
+					}
+					else if (stats[8] == 2) {
+						slowPrintln("You thrust the orb you hold into the shade, which howls before exploding into a cloud of dark smoke.");
+						stats[10] += 1;
+						choice = true;
+					}
+					else slowPrintln("Invalid choice. Try again.");
+				}
+				slowPrintln("Gained 1 essence.");
+				stats = addEssence(stats, 1);
+				println("");
+			}
+			else slowPrintln("You have been defeated by the shade.");
+		}
+		
+		
+		
+		//husk combat
+		else if (com == 2) {
+			slowPrintln("A figure stumbles out of the shadows towards you, its skin shadows, its eyes two empty pits. Tattered armor clings to it, scraps of clothing hang off of it, a rusty sword is clutched in its hand.");
+			println("");
+			int huskHP = 19;
+			while (huskHP > 0 && stats[1] > 0) {
+					//run the options for your turn
+				while (properturn == false) {
+					stats = yourTurn(stats);
+					if (stats[8] == 1) {
+						int[] youAttack = attack(stats[4]);
+						if (youAttack[0] >= 14) {
+							slowPrintln("You attack the husk, doing " + youAttack[1] + " damage.");
+							huskHP -= youAttack[1];
+						}
+						else slowPrintln("You attack the husk, but miss!");
+						properturn = true;
+					}
+					else if (stats[8] == 2) {
+						if (stats[2] >= 1) {
+							if (stats[0] == 0) slowPrintln("You channel power into the orb in your hand, expanding it into a protective bubble around yourself.");
+							else slowPrintln("You strengthen the protective bubble around yourself.");
+							stats[0] += 2;
+							stats[2] -= 1;
+							properturn = true;
+						}
+						else {
+							println("Not enough mana!");
+							properturn = false;
+						}
+					}
+					else if (stats[8] == 3) {
+						if (stats[2] >= 2) {
+							stats[2] -= 2;
+							int[] youBurst = burst();
+							if (youBurst[0] >=  14) {
+								slowPrintln("You hurl the orb in your hand, summoning another immediately, dealing " + youBurst[1] + " damage to the husk.");
+								huskHP = huskHP - youBurst[1];
+							}
+							else slowPrintln("You hurl the orb in your hand, summoning another immediately, but the jerky motions of the husk cause you to miss.");
+							properturn = true;
+						}
+						else {
+							slowPrintln("Insufficient mana!");
+							properturn = false;
+						}
+					}
+					else if (stats[8] == 4 && stats[5] > 0) {
+						int heal = (int)(Math.random() * 6)+1;
+						int heal2 = (int)(Math.random() * 6)+1;
+						int heal3 = -(heal + heal2 + 8);
+						takeDmg(stats, heal3);
+						stats[5] -= 1;
+						slowPrintln("You drink a potion quickly to restore" + heal3 + "health.");
+						printStats(stats);
+						println("");
+						properturn = true;
+					}
+					else {
+						slowPrintln("Invalid option. Try again.");
+						properturn = false;
+					}
+				}
+				//run enemies turn
+				if (huskHP > 0) {
+				//randomly generared chances of hitting and amounts of damage
+					for (int hit = 0; hit < 2; hit++) {
+						int huskHit = (int)(Math.random() * 20)+6;
+						int huskDmg = (int)(Math.random() * 6)+3;
+						currentAC = 16;
+						if (stats[0] > 0) {
+							currentAC = 20;
+							huskDmg -= 3;
+						}	
+						if (huskHit >= currentAC) {
+							slowPrintln("The husk lunges, swiping with its sword, dealing " + huskDmg + " damage.");
+							takeDmg(stats, huskDmg);
+						}
+						else slowPrintln("The husk attempts to slash you, but you fend off the attack.");
+						properturn = false;
+					}
+					if (stats[0] > 0) stats[0] -= 1;
+				}
+				else slowPrintln("You have defeated the husk!");
+
+			}
+			if (stats[1] > 0) {
+				slowPrintln("The husk crumbles before you, sorrowful eyes looking to you.");
+				stats[8] = 0;
+				choice = false;
+				while (choice == false) {
+					println("What will you do?");
+					println("1) Spare the husk");
+					println("2) End the husk");
+					print("> ");
+					stats[8] = input.nextInt();
+					println("");
+					if (stats[8] == 1) {
+						slowPrintln("You reach forward to close the eyes of the husk, which issues a soft sigh and crumbles into ash, blowing away.");
+						stats[9] += 1;
+						choice = true;
+					}
+					else if (stats[8] == 2) {
+						slowPrintln("You thrust your sword forward into the husk's chest which shriek, fire bursting forth from it as it burns away.");
+						stats[10] += 1;
+						choice = true;
+					}
+					else slowPrintln("Invalid choice. Try again.");
+				}
+				slowPrintln("Gained 2 essence.");
+				stats = addEssence(stats, 2);
+			}
+			else slowPrintln("You have been defeated by the husk.");
+		}		
+		//squid
+		else if (com == 14) {
+			int squidHP = 10;
+			boolean stunned = false;
+			int mindstab = 0;
+			properturn = false;
+			slowPrintln("You lunge at the wretch to end it, causing it to shriek. You feel a powerful force assail your mind...");
+			int resist = (int)(Math.random() * 20)+4;
+			if (resist > 10) {
+				slowPrintln("...but you manage to fight the influence off.");
+			}
+			else {
+				slowPrintln("A piercing pain fills your mind and you find yourself stunned.");
+				stunned = true;
+				mindstab = (((int)(Math.random() * 4)+1)+((int)(Math.random() * 4)+1)+2);
+				takeDmg(stats, mindstab);
+			}
+			while (squidHP > 0 && stats[1] > 0) {
+				//your turn
+				while (properturn == false) {
+					if (stunned == false) {
+						stats = yourTurn(stats);
+						if (stats[8] == 1) {
+							int[] youAttack = attack(stats[4]);
+							if (youAttack[0] >= 12) {
+								slowPrintln("You attack the wretch, doing " + youAttack[1] + " damage.");
+								squidHP -= youAttack[1];
+							}
+							else slowPrintln("You attack the wretch, but miss!");
+							properturn = true;
+						}
+						else if (stats[8] == 2) {
+							if (stats[2] >= 1) {
+								if (stats[0] == 0) slowPrintln("You channel power into the orb in your hand, expanding it into a protective bubble around yourself.");
+								else slowPrintln("You strengthen the protective bubble around yourself.");
+								stats[0] += 2;
+								stats[2] -= 1;
+								properturn = true;
+							}
+							else {
+								println("Not enough mana!");
+								properturn = false;
+							}
+						}
+						else if (stats[8] == 3) {
+							if (stats[2] >= 2) {
+								stats[2] -= 2;
+								int[] youBurst = burst();
+								if (youBurst[0] >= 12) {
+									slowPrintln("You hurl the orb in your hand, summoning another immediately, dealing " + youBurst[1] + " damage to the wretch.");
+									squidHP = squidHP - youBurst[1];
+								}
+								else slowPrintln("You hurl the orb in your hand, summoning another immediately, but the jerky motions of the shade cause you to miss.");
+								properturn = true;
+							}
+							else {
+								slowPrintln("Insufficient mana!");
+								properturn = false;
+							}
+						}
+						else if (stats[8] == 4 && stats[5] > 0) {
+							int heal = (int)(Math.random() * 6)+1;
+							int heal2 = (int)(Math.random() * 6)+1;
+							int heal3 = -(heal + heal2 + 8);
+							takeDmg(stats, heal3);
+							stats[5] -= 1;
+							slowPrintln("You drink a potion quickly to restore" + heal3 + "health.");
+							printStats(stats);
+							println("");
+							properturn = true;
+							
+						}
+						else {
+							slowPrintln("Invalid option. Try again.");
+							properturn = false;
+						}
+					}
+					else {
+						slowPrintln("You cannot act while stunned, but you manage to shake off the stun right as the wretch acts again.");
+						properturn = true;
+						stunned = false;
+					}
+				}
+				//squid turn
+				if (squidHP > 0) {
+					int regain = (int)(Math.random() * 6)+1;
+					if (regain == 5 || regain == 6) {
+						slowPrintln("You feel the wretch attack your mind again.");
+						resist = (int)(Math.random() * 20)+4;
+						if (resist > 10) {
+							slowPrintln("...but you manage to fight the influence off.");
+						}
+						else {
+							slowPrintln("A piercing pain fills your mind and you find yourself stunned.");
+							stunned = true;
+							mindstab = (((int)(Math.random() * 4)+1)+((int)(Math.random() * 4)+1)+2);
+							takeDmg(stats, mindstab);
+						}
+					}
+					else {
+						currentAC = 16;
+						int squidHit = (int)(Math.random() * 20)+3;
+						int squidDmg = (((int)(Math.random() * 4)+1) + ((int)(Math.random() * 4)+1) + 2);
+						if (stats[0] > 0) {
+							squidDmg -= 3;
+							currentAC = 20;
+						}
+						if (squidHit >= currentAC) {
+							slowPrint("The wretch swipes at you with a slimy tentacle. As it hits, you feel a spike of pain shoot up into your mind, dealing " + squidDmg + " damage.");
+							takeDmg(stats, squidDmg);
+						}
+						else slowPrintln("The wretch attempts to slap you with a tentacle, but you avoid the sloppy attack.");
+					}
+					properturn = false;
+					if (stats[0] > 0) stats[0] -= 0;
+				}
+				else slowPrintln("You have slain the wretch!");
+			}
+			if (stats[1] > 0) {
+				slowPrintln("As the wretch falls to the floor, it remains still, lifeless.");
+				slowPrintln("Gained two essence.");
+				addEssence(stats, 2);
+			}
+			else slowPrintln("The wretch has slain you.");
+		}
+		//big boi combat
+		else if (com == 4) {
+			slowPrintln("A shadow claw grabs the floor beside the pool. A great and terrible image rises up, squezzing out from beneath the body. It is a grotesque amalgamation of parts of the body. Too many arms of too many sizes stick out of its malformed torso. It stands upon seven feet, each thudding hard and heavy upon the ground. It’s multiple heads snarl and snap with a plethora of mouths, all filled with a great many teeth. Dozens of bright red eyes glare at you.");
+			println("");
+			int beastHP = 34;
+			while (beastHP > 0 && stats[1] > 0) {
+					//run the options for your turn
+				while (properturn == false) {
+					stats = yourTurn(stats);
+					if (stats[8] == 1) {
+						int[] youAttack = attack(stats[4]);
+						if (youAttack[0] >= 12) {
+							if (stats[4] == 5) {
+								int light = (youAttack[1] * 2);
+								slowPrintln("You attack the beast and the light blade flashes, searing the monster badly, dealing " + light + " damage to it.");
+								beastHP -= light;
+							}
+							else {
+								slowPrintln("You attack the beast, doing " + youAttack[1] + " damage.");
+								beastHP -= youAttack[1];
+							}
+						}
+						else slowPrintln("You attack the beast, but miss!");
+						properturn = true;
+					}
+					else if (stats[8] == 2) {
+						if (stats[2] >= 1) {
+							if (stats[0] == 0) slowPrintln("You channel power into the orb in your hand, expanding it into a protective bubble around yourself.");
+							else slowPrintln("You strengthen the protective bubble around yourself.");
+							stats[0] += 2;
+							stats[2] -= 1;
+							properturn = true;
+						}
+						else {
+							println("Not enough mana!");
+							properturn = false;
+						}
+					}
+					else if (stats[8] == 3) {
+						if (stats[2] >= 2) {
+							stats[2] -= 2;
+							int[] youBurst = burst();
+							if (youBurst[0] >=  14) {
+								slowPrintln("You hurl the orb in your hand, summoning another immediately, dealing " + youBurst[1] + " damage to the beast.");
+								beastHP = beastHP - youBurst[1];
+							}
+							else slowPrintln("You hurl the orb in your hand, summoning another immediately, but the jerky motions of the beast cause you to miss.");
+							properturn = true;
+						}
+						else {
+							slowPrintln("Insufficient mana!");
+							properturn = false;
+						}
+					}
+					else if (stats[8] == 4 && stats[5] > 0) {
+						int heal = (int)(Math.random() * 6)+1;
+						int heal2 = (int)(Math.random() * 6)+1;
+						int heal3 = -(heal + heal2 + 8);
+						takeDmg(stats, heal3);
+						stats[5] -= 1;
+						slowPrintln("You drink a potion quickly to restore" + heal3 + "health.");
+						printStats(stats);
+						println("");
+						properturn = true;
+					}
+					else {
+						slowPrintln("Invalid option. Try again.");
+						properturn = false;
+					}
+				}
+				//run enemies turn
+				if (beastHP > 0) {
+					int beastHit1 = (int)(Math.random() * 20)+6;
+					int beastDmg1 = (int)(Math.random() * 8)+4;
+					currentAC = 16;
+					if (stats[0] > 0){
+						currentAC = 20;
+						beastDmg1 -= 3;
+					}
+					if (beastHit1 >= currentAC) {
+						slowPrintln("The beast lunges, swiping with its many claws, dealing " + beastDmg1 + " damage.");
+						takeDmg(stats, beastDmg1);
+					}
+					else slowPrintln("The beast attempts to slash you, but you fend off the attack.");
+					int beastHit2 = (int)(Math.random() * 20)+6;
+					int beastDmg2 = (int)(Math.random() * 6)+2 + (int)(Math.random() * 6)+2;
+					currentAC = 16;
+					if (stats[0] > 0) {
+						currentAC = 20;
+						beastDmg2 -= 3;
+					}
+					if (beastHit2 >= currentAC) {
+						slowPrintln("The beast lunges, bitting into you, dealing " + beastDmg2 + " damage.");
+						takeDmg(stats, beastDmg2);
+					}
+					else slowPrintln("The beast attempts to bite you, but you fend off the attack.");
+					if (stats[0] > 0) stats[0] -= 1;
+					properturn = false;
+				}
+				else slowPrintln("You have defeated the beast!");
+
+			}
+			if (stats[1] > 0) {
+				slowPrintln("The beast crumbles before you, panting heavily as it begins to fall apart.");
+				stats[8] = 0;
+				choice = false;
+				while (choice == false) {
+					println("What will you do?");
+					println("1) Spare the beast");
+					println("2) End the beast");
+					print("> ");
+					stats[8] = input.nextInt();
+					println("");
+					if (stats[8] == 1) {
+						slowPrintln("You place your orb upon the beast, watching it sink into the mass, disappearing. The beast calm before closing its eyes. It's many parts slip off, turning into black mist before they even hit the floor, fading away. Soon all that remains is the body of a single, frail man who looks at you with eyes full of regret and promptly fades into nothing.");
+						stats[9] += 1;
+						choice = true;
+					}
+					else if (stats[8] == 2) {
+						slowPrintln("You plant your foot upon the beast and kick it back down into the black pool from whence it came.");
+						stats[10] += 1;
+						choice = true;
+					}
+					else slowPrintln("Invalid choice. Try again.");
+				}
+				slowPrintln("Gained 5 essence.");
+				stats = addEssence(stats, 5);
+			}
+			else slowPrintln("You have been defeated by the beast.");
+		}
+		
+		else println("");
+		//reset shield, return
+		stats[0] = 0;
+		return stats;
+	}
+	
+	
+	
+	
+	
+	
+	//prints the stats in a single line
+	public static void printStats(int[] stats) {
+		System.out.printf("Hp: %d Mana: %d Essence: %d Potions: %d", stats[1], stats[2], stats[3], stats[5]);
+	}
+	
+	public static int[] takeDmg(int[] stats, int dmg) {
+		stats[1] = stats[1] - dmg;
+		return stats;
+	}
+	public static int[] addEssence(int[] stats, int essence) {
+		stats[3] = stats[3] + essence;
+		return stats;
+	}
+	
+	//method for the player's turn
+	public static int[] yourTurn(int[] stats) throws InterruptedException {
+		Scanner input = new Scanner(System.in);
+		println("It is your turn, what will you do?");
+		printStats(stats);
+		println("");
+		String weapon = "Nothing.";
+		if (stats[4] == 1) weapon = "Dagger";
+		else if (stats[4] == 2) weapon = "Sword";
+		else if (stats[4] == 3) weapon = "Axe";
+		else if (stats[4] == 4) weapon = "Spear";
+		else if (stats[4] == 5) weapon = "Light Blade";
+		println("1) Attack with " + weapon);
+		println("2) Shield(-1 mana)");
+		println("3) Mana Burst(-2 mana)");
+		if (stats[5] > 0) println("4) Drink a potion.");
+		print("> ");
+		stats[8] = input.nextInt();
+		println("");
+		return stats;
+	}
+	
+	//determining attack hits and damage based off current weapon
+	public static int[] attack(int weapon) {
+		int[] result = {0, 0};
+		//0 = to hit 1 = damage
+		if (weapon == 1) {
+			result[0] = (int)(Math.random() * 20)+5;
+			result[1] = (int)(Math.random() * 4)+5;
+		}
+		else if (weapon == 2) {
+			result[0] = (int)(Math.random() * 20)+8;
+			result[1] = (int)(Math.random() * 8)+7;
+		}
+		else if (weapon == 3) {
+			result[0] = (int)(Math.random() * 20)+5;
+			result[1] = (((int)(Math.random() * 6)+1) + ((int)(Math.random() * 6)+1) + 6);
+		}
+		else if (weapon == 4) {
+			result[0] = (int)(Math.random() * 20)+9;
+			result[1] = (int)(Math.random() * 4)+5;
+		}
+		else if (weapon == 5) {
+			result[0] = (int)(Math.random() * 20)+9;
+			result[1] = (int)(Math.random() * 10)+8;
+		}
+		return result; 
+	}
+	
+	public static int[] burst() {
+		int[] result = {0, 0};
+		result[0] = (int)(Math.random() * 20)+11;
+		result[1] = (((int)(Math.random() * 6)+1) + ((int)(Math.random() * 6)+1) + 8);
+		return result;
+	}
+	
+	//for all my array printing needs
+	public static void printArray(String[][] myArray) {
+		for (int row = 0; row < myArray.length; row++) {
+			for (int column = 0; column < myArray[row].length; column++) {
+				System.out.print(myArray[row][column] + " ");
+			}
+			System.out.println();
+		}
+	}
+	
+	//for all my array printing needs
+	public static void printArray(int[][] myArray) {
+		for (int row = 0; row < myArray.length; row++) {
+			for (int column = 0; column < myArray[row].length; column++) {
+				System.out.print(myArray[row][column] + " ");
+			}
+			System.out.println();
+		}
+	}
+	
+	//print characters one by one
+	public static void slowPrint(String message) throws InterruptedException {
+		String neato = message; 
+		char[] chars = neato.toCharArray();
+
+		for (int i = 0; i < chars.length; i++) {
+			System.out.print(chars[i]);
+			Thread.sleep(20);
+		}
+	}
+	
+	//print characters one by one and skip down to next line
+	public static void slowPrintln(String message) throws InterruptedException {
+		String neato = message; 
+		char[] chars = neato.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			System.out.print(chars[i]);
+			Thread.sleep(20);
+		}
+		System.out.println("");
+	}
+	
+	public static void reallyslowPrintln(String message) throws InterruptedException {
+		String neato = message; 
+		char[] chars = neato.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			System.out.print(chars[i]);
+			Thread.sleep(200);
+		}
+		System.out.println("");
+	}
+
+
+	public static void print(String hold) throws InterruptedException {
+			String neato = hold;
+			char[] chars = neato.toCharArray();
+			for (int i = 0; i < chars.length; i++) {
+				System.out.print(chars[i]);
+				Thread.sleep(10);
+			}
+	}
+	
+	public static void println(String hold) throws InterruptedException {
+			String neato = hold;
+			char[] chars = neato.toCharArray();
+			for (int i = 0; i < chars.length; i++) {
+				System.out.print(chars[i]);
+				Thread.sleep(10);
+			}
+			System.out.println("");
+	}
+}
