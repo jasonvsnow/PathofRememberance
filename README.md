@@ -3,6 +3,9 @@
 ## Synopsis
 A mini text based adventure fame
 
+## Motivation
+I built this game because I've always enjoyed adventure games, their stories and mysteries, so being able to make some of that myself was exciting and fun.
+
 ## How to Run
 To run PathofRememberance one needs simply to be able to compile .java files, download the one provided, and run the program.
 
