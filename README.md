@@ -10,7 +10,7 @@ I built this game because I've always enjoyed adventure games, their stories and
 To run PathofRememberance one needs simply to be able to compile .java files, download the one provided, and run the program. The program will prompt you when input is needed until you enter valid input, so playing the game shouldn't be too hard!
 
 ## Code Example
-This is the code that, once the user is past the inital 'tutorial' keeps the game running until the player reaches the end or gives up after dying.
+This is the code that, once the user is past the initial 'tutorial' keeps the game running until the player reaches the end or gives up after dying.
 ```
 int room = 2;
 boolean playing = true;
