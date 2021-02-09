@@ -1,4 +1,4 @@
-package ch19;
+package thePath;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -13,6 +13,9 @@ import javafx.scene.paint.*;
 import javafx.beans.property.*;
 
 public class Display extends Pane {
+	private static String hp = "50";
+	private static String mana = "10";
+	private static String coin = "0";
 	
 	public static BorderPane getPane() {
 		BorderPane set = new BorderPane();
@@ -33,10 +36,13 @@ public class Display extends Pane {
 		userInput.getChildren().addAll(holder, enter);
 		userInput.setPadding(new Insets(10, 10, 10, 10));
 		
-		Label hp = new Label("HP: ");
-		Label health = new Label("Health: ");
-		Label potions = new Label("Potions: ");
-		statDisplay.getChildren().addAll(hp, health, potions);
+		Label hpLbl = new Label("HP: " + hp);
+		Label manaLbl = new Label("Mana: " + mana);
+		Label coinLbl = new Label("Coins: " + coin);
+		
+		
+		
+		statDisplay.getChildren().addAll(hpLbl, manaLbl, coinLbl);
 		statDisplay.setPadding(new Insets(0, 30, 0, 0));
 		
 		
