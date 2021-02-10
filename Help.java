@@ -13,7 +13,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.*;
 import javafx.scene.paint.*;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.scene.control.*;
 import javafx.beans.*;
+import javafx.beans.Observable;
 
 public class Help extends Application {
 	private static TextPane text = new TextPane();
@@ -33,23 +36,35 @@ public class Help extends Application {
 	
 	public void start(Stage primaryStage) {
 		Game game = new Game();
+		//input buttons
 		Button bt1 = new Button("1");
 		Button bt2 = new Button("2");
 		Button bt3 = new Button("3");
 		Button bt4 = new Button("4");
-		HBox buttonHolder = new HBox(20);
+		HBox buttonHolder = new HBox(10);
 		buttonHolder.getChildren().addAll(bt1, bt2, bt3, bt4);
 		buttonHolder.setAlignment(Pos.CENTER);
 		
-		Button start = new Button("Start");
+		//stat display
+		Label hpLbl = new Label("HP: 50");
+		Label manaLbl = new Label("Mana: 20");
+		Label coinsLbl = new Label("Coins: 0");
+		Label potionsLbl = new Label("Potions: 0");
+		Label attackLbl = new Label("Attack: 1");
+		Label defenseLbl = new Label("Defense: 0");
+		HBox statHolder = new HBox(10);
+		statHolder.getChildren().addAll(hpLbl, manaLbl, coinsLbl, potionsLbl, attackLbl, defenseLbl);
 		
+		
+		Button start = new Button("Start");
 		
 		BorderPane pane = new BorderPane();
 		pane.setAlignment(start, Pos.CENTER);
+		pane.setTop(statHolder);
 		pane.setCenter(text);
 		pane.setBottom(start);
 		
-		Scene scene = new Scene(pane, 538, 300);
+		Scene scene = new Scene(pane, 515, 300);
 		primaryStage.setTitle("Testing Texts");
 		primaryStage.setScene(scene);
 		primaryStage.show();
