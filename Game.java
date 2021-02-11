@@ -1,10 +1,9 @@
 package thePath;
 
 
-import java.util.*;
+
 
 public class Game {
-	private Help help;
 	private Character hero;
 	private int hp = 50;
 		
