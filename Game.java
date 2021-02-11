@@ -5,9 +5,11 @@ import java.util.*;
 
 public class Game {
 	private Help help;
+	private Character hero;
 	private int hp = 50;
 		
-	Game() {	
+	Game() {
+		hero = new Character();
 	}
 	public int getHP() {
 		return hp;
@@ -57,7 +59,7 @@ public class Game {
 						+ "1) Go back to other Room\n"
 						+ "2) Heal some more\n\n"
 						+ "");
-				hp += 1;
+				hp -= 1;
 			}
 			else if (choice == 3) {
 				//leave to Closet
@@ -149,9 +151,6 @@ public class Game {
 		else if (room == 14) {
 			
 		}
-		
-		
-		
 		
 		return reRoom;
 		

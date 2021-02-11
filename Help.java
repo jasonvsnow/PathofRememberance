@@ -2,26 +2,18 @@ package thePath;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.*;
-import javafx.scene.paint.*;
-import javafx.beans.property.*;
-import javafx.collections.FXCollections;
 import javafx.scene.image.*;
-import javafx.beans.*;
-import javafx.beans.Observable;
+
 
 public class Help extends Application {
 	private static TextPane text = new TextPane();
 	private static StatPane stats = new StatPane();
-	private String held = "";
 	private int room = 0;
 	private Game game = new Game();
 	private boolean started = false;
