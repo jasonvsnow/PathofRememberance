@@ -103,7 +103,6 @@ public class Game {
 			else if (choice == 4) {
 				//armory 
 			}
-			
 		}
 		//closet
 		else if (room == 5) {
@@ -116,7 +115,7 @@ public class Game {
 		}
 		//shop
 		else if (room == 6) {
-			
+		
 		}
 		//shopping
 		else if (room == 7) {
