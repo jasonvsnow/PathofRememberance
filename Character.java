@@ -8,6 +8,7 @@ public class Character {
 	private int attack;
 	private int defense;
 	private int defendCharge;
+	private boolean map;
 	private boolean captainKey;
 	private boolean basementKey;
 	
@@ -19,13 +20,14 @@ public class Character {
 		attack = 1;
 		defense = 0;
 		defendCharge = 0;
+		map = false;
 		captainKey = false;
 		basementKey = false;
 	}
 	public int getHP() {
 		return hp;
 	}
-	public void sethp(int hp) {
+	public void setHP(int hp) {
 		this.hp = hp;
 	}
 	public int getMana() {
@@ -63,6 +65,12 @@ public class Character {
 	}
 	public void setDefendCharge(int defendCharge) {
 		this.defendCharge = defendCharge;
+	}
+	public boolean isMap() {
+		return map;
+	}
+	public void setMap(boolean map) {
+		this.map = map;
 	}
 	public boolean isCaptainKey() {
 		return captainKey;

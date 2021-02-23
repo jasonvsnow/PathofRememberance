@@ -27,8 +27,8 @@ public class Help extends Application {
 	public static void print(String s) {
 		text.addText(s);
 	}
-	public void setHP(int i) {
-		stats.setHP(i);
+	public void setStats(int hp, int mana, int coins, int potions, int attack, int defense) {
+		stats.setStats(hp, mana, coins, potions, attack, defense);
 	}
 	
 	public void start(Stage primaryStage) throws FileNotFoundException{
@@ -94,7 +94,7 @@ public class Help extends Application {
 		primaryStage.show();
 		
 		
-		stats.setHP(50);
+		stats.setStats(50, 20, 0, 0, 1, 0);
 		text.addText("This is all a test.\n");
 
 		start.setOnAction(e -> {
@@ -105,22 +105,22 @@ public class Help extends Application {
 		bt1.setOnAction(e -> {
 			int hold = game.room(room, 1);
 			room = hold;
-			setHP(game.getHP());
+			setStats(game.getHP(), 0, 0, 0, 0, 0);
 		});
 		bt2.setOnAction(e -> {
 			int hold = game.room(room, 2);
 			room = hold;
-			setHP(game.getHP());
+			setStats(game.getHP(), 0, 0, 0, 0, 0);
 		});
 		bt3.setOnAction(e -> {
 			int hold = game.room(room, 3);
 			room = hold;
-			setHP(game.getHP());
+			setStats(game.getHP(), 0, 0, 0, 0, 0);
 		});
 		bt4.setOnAction(e -> {
 			int hold = game.room(room, 4);
 			room = hold;
-			setHP(game.getHP());
+			setStats(game.getHP(), 0, 0, 0, 0, 0);
 		});
 		
 		adventure.setOnAction(e -> {
@@ -194,8 +194,13 @@ class StatPane extends HBox {
 		getChildren().clear();
 		getChildren().addAll(hpLbl, manaLbl, coinsLbl, potionsLbl, attackLbl, defenseLbl);
 	}
-	public void setHP(int i) {
-		hpString = "HP: " + i;
+	public void setStats(int hp, int mana, int coins, int potions, int attack, int defense) {
+		hpString = "HP: " + hp;
+		manaString = "Mana: " + mana;
+		coinsString = "Coins: " + coins;
+		potionsString = "Potions: " + potions;
+		attackString = "Attack: " + attack;
+		defenseString = "Mana: " + defense;
 		paintStats();
 	}
 }

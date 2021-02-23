@@ -5,41 +5,79 @@ package thePath;
 
 public class Game {
 	private Character hero;
-	private int hp = 50;
 		
 	Game() {
 		hero = new Character();
 	}
 	public int getHP() {
-		return hp;
+		return hero.getHP();
 	}
+	
+
 	
 	public int room(int room, int choice) {
 		int reRoom = room;
 		//waking up
 		if (room == 0) {
 			if (choice == 0)
-				Help.print("It is dark yada yada\n"
+				Help.print("You come to consciousness and feel yourself lying upon something hard. You are surrounded by darkness, unable to see anything.\n"
 						+ "1) Make a light\n"
+						+ "2) Do Nothing\n"
 						+ "\n");
 			if (choice == 1) {
-				Help.print("You wake up\n"); //consequence of Action 1 
+				Help.print("You summon a power within you and conjure up a ball of light.\n"); //consequence of Action 1 
 				//add mana take
 				reRoom = 1; //set to awakening room
-				Help.print("You sit up and look around yada yada\n"  //intro to awakening room and actions
-						+ "1) I wanna leave\n"
+				
+				
+				Help.print("With the orb of light in your hand, you stand and are able to see the rest of the room clearly. "
+						+ "You were laying upon an obsidian slab and nearby there is a wooden table. There is a door.\n"  //intro to awakening room and actions
+						+ "1) Leave through the door\n"
+						+ "2) Investigate table.\n"
+						+ "\n");
+			}
+			if (choice == 2) {
+				Help.print("You do nothing. This is unlikely to get you anywhere.\n"
+						+ "1) Make a light\n"
+						+ "2) Do Nothing\n"
 						+ "\n");
 			}
 		}
 		//Awaken Room
 		else if (room == 1) {
 			if (choice == 1) {
-				Help.print("You've left the empty boring room.\n"); //consequence of Action 1 
-				reRoom = 2;
-				Help.print("The armory is X\n "   //intro to armory
-						+ "1) Hurt ourselves here\n"
-						+ "2) Move to the healing room\n"
+				if (hero.isMap()) {
+					Help.print("You exit the room via the door.\n");
+					//consequence of Action 1 
+					reRoom = 2;
+					Help.print("You enter an armory. "
+							+ "Weapons rest upon racks, a table sits in the center with a few plates and cups upon it, and several chairs are about the table. "
+							+ "There is a door to the east, a door to the west, and a door to the south. "
+							+ "You know where the doors lead thanks to your map.\n"
+							+ "1) Return to the awakening room\n"
+							+ "2) Grab a weapon"
+							+ "3) Hurt ourselves with a wepaon\n"
+							+ "\n");
+				}
+				else Help.print("You try to leave but find the door locked.\n"
+						+ "1) Leave through the door\n"
+						+ "2) Investigate table.\n"
 						+ "\n");
+			}
+			else if (choice == 2) {
+				if (hero.isMap()) {
+					Help.print("You already found everything on this table.\n"
+							+ "1) Leave through the door\n"
+							+ "2) Investigate table.\n"
+							+ "\n");
+				}
+				else {
+					Help.print("You look at the table and find a map and key.\n"
+							+ "1) Leave through the door\n"
+							+ "2) Investigate table.\n"
+							+ "\n");
+					hero.setMap(true);
+				}
 			}
 		}
 		//armory
@@ -58,7 +96,7 @@ public class Game {
 						+ "1) Go back to other Room\n"
 						+ "2) Heal some more\n\n"
 						+ "");
-				hp -= 1;
+				hero.setHP(hero.getHP()-1);
 			}
 			else if (choice == 3) {
 				//leave to Closet
@@ -119,34 +157,6 @@ public class Game {
 		}
 		//shopping
 		else if (room == 7) {
-			
-		}
-		//hallway
-		else if (room == 8) {
-			
-		}
-		//messhal
-		else if (room == 9) {
-			
-		}
-		//captain's chamber
-		else if (room == 10) {
-			
-		}
-		//training room
-		else if (room == 11) {
-			
-		}
-		//basement 
-		else if (room == 12) {
-			
-		}
-		//grand hall
-		else if (room == 13) {
-			
-		}
-		//combat starter 
-		else if (room == 14) {
 			
 		}
 		
