@@ -34,6 +34,12 @@ public class Game {
 	public int getDefense() {
 		return hero.getDefense();
 	}
+	public void drinkPotion() {
+		if (hero.getPotions() > 0) {
+			hero.setPotions(hero.getPotions()-1);
+			hero.setHP(hero.getHP() + 10);
+		}
+	}
 	
 
 	public int room(int room, int choice) {

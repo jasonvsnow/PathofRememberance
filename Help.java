@@ -42,8 +42,13 @@ public class Help extends Application {
 		choiceButtons.getChildren().addAll(bt1, bt2, bt3, bt4);
 		choiceButtons.setAlignment(Pos.CENTER);
 		
-		
 		Button pot = new Button("Drink Potion");
+		pot.setOnAction(e -> {
+			game.drinkPotion();
+			setStats(game.getHP(), game.getMana(), game.getCoins(), game.getPotions(), game.getAttack(), game.getDefense());
+		});
+		
+		
 		
 		FlowPane buttonHolder = new FlowPane();
 		buttonHolder.getChildren().addAll(choiceButtons, pot);
@@ -94,7 +99,7 @@ public class Help extends Application {
 		primaryStage.show();
 		
 		
-		stats.setStats(50, 20, 0, 0, 1, 1);
+		setStats(game.getHP(), game.getMana(), game.getCoins(), game.getPotions(), game.getAttack(), game.getDefense());
 		text.addText("You are asleep.\n");
 
 		start.setOnAction(e -> {

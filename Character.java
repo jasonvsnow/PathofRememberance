@@ -19,7 +19,7 @@ public class Character {
 		hp = 50;
 		mana = 20;
 		coins = 0;
-		potions = 0;
+		potions = 2;
 		attack = 1;
 		defense = 1;
 		defendCharge = 0;
