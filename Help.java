@@ -51,7 +51,7 @@ public class Help extends Application {
 		buttonHolder.setHgap(50);
 		
 		
-		Button start = new Button("Start");
+		Button start = new Button("Wake Up");
 		
 		HBox topTest = new HBox(50);
 		
@@ -94,8 +94,8 @@ public class Help extends Application {
 		primaryStage.show();
 		
 		
-		stats.setStats(50, 20, 0, 0, 1, 0);
-		text.addText("This is all a test.\n");
+		stats.setStats(50, 20, 0, 0, 1, 1);
+		text.addText("You are asleep.\n");
 
 		start.setOnAction(e -> {
 			pane.setBottom(buttonHolder);
@@ -105,22 +105,22 @@ public class Help extends Application {
 		bt1.setOnAction(e -> {
 			int hold = game.room(room, 1);
 			room = hold;
-			setStats(game.getHP(), 0, 0, 0, 0, 0);
+			setStats(game.getHP(), game.getMana(), game.getCoins(), game.getPotions(), game.getAttack(), game.getDefense());
 		});
 		bt2.setOnAction(e -> {
 			int hold = game.room(room, 2);
 			room = hold;
-			setStats(game.getHP(), 0, 0, 0, 0, 0);
+			setStats(game.getHP(), game.getMana(), game.getCoins(), game.getPotions(), game.getAttack(), game.getDefense());
 		});
 		bt3.setOnAction(e -> {
 			int hold = game.room(room, 3);
 			room = hold;
-			setStats(game.getHP(), 0, 0, 0, 0, 0);
+			setStats(game.getHP(), game.getMana(), game.getCoins(), game.getPotions(), game.getAttack(), game.getDefense());
 		});
 		bt4.setOnAction(e -> {
 			int hold = game.room(room, 4);
 			room = hold;
-			setStats(game.getHP(), 0, 0, 0, 0, 0);
+			setStats(game.getHP(), game.getMana(), game.getCoins(), game.getPotions(), game.getAttack(), game.getDefense());
 		});
 		
 		adventure.setOnAction(e -> {
@@ -181,7 +181,7 @@ class StatPane extends HBox {
 		coinsString = "Coins: 0";
 		potionsString = "Potions: 0";
 		attackString = "Attack: 1";
-		defenseString = "Defense: 0";
+		defenseString = "Defense: 1";
 	}
 	private void paintStats() {
 		Label hpLbl = new Label(hpString);
@@ -200,7 +200,7 @@ class StatPane extends HBox {
 		coinsString = "Coins: " + coins;
 		potionsString = "Potions: " + potions;
 		attackString = "Attack: " + attack;
-		defenseString = "Mana: " + defense;
+		defenseString = "Defense: " + defense;
 		paintStats();
 	}
 }

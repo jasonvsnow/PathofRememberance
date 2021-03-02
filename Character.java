@@ -1,6 +1,7 @@
 package thePath;
 
 public class Character {
+	private int room;
 	private int hp;
 	private int mana;
 	private int coins;
@@ -11,19 +12,29 @@ public class Character {
 	private boolean map;
 	private boolean captainKey;
 	private boolean basementKey;
+	private boolean tutorial;
 	
 	Character() {
+		room = 0;
 		hp = 50;
-		mana = 10;
+		mana = 20;
 		coins = 0;
 		potions = 0;
 		attack = 1;
-		defense = 0;
+		defense = 1;
 		defendCharge = 0;
 		map = false;
 		captainKey = false;
 		basementKey = false;
+		tutorial = true;
 	}
+	public int getRoom() {
+		return room;
+	}
+	public void setRoom(int room) {
+		this.room = room;
+	}
+	
 	public int getHP() {
 		return hp;
 	}
@@ -84,7 +95,12 @@ public class Character {
 	public void setBasementKey(boolean basementKey) {
 		this.basementKey = basementKey;
 	}
-	
+	public boolean isTutorial() {
+		return tutorial;
+	}
+	public void setTutorial(boolean tutorial) {
+		this.tutorial = tutorial;
+	}
 	
 	
 	
