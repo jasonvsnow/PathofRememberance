@@ -32,7 +32,8 @@ public class Help extends Application {
 	}
 	
 	public void start(Stage primaryStage) throws FileNotFoundException{
-		
+		//8, 13, 13, 15, 16, 16
+		//9, 10, 14, 15, 16, 17
 		//input buttons
 		Button bt1 = new Button("1");
 		Button bt2 = new Button("2");
@@ -88,7 +89,7 @@ public class Help extends Application {
 		Image image = new Image(inputstream);
 		HBox t = new HBox();
 		ImageView mapView = new ImageView(image);
-		mapView.setFitHeight(300);
+		mapView.setFitHeight(280);
 		mapView.setFitWidth(580);
 		
 
@@ -134,8 +135,15 @@ public class Help extends Application {
 			pane.setCenter(text);
 		});
 		map.setOnAction(e -> {
-			pane.setBottom(t);
-			pane.setCenter(mapView);
+			if (game.isMap()) {
+				pane.setCenter(mapView);
+				pane.setBottom(t);
+			}
+			else {
+				print("\n(You don't have the map yet!)\n");
+				map.setSelected(false);
+				adventure.setSelected(true);
+			}
 		});
 		
 		

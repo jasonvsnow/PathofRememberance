@@ -34,6 +34,9 @@ public class Game {
 	public int getDefense() {
 		return hero.getDefense();
 	}
+	public boolean isMap() {
+		return hero.isMap();
+	}
 	public void drinkPotion() {
 		if (hero.getPotions() > 0) {
 			hero.setPotions(hero.getPotions()-1);
@@ -122,42 +125,142 @@ public class Game {
 				hero.setRoom(1);
 			}
 			else if (choice == 2) {
-				Help.print("I haven't  built this yet. Shame on you.\n");
-				reRoom = 3;
+				Help.print("You exit the armory through the door.\n");
 				hero.setRoom(3);
+				
+				
+				int y = combatCheck();
+				if (y > 0) {
+					type = combatStarter(y);
+					reRoom = 8;
+				}
+				else {
+					reRoom = 3;
+					Help.print("Barracks intro.\n"
+							+ "1) Go to the Armory\n"
+							+ "2) Go to the Hallway"
+							+ "3) Go to the Shop\n"
+							+ "4) Go to the Storage\n"
+							+ "\n");
+				}
+				
+				
 			}
 			else if (choice == 3) {
 				if (hero.getAttack() <= 2) {
 					Help.print("You decide to abanon your dagger for a more trusty sword.\n"
-							+ "1) Go to the awakening room.\n"
+							+ "1) Go to the Awakening Room.\n"
 							+ "2) Go to the Barracks.\n"
 							+ "\n");
 					hero.setAttack(5);
 				}
 			}
 		}
-		//armory selection
+		//barracks
 		else if (room == 3) {
-			if (choice >= 1 || choice <= 1) {
-				Help.print("We're just vibing in the unbuilt room.\n\n");
+			if (choice == 1) {
+				Help.print("You head into the armory.\n");
+				hero.setRoom(2);
+				int y = combatCheck();
+				Help.print("You leave the room, entering the armory.\n"
+						+ "This describes the armory.\n"
+						+ "1) Go to the awakening room.\n"
+						+ "2) Go to the Barracks.\n");
+						if (hero.getAttack() <= 2) Help.print("3) Grab a weapon.\n");
+						Help.print("\n");
+				reRoom = 2;
+			}
+			else if (choice == 2) {
+				Help.print("You head into the hallway.\n");
+
+			}
+			else if (choice == 3) {
+				
+			}
+			else if (choice == 4) {
+				
 			}
 		}
-		//barracks
+		//shop
 		else if (room == 4) {
-			
+			if (choice == 1) {
+
+			}
+			else if (choice == 2) {
+				
+			}
+			else if (choice == 3) {
+				
+			}
+			else if (choice == 4) {
+				
+			}
 		}
 		//closet
 		else if (room == 5) {
-			
+			if (choice == 1) {
+
+			}
+			else if (choice == 2) {
+				
+			}
+			else if (choice == 3) {
+				
+			}
+			else if (choice == 4) {
+				
+			}
 		}
-		//shop
+		//hallway
 		else if (room == 6) {
-		
+			if (choice == 1) {
+
+			}
+			else if (choice == 2) {
+				
+			}
+			else if (choice == 3) {
+				
+			}
+			else if (choice == 4) {
+				
+			}
 		}
-		//shopping
+		//training room
 		else if (room == 7) {
+			if (choice == 1) {
+
+			}
+			else if (choice == 2) {
+				
+			}
+			else if (choice == 3) {
+				
+			}
+			else if (choice == 4) {
+				
+			}
+		}
+		//captain's room
+		else if (room == 9) {
+			if (choice == 1) {
+
+			}
+			else if (choice == 2) {
+				
+			}
+			else if (choice == 3) {
+				
+			}
+			else if (choice == 4) {
+				
+			}
+		}
+		//mess hall
+		else if (room == 10) {
 			
 		}
+	
 		
 		
 		else if (room == 100) {
@@ -208,24 +311,41 @@ public class Game {
 		return reRoom;
 		
 	}
+	public int combatCheck() {
+		int check = (int)(Math.random()*3);
+		if (check == 0) {
+			
+		}
+		else if (check == 1) {
+			
+		}
+		else if (check == 2) {
+			
+		}
+		
+		return 1;
+	}
+	
+	
 	public int combatStarter(int seed) {
 		if (seed == 0) {
 			Help.print("You are fighting a shade.\n");
-			Help.print("What will you do?\n"
-					+ "1) Attack\n"
-					+ "2) Defend\n"
-					+ "3) Use Magic\n"
-					+ "\n");
 		}
 		else if (seed == 1) {
-			
+			Help.print("You are fighting a skeleton.\n");
 		}
 		else if (seed == 2) {
-			
+			Help.print("You are fighting a zombie.\n");
 		}
 		else if (seed == 3) {
-			
+			Help.print("You are fighting the Lord.\n");
 		}
+		Help.print("What will you do?\n"
+				+ "1) Attack\n"
+				+ "2) Defend\n"
+				+ "3) Use Magic\n"
+				+ "\n");
+		
 		
 		return seed;
 	}
@@ -242,6 +362,27 @@ public class Game {
 			Help.print("\n");
 			reRoom = 2;
 			hero.setRoom(2);
+		}
+		else if (reRoom == 3) {
+			//barracks
+		}
+		else if (reRoom == 4) {
+			
+		}
+		else if (reRoom == 5) {
+			
+		}
+		else if (reRoom == 6) {
+			
+		}
+		else if (reRoom == 7) {
+			
+		}
+		else if (reRoom == 8) {
+			
+		}
+		else if (reRoom == 9) {
+			
 		}
 	}
 	
