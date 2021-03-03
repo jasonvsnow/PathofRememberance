@@ -196,7 +196,7 @@ public class Game {
 				
 			}
 		}
-		//closet
+		//storage
 		else if (room == 5) {
 			if (choice == 1) {
 
@@ -323,7 +323,7 @@ public class Game {
 			
 		}
 		
-		return 1;
+		return check;
 	}
 	
 	
@@ -360,29 +360,34 @@ public class Game {
 			+ "2) Go to the Barracks.\n");
 			if (hero.getAttack() <= 2) Help.print("3) Grab a weapon.\n");
 			Help.print("\n");
-			reRoom = 2;
-			hero.setRoom(2);
 		}
 		else if (reRoom == 3) {
 			//barracks
-		}
-		else if (reRoom == 4) {
-			
+			Help.print("Describe barracks post fight\n"
+					+ "1) Go to the Armory\n"
+					+ "2) Go to the Hallway\n"
+					+ "3) Go to the Shop\n"
+					+ "4) Go to the Storage\n"
+					+ "\n");
+
 		}
 		else if (reRoom == 5) {
-			
+			//storage
+			Help.print("");
 		}
 		else if (reRoom == 6) {
-			
+			//hallway
+			Help.print("");
 		}
 		else if (reRoom == 7) {
-			
-		}
-		else if (reRoom == 8) {
-			
+			//training room
+			Help.print("");
 		}
 		else if (reRoom == 9) {
-			
+			//captain's room
+		}
+		else if (reRoom == 10) {
+			//messhall
 		}
 	}
 	
