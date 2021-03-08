@@ -172,28 +172,56 @@ public class Game {
 			}
 			else if (choice == 2) {
 				Help.print("You head into the hallway.\n");
+				hero.setRoom(6);
+				int y = combatCheck();
+				if (y > 0) {
+					type = combatStarter(y);
+					reRoom = 8;
+				}
+				else {
+					reRoom = 6;
+				}
+				Help.print("");
 
 			}
 			else if (choice == 3) {
-				
+				Help.print("You head into the shop.");
+				hero.setRoom(4);
+				int y = combatCheck();
+				if (y > 0) {
+					type = combatStarter(y);
+					reRoom = 8;
+				}
+				else {
+					reRoom = 4;
+				}
 			}
 			else if (choice == 4) {
-				
+				Help.print("You head into the storage.");
+				hero.setRoom(5);
+				int y = combatCheck();
+				if (y > 0) {
+					type = combatStarter(y);
+					reRoom = 8;
+				}
+				else {
+					reRoom = 5;
+				}
 			}
 		}
 		//shop
 		else if (room == 4) {
 			if (choice == 1) {
-
+				//health potion
 			}
 			else if (choice == 2) {
-				
+				//mana potion
 			}
 			else if (choice == 3) {
-				
+				//key > leave
 			}
 			else if (choice == 4) {
-				
+				// leave > 0
 			}
 		}
 		//storage
