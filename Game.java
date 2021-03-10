@@ -2,44 +2,87 @@ package thePath;
 
 
 
-
+/**
+ * <h1>Game</h1> 
+ * <p>This class </p>
+ * <p>Created: </p>
+ * @author Jason Snow
+ *
+ */
 public class Game {
 	private Character hero;
 	private Combat conflict;
 	private int reRoom;
 	private int type;
 	
-		
+	/**
+	 * 
+	 */
 	Game() {
 		hero = new Character();
 		conflict = new Combat();
 		reRoom = 0;
 		type = 0;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getHP() {
 		return hero.getHP();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMana() {
 		return hero.getMana();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getCoins() {
 		return hero.getCoins();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getHPpotions() {
 		return hero.getHPPotion();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getMNPotions() {
 		return hero.getMNPotion();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getAttack() {
 		return hero.getAttack();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getDefense() {
 		return hero.getDefense();
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isMap() {
 		return hero.isMap();
 	}
+	/**
+	 * 
+	 */
 	public void drinkHPotion() {
 		if (hero.getHP() > 0) {
 			if (hero.getHPPotion() > 0) {
@@ -53,6 +96,9 @@ public class Game {
 			else Display.print("You don't have any health potions to drink.\n\n");
 		}
 	}
+	/**
+	 * 
+	 */
 	public void drinkMNPotion() {
 		if (hero.getHP() > 0) {
 			if (hero.getMNPotion() > 0) {
@@ -67,8 +113,12 @@ public class Game {
 		}
 	}
 	
-	
-
+	/**
+	 * 
+	 * @param room
+	 * @param choice
+	 * @return
+	 */
 	public int room(int room, int choice) {
 
 		//waking up
@@ -366,7 +416,10 @@ public class Game {
 		return reRoom;
 		
 	}
-	
+	/**
+	 * 
+	 * @param seed
+	 */
 	public void combatStarter(int seed) {
 		reRoom = 8;
 		if (seed == 0) {
@@ -391,6 +444,9 @@ public class Game {
 				+ "3) Use Magic\n"
 				+ "\n");
 	}
+	/**
+	 * 
+	 */
 	public void enterRoom() {
 		reRoom = hero.getRoom();
 		if (reRoom == 1) {

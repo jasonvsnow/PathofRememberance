@@ -10,7 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.image.*;
 
-
+/**
+ * 
+ * @author student
+ *
+ */
 public class Display extends Application {
 	private static TextPane text = new TextPane();
 	private static StatPane stats = new StatPane();
@@ -18,19 +22,44 @@ public class Display extends Application {
 	private Game game = new Game();
 	private boolean started = false;
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getRoom() {
 		return room;
 	}
+	/**
+	 * 
+	 * @param i
+	 */
 	public void setRoom(int i) {
 		room = i;
 	}
+	/**
+	 * 
+	 * @param s
+	 */
 	public static void print(String s) {
 		text.addText(s);
 	}
+	/**
+	 * 
+	 * @param hp
+	 * @param mana
+	 * @param coins
+	 * @param attack
+	 * @param defense
+	 * @param hppotions
+	 * @param mnpotions
+	 */
 	public void setStats(int hp, int mana, int coins, int attack, int defense, int hppotions, int mnpotions) {
 		stats.setStats(hp, mana, coins, attack, defense, hppotions, mnpotions);
 	}
 	
+	/**
+	 * 
+	 */
 	public void start(Stage primaryStage) throws FileNotFoundException{
 		//8, 13, 13, 15, 16, 16
 		//9, 10, 14, 15, 16, 17
@@ -176,17 +205,31 @@ public class Display extends Application {
 		
 		
 	}
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 }
 
+/**
+ * 
+ * @author student
+ *
+ */
 class TextPane extends Pane {
 	private String s;
-	
+	/**
+	 * 
+	 */
 	TextPane() {
 		s = "";
 	}
+	/**
+	 * 
+	 */
 	private void paintText() {
 		TextArea text = new TextArea();
 		text.setText(s);
@@ -198,16 +241,29 @@ class TextPane extends Pane {
 		getChildren().clear();
 		getChildren().add(text);
 	}
+	/**
+	 * 
+	 * @param s
+	 */
 	public void addText(String s) {
 		this.s += s;
 		paintText();
 	}
+	/**
+	 * 
+	 * @param c
+	 */
 	public void addText(char c) {
 		this.s += c + "";
 		paintText();
 	}
 }
 
+/**
+ * 
+ * @author student
+ *
+ */
 class StatPane extends HBox {
 	private String hpString = "test";
 	private String manaString;
@@ -216,9 +272,10 @@ class StatPane extends HBox {
 	private String defenseString;
 	private String hppotionsString;
 	private String mnpotionsString;
-
 	
-	
+	/**
+	 * 
+	 */
 	StatPane() {
 		hpString = "HP: 50";
 		manaString = "Mana: 20";
@@ -229,6 +286,9 @@ class StatPane extends HBox {
 		mnpotionsString = "Mana Potions: 0";
 
 	}
+	/**
+	 * 
+	 */
 	private void paintStats() {
 		Label hpLbl = new Label(hpString);
 		Label manaLbl = new Label(manaString);
@@ -242,6 +302,16 @@ class StatPane extends HBox {
 		getChildren().clear();
 		getChildren().addAll(hpLbl, manaLbl, coinsLbl, attackLbl, defenseLbl, hppotionsLbl, mnpotionsLbl);
 	}
+	/**
+	 * 
+	 * @param hp
+	 * @param mana
+	 * @param coins
+	 * @param attack
+	 * @param defense
+	 * @param hppotions
+	 * @param mnpotions
+	 */
 	public void setStats(int hp, int mana, int coins, int attack, int defense, int hppotions, int mnpotions) {
 		hpString = "HP: " + hp;
 		manaString = "Mana: " + mana;

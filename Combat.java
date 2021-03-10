@@ -1,19 +1,32 @@
 package thePath;
 
+/**
+ * 
+ * @author student
+ *
+ */
 public class Combat {
 	private Enemy foe;
 	private int foeType;
 	private boolean init;
 	int hold;
 
-	
+	/**
+	 * 
+	 */
 	Combat() {
 		foe = new Enemy();
 		foeType = 0;
 		init = false;
 		hold = 1;
 	}
-	
+	/**
+	 * 
+	 * @param hero
+	 * @param choice
+	 * @param type
+	 * @return
+	 */
 	public int fight(Character hero, int choice, int type) {
 		if (!init) {
 			foeType = type;
@@ -52,10 +65,16 @@ public class Combat {
 		}
 		
 	}
-	
+	/**
+	 * 
+	 * @param hero
+	 * @param choice
+	 * @return
+	 */
 	public int processPlayerTurn(Character hero, int choice) {
 		if (choice == 1) {
 			int dealt = hero.getAttack()-foe.getDefense();
+			if (dealt < 0) dealt = 0;
 			Display.print("You attack, dealing " + dealt + " damage!\n");
 			foe.setHP(foe.getHP()-dealt);
 		}
@@ -107,10 +126,15 @@ public class Combat {
 			return 0;
 		}
 	}
-	
+	/**
+	 * 
+	 * @param hero
+	 * @param choice
+	 */
 	public void processEnemyTurn(Character hero, int choice) {
 		if (foeType == 0) {
 			int dealing = foe.getAttack() - hero.getDefense();
+			if (dealing < 0) dealing = 0;
 			Display.print("\nThe wretched green thing screams and slashes at you with black claws, dealing " + dealing + " damage.\n");
 			hero.setHP(hero.getHP() - dealing);
 		}
@@ -124,6 +148,7 @@ public class Combat {
 			}
 			else {
 				int dealing = foe.getAttack() - hero.getDefense();
+				if (dealing < 0) dealing = 0;
 				Display.print("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
 				
 			}
@@ -132,6 +157,7 @@ public class Combat {
 			int ran = (int)(Math.random()*3);
 			if (ran == 0) {
 				int dealing = foe.getAttack() - hero.getDefense();
+				if (dealing < 0) dealing = 0;
 				Display.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
 				hero.setHP(hero.getHP() - dealing);
 			}
@@ -142,6 +168,7 @@ public class Combat {
 				}
 				else {
 					int dealing = foe.getAttack() - hero.getDefense();
+					if (dealing < 0) dealing = 0;
 					Display.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
 					hero.setHP(hero.getHP() - dealing);
 				}
@@ -150,16 +177,31 @@ public class Combat {
 	}
 	
 	
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isInit() {
 		return init;
 	}
+	/**
+	 * 
+	 * @param init
+	 */
 	public void setInit(boolean init) {
 		this.init = init;
 	}
+	/**
+	 * 
+	 * @return
+	 */
 	public int getFoeType() {
 		return foeType;
 	}
+	/**
+	 * 
+	 * @param type
+	 */
 	public void setFoeType(int type) {
 		foeType = type;
 	}
