@@ -28,23 +28,23 @@ public class Combat {
 			return 0;
 		}
 		else if (hold == 1) {
-			Help.print("1) Attack\n"
+			Display.print("1) Attack\n"
 					+ "2) Defend\n"
 					+ "3) Use Magic\n"
 					+ "\n");
 			return 1;
 		}
 		else if (hold == 2) {
-			Help.print("You won!\n");
+			Display.print("You won!\n");
 			hero.setDefense(1);
-			if (foe.getReward() > 1) Help.print("You find " + foe.getReward() + " coins on the enemy.\n");
-			else Help.print("You find " + foe.getReward() + " coin on the enemy.\n");
+			if (foe.getReward() > 1) Display.print("You find " + foe.getReward() + " coins on the enemy.\n");
+			else Display.print("You find " + foe.getReward() + " coin on the enemy.\n");
 			hero.setCoins(hero.getCoins()+foe.getReward());
 			init = false;
 			return 2;
 		}
 		else {
-			Help.print("1) Attack\n"
+			Display.print("1) Attack\n"
 					+ "2) Defend\n"
 					+ "3) Use Magic\n"
 					+ "\n");
@@ -56,11 +56,11 @@ public class Combat {
 	public int processPlayerTurn(Character hero, int choice) {
 		if (choice == 1) {
 			int dealt = hero.getAttack()-foe.getDefense();
-			Help.print("You attack, dealing " + dealt + " damage!\n");
+			Display.print("You attack, dealing " + dealt + " damage!\n");
 			foe.setHP(foe.getHP()-dealt);
 		}
 		if (choice == 2) {
-			Help.print("You defend!\n");
+			Display.print("You defend!\n");
 			//edit 
 			if (hero.getAttack() == 5) hero.setDefense(5);
 			else if (hero.getAttack() == 10) hero.setDefense(8);
@@ -69,13 +69,13 @@ public class Combat {
 		}
 		if (choice == 3) {
 			if (hero.getMana() >= 2) {
-				Help.print("You hold the ball of light in your hand out and it explodes, burning the enemy for 7 damage! The ball then relights. \n");
+				Display.print("You hold the ball of light in your hand out and it explodes, burning the enemy for 7 damage! The ball then relights. \n");
 				foe.setHP(foe.getHP()-7);
 				hero.setMana(hero.getMana()-2);
 			}
 			else {
-				Help.print("You don't have enough mana for that!\n");
-				Help.print(""
+				Display.print("You don't have enough mana for that!\n");
+				Display.print(""
 						+ "1) Attack\n"
 						+ "2) Defend\n"
 						+ "3) Use Magic\n"
@@ -111,20 +111,20 @@ public class Combat {
 	public void processEnemyTurn(Character hero, int choice) {
 		if (foeType == 0) {
 			int dealing = foe.getAttack() - hero.getDefense();
-			Help.print("\nThe wretched green thing screams and slashes at you with black claws, dealing " + dealing + " damage.\n");
+			Display.print("\nThe wretched green thing screams and slashes at you with black claws, dealing " + dealing + " damage.\n");
 			hero.setHP(hero.getHP() - dealing);
 		}
 		else if (foeType == 2) {
 			int ran = (int)(Math.random()*3);
 			if (ran == 0 && foe.getMana() > 0) {
-				Help.print("\nThe creature slams its spikey hand into the ground and beneath you spikes erupt, slamming into you and piercing your defenses, dealing 7 damage to you while also reinforcing the creatures armor.\n");
+				Display.print("\nThe creature slams its spikey hand into the ground and beneath you spikes erupt, slamming into you and piercing your defenses, dealing 7 damage to you while also reinforcing the creatures armor.\n");
 				foe.setMana(foe.getMana()-1);
 				foe.setDefense(foe.getDefense()+1);
 				hero.setHP(hero.getHP()-7);
 			}
 			else {
 				int dealing = foe.getAttack() - hero.getDefense();
-				Help.print("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
+				Display.print("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
 				
 			}
 		}
@@ -132,17 +132,17 @@ public class Combat {
 			int ran = (int)(Math.random()*3);
 			if (ran == 0) {
 				int dealing = foe.getAttack() - hero.getDefense();
-				Help.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
+				Display.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
 				hero.setHP(hero.getHP() - dealing);
 			}
 			else {
 				if (foe.getDefense() < 2) {
 					foe.setDefense(2);
-					Help.print("The creature snarls and more spikes suddenly burst out from its skin, hardening its defense.\n");
+					Display.print("The creature snarls and more spikes suddenly burst out from its skin, hardening its defense.\n");
 				}
 				else {
 					int dealing = foe.getAttack() - hero.getDefense();
-					Help.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
+					Display.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
 					hero.setHP(hero.getHP() - dealing);
 				}
 			}
