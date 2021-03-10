@@ -5,13 +5,13 @@ public class Character {
 	private int hp;
 	private int mana;
 	private int coins;
-	private int potions;
+	private int HPpotion;
+	private int MNpotion;
 	private int attack;
 	private int defense;
 	private int defendCharge;
 	private boolean map;
 	private boolean captainKey;
-	private boolean basementKey;
 	private boolean tutorial;
 	
 	Character() {
@@ -19,13 +19,13 @@ public class Character {
 		hp = 50;
 		mana = 20;
 		coins = 0;
-		potions = 2;
+		HPpotion = 2;
+		MNpotion = 0;
 		attack = 1;
-		defense = 1;
+		defense = 0;
 		defendCharge = 0;
 		map = false;
 		captainKey = false;
-		basementKey = false;
 		tutorial = true;
 	}
 	public int getRoom() {
@@ -53,12 +53,19 @@ public class Character {
 	public void setCoins(int coins) {
 		this.coins = coins;
 	}
-	public int getPotions() {
-		return potions;
+	public int getHPPotion() {
+		return HPpotion;
 	}
-	public void setPotions(int potions) {
-		this.potions = potions;
+	public void setHPPotion(int potions) {
+		HPpotion = potions;
 	}
+	public int getMNPotion() {
+		return MNpotion;
+	}
+	public void setMNPotion(int potions) {
+		MNpotion = potions;
+	}
+	
 	public int getAttack() {
 		return attack;
 	}
@@ -88,12 +95,6 @@ public class Character {
 	}
 	public void setCaptainKey(boolean captainKey) {
 		this.captainKey = captainKey;
-	}
-	public boolean isBasementKey() {
-		return basementKey;
-	}
-	public void setBasementKey(boolean basementKey) {
-		this.basementKey = basementKey;
 	}
 	public boolean isTutorial() {
 		return tutorial;

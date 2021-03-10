@@ -19,23 +19,16 @@ public class Enemy {
 		if (type == 1) {
 			hp = 10;
 			mana = 0;
-			attack = 8;
+			attack = 10;
 			defense = 1;
-			reward = 2;
+			reward = 3;
 		}
 		if (type == 2) {
-			hp = 20;
-			mana = 0;
-			attack = 12;
-			defense = 1;
-			reward = 4;
-		}
-		if (type == 3) {
-			hp = 40;
-			mana = 10;
-			attack = 16;
-			defense = 2;
-			reward = 8;
+			hp = 18;
+			mana = 4;
+			attack = 15;
+			defense = 3;
+			reward = 5;
 		}
 	}
 	public int getHP() {

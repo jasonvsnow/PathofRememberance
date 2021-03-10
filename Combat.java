@@ -12,7 +12,6 @@ public class Combat {
 		foeType = 0;
 		init = false;
 		hold = 1;
-
 	}
 	
 	public int fight(Character hero, int choice, int type) {
@@ -21,7 +20,6 @@ public class Combat {
 			if (type == 0) foe = new Enemy();
 			else if (type == 1) foe = new Enemy(1);
 			else if (type == 2) foe = new Enemy(2);
-			else if (type == 3) foe = new Enemy(3);
 			init = true;
 		}
 		hold = processPlayerTurn(hero, choice);
@@ -41,6 +39,7 @@ public class Combat {
 			hero.setDefense(1);
 			if (foe.getReward() > 1) Help.print("You find " + foe.getReward() + " coins on the enemy.\n");
 			else Help.print("You find " + foe.getReward() + " coin on the enemy.\n");
+			hero.setCoins(hero.getCoins()+foe.getReward());
 			init = false;
 			return 2;
 		}
@@ -62,13 +61,16 @@ public class Combat {
 		}
 		if (choice == 2) {
 			Help.print("You defend!\n");
-			hero.setDefense(4);
+			//edit 
+			if (hero.getAttack() == 5) hero.setDefense(5);
+			else if (hero.getAttack() == 10) hero.setDefense(8);
+			else hero.setDefense(3);
 			hero.setDefendCharge(4);
 		}
 		if (choice == 3) {
 			if (hero.getMana() >= 2) {
-				Help.print("For now, magic is just a better attack. You blast the enemy for 5 damage!\n");
-				foe.setHP(foe.getHP()-5);
+				Help.print("You hold the ball of light in your hand out and it explodes, burning the enemy for 7 damage! The ball then relights. \n");
+				foe.setHP(foe.getHP()-7);
 				hero.setMana(hero.getMana()-2);
 			}
 			else {
@@ -85,21 +87,67 @@ public class Combat {
 		if (hero.getDefendCharge() > 0) {
 			hero.setDefendCharge(hero.getDefendCharge()-1);
 		}
-		else hero.setDefense(1);
-		if (foe.getHP() > 0) {
-			int dealing = foe.getAttack()-hero.getDefense();
-			Help.print("The enemy then counter attacks, dealing " + dealing + " damage.\n");
-			hero.setHP(hero.getHP()-dealing);
+		else {
+			if (hero.getAttack() == 5) hero.setDefense(2);
+			else if (hero.getAttack() == 10) hero.setDefense(5);
+			else hero.setDefense(0);
 		}
-		else return 2;
+		if (foe.getHP() > 0) {
+			processEnemyTurn(hero, choice);	
+		}
+		else {
+			return 2;
+		}
 		
 		
 		if (hero.getHP() > 0) {
 			return 1;
 		}
-		else return 0;
+		else {
+			return 0;
+		}
 	}
 	
+	public void processEnemyTurn(Character hero, int choice) {
+		if (foeType == 0) {
+			int dealing = foe.getAttack() - hero.getDefense();
+			Help.print("\nThe wretched green thing screams and slashes at you with black claws, dealing " + dealing + " damage.\n");
+			hero.setHP(hero.getHP() - dealing);
+		}
+		else if (foeType == 2) {
+			int ran = (int)(Math.random()*3);
+			if (ran == 0 && foe.getMana() > 0) {
+				Help.print("\nThe creature slams its spikey hand into the ground and beneath you spikes erupt, slamming into you and piercing your defenses, dealing 7 damage to you while also reinforcing the creatures armor.\n");
+				foe.setMana(foe.getMana()-1);
+				foe.setDefense(foe.getDefense()+1);
+				hero.setHP(hero.getHP()-7);
+			}
+			else {
+				int dealing = foe.getAttack() - hero.getDefense();
+				Help.print("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
+				
+			}
+		}
+		else if (foeType == 1) {
+			int ran = (int)(Math.random()*3);
+			if (ran == 0) {
+				int dealing = foe.getAttack() - hero.getDefense();
+				Help.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
+				hero.setHP(hero.getHP() - dealing);
+			}
+			else {
+				if (foe.getDefense() < 2) {
+					foe.setDefense(2);
+					Help.print("The creature snarls and more spikes suddenly burst out from its skin, hardening its defense.\n");
+				}
+				else {
+					int dealing = foe.getAttack() - hero.getDefense();
+					Help.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
+					hero.setHP(hero.getHP() - dealing);
+				}
+			}
+		}
+	}
 	
 	
 	
