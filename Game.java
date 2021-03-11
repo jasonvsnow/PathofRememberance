@@ -3,9 +3,9 @@ package thePath;
 
 
 /**
- * <h1>Game</h1> 
- * <p>This class </p>
- * <p>Created: </p>
+ * <h1>Game</h1>
+ * <p>This class takes care of the majority of the game functions, calling other classes and their methods to do so and providing the bulk of the code that makes the game the game itself, hence the name.</p>
+ * <p>Created: 03/10/21</p>
  * @author Jason Snow
  *
  */
@@ -16,7 +16,10 @@ public class Game {
 	private int type;
 	
 	/**
-	 * 
+	 * This is the no-arg constructor for a game object.
+	 * <prev>Example: nn 
+	 * {@code Game() will make a default Game object
+	 * }</prev>
 	 */
 	Game() {
 		hero = new Character();
@@ -25,56 +28,80 @@ public class Game {
 		type = 0;
 	}
 	/**
-	 * 
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for HP.
+	 * <prev>Example: 
+	 * {@code game.getHP() might typically return 1-50 as all other values are death.
+	 * }</prev>
+	 * @return (int; the amount of hp the Character object currently has)
 	 */
 	public int getHP() {
 		return hero.getHP();
 	}
 	/**
-	 * 
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for Mana.
+	 * <prev>Example: 
+	 * {@code game.getMana() will typically return 0-20.
+	 * }</prev>
+	 * @return (int; the amount of mana the Character object currently has)
 	 */
 	public int getMana() {
 		return hero.getMana();
 	}
 	/**
-	 * 
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for coins.
+	 * <prev>Example: 
+	 * {@code game.getCoins() might return 0 or 1000 coins, as there is no limit on the number of coins acquired. 
+	 * }</prev>
+	 * @return (int; the amount of coins the Character object currently has)
 	 */
 	public int getCoins() {
 		return hero.getCoins();
 	}
 	/**
-	 * 
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for health potions.
+	 * <prev>Example: 
+	 * {@code game.getHPpotions() might return 0 or more.
+	 * }</prev>
+	 * @return (int; the amount of health potions the Character object currently has)
 	 */
 	public int getHPpotions() {
 		return hero.getHPPotion();
 	}
 	/**
-	 * 
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for mana potions.
+	 * <prev>Example: 
+	 * {@code game.getMNpotions() might return 0 or more.
+	 * }</prev>
+	 * @return (int; the amount of mana potions the Character object currently has)
 	 */
 	public int getMNPotions() {
 		return hero.getMNPotion();
 	}
 	/**
-	 * 
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for attack value.
+	 * <prev>Example: 
+	 * {@code game.getAttack() might return 0, 1, 5, or 10 as those are the available attack values
+	 * }</prev>
+	 * @return (int; current attack value of the Character object)
 	 */
 	public int getAttack() {
 		return hero.getAttack();
 	}
 	/**
-	 * 
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for defense.
+	 * <prev>Example: 
+	 * {@code game.getHP() might return 0, 1, 3, or 6 as those are the available defense values 
+	 * }</prev>
+	 * @return (int; current defense value of the Character object)
 	 */
 	public int getDefense() {
 		return hero.getDefense();
 	}
 	/**
-	 * 
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for HP.
+	 * <prev>Example: 
+	 * {@code game.getHP() might typically return 1-50 as all other values are death.
+	 * }</prev>
 	 * @return
 	 */
 	public boolean isMap() {
@@ -131,7 +158,7 @@ public class Game {
 			if (choice == 1) {
 				Display.print("You summon a power within you and conjure up a ball of light.\n"); //consequence of Action 1 
 				hero.setMana(hero.getMana()-1);
-				Display.print("You open your eyes and find yourself laying on a stone slab, in the middle of a room. "
+				Display.print("\tYou open your eyes and find yourself laying on a slab of hard material that appears to be obsidian. The floor around the slab is scrawled with runes in white chalk, their meaning unknown to you. "
 						+ "There is a door out of the room as well as a table nearby with a map, dagger, and key upon it.\n");
 				hero.setRoom(1); //set to awakening room
 				reRoom = 1;
@@ -289,20 +316,32 @@ public class Game {
 			}
 			else if (choice == 3) {
 				if (hero.isCaptainKey()) {
-					//leave
+					Display.print("You stand, thank the man for his time, and return to the barracks.\n");
+					hero.setRoom(3);
+					enterRoom();
 				}
 				else {
 					if (hero.getCoins() > 9) {
-						//buy key
+						Display.print("You hand over a generous numnber of coins and receive a single golden key in return.\n");
+						hero.setCoins(hero.getCoins()-10);
+						hero.setCaptainKey(true);
 					}
-					else {
-						//fail to buy key
-					}
+					else Display.print("You eye the key, but realize you don't have enough to purchase it.\n");
+				}
+				Display.print(""
+						+ "1) Buy a potion of health(1 coin)\n"
+						+ "2) Buy a potion of mana.(2 coins)\n");
+				if (!hero.isCaptainKey()) {
+					Display.print("3) Buy the golden key.(10 coins)\n"
+						+ "4) Leave\n"
+						+ "\n");
 				}
 			}
 			else if (choice == 4) {
 				if (!hero.isCaptainKey()) {
-					//leave
+					Display.print("You stand, thank the man for his time, and return to the barracks.\n");
+					hero.setRoom(3);
+					enterRoom();
 				}
 			}
 		}
@@ -322,56 +361,118 @@ public class Game {
 		//hallway
 		else if (room == 6) {
 			if (choice == 1) {
-
+				Display.print("You return to the barracks through the plain door.\n");
+				hero.setRoom(3);
+				type = (int)(Math.random()*3);
+				if (type > 0) combatStarter(type);
+				else enterRoom();
 			}
 			else if (choice == 2) {
-				
+				Display.print("The training room is seperated only by an archway you walk through, having to step over a large spike taking up much of the space.\n");
+				hero.setRoom(7);
+				type = (int)(Math.random()*3);
+				if (type > 0) combatStarter(type);
+				else enterRoom();
 			}
 			else if (choice == 3) {
-				
+				Display.print("The messhall door is missing, once there but has been smashed to bits by some force in the past. You step over the rubble to get inside.\n");
+				hero.setRoom(10);
+				type = (int)(Math.random()*3);
+				if (type > 0) combatStarter(type);
+				else enterRoom();
 			}
 			else if (choice == 4) {
-				
+				if (hero.isCaptainKey()) {
+					Display.print("Using the key you got from the shop keeper, you slide it into the door and with a click hear it unlock. You push the door opena and step inside.");
+					type = 2;
+					combatStarter(type);
+				}
+				else Display.print("The door is locked. You try the key you got from the awakening room, but to no avail. You need a different key.\n"
+						+ "1) Go to the barracks\n"
+						+ "2) Go to the training room\n"
+						+ "3) Go to the mess hall\n"
+						+ "2) Go to the captain's chamber.\n"
+						+ "\n");
 			}
 		}
 		//training room
 		else if (room == 7) {
 			if (choice == 1) {
-
+				Display.print("You return to the hallway, stepping over the spike in the archway.\n");
+				hero.setRoom(6);
+				type = (int)(Math.random()*3);
+				if (type > 0) combatStarter(type);
+				else enterRoom();
 			}
 			else if (choice == 2) {
-				
-			}
-			else if (choice == 3) {
-				
-			}
-			else if (choice == 4) {
-				
+				if (hero.getAttack() == 10) {
+					Display.print("You loot the bodies once more, but find nothing more of value.\n");
+				}
+				else {
+					Display.print("You move and shift bodies, looking for something of use when you find a sword made of the same material as the spikes and monsters. "
+							+ "Alongside it a shield. They both seem better to your current weapony, so you take them.\n");
+					hero.setAttack(10);
+					hero.setDefense(5);
+					Display.print(""
+							+ "1) Go to the hallway\n"
+							+ "2) Investigate the bodies.\n"
+							+ "\n");
+				}
 			}
 		}
 		//captain's room
 		else if (room == 9) {
 			if (choice == 1) {
-
+				Display.print("You muster your strength as you approach the window. Raising up your blade, you smash it down upon the spikes and a faint crack appears. "
+						+ "Again, again, you smash your blade into the spikes with a fanatic strength until, rather suddenly, they shatter. "
+						+ "Light streams in through the window and as you look out you see bright blue skies above. Crawling out of the window, you drop down to the grass below. "
+						+ "You are out. You are free. It's going to be alright.\n");
+				reRoom = 98;
 			}
 			else if (choice == 2) {
-				
-			}
-			else if (choice == 3) {
-				
-			}
-			else if (choice == 4) {
-				
+				Display.print("You turn away from the window, for whatever reason choosing to remain in this place. As you step into the hallway once more, you feel a finality in that choice. You will remain.\n");
+				reRoom = 99;
 			}
 		}
 		//mess hall
 		else if (room == 10) {
-			
+			if (choice == 1) {
+				Display.print("You return to the hallway, stepping over the rubble of the door that once was.\n");
+				hero.setRoom(6);
+				type = (int)(Math.random()*3);
+				if (type > 0) combatStarter(type);
+				else enterRoom();
+			}
+			else if (choice == 2) {
+				if (hero.getHP() < 25 || hero.getMana() < 10) {
+					Display.print("You scour the place for anything, but find nothing. By the end of the search, however, you feel refreshed.\n");
+					if (hero.getHP() < 25) hero.setHP(25);
+					if (hero.getMana() < 10) hero.setMana(10);
+				}
+				else {
+					Display.print("You search for something, but nothing seems useful in this room.\n");
+				}
+				Display.print(""
+						+ "1) Go to the hallway\n"
+						+ "2) Search the room\n"
+						+ "\n");
+			}
 		}
 	
+			
+			
+			
+		else if (room == 98) {
+			if (choice < 0) {
+				Display.print("It's going to be alright.\n");
+			}
+		}
 		
-		
-		
+		else if (room == 99) {
+			if (choice < 0) {
+				Display.print("You will remain.\n\n");
+			}
+		}
 		
 		
 		else if (room == 100) {
@@ -410,12 +511,11 @@ public class Game {
 			else if (result == 3) {
 				reRoom = 8;
 			}
-			
 		}
-		
 		return reRoom;
-		
 	}
+
+		
 	/**
 	 * 
 	 * @param seed
@@ -505,11 +605,11 @@ public class Game {
 		}
 		else if (reRoom == 6) {
 			//hallway
-			Display.print("\tThe hallway’s stone floor is broken and shattered by the many spikes jutting throughout it, out of and into walls and floors alike, making navigating it a little difficult.\n"
+			Display.print("\tThe hallway's stone floor is broken and shattered by the many spikes jutting throughout it, out of and into walls and floors alike, making navigating it a little difficult.\n"
 					+ "1) Go to the barracks\n"
 					+ "2) Go to the training room\n"
 					+ "3) Go to the mess hall\n"
-					+ "2) Go to the captain’s chamber.\n"
+					+ "2) Go to the captain's chamber.\n"
 					+ "\n");
 		}
 		else if (reRoom == 7) {
@@ -524,12 +624,16 @@ public class Game {
 					+ "\n");
 		}
 		else if (reRoom == 9) {
-			Display.print("\tAs you enter the captian's chamber, you realize you won.");
+			Display.print("\tAs you enter the captian's chamber, you see a window blocked up by the black spikes. The well made bed, the cluttered desk, the chest locked in the corner, it all seems to fade away as you gaze upon the window.\n"
+					+ "1) Break out the window, escape.\n"
+					+ "2) Return to the hallway, remain.\n"
+					+ "\n");
+
 			
 		}
 		else if (reRoom == 10) {
 			//mess hall
-			Display.print("\tThe mess hall’s floors shift from the stone of the hallway back to the same wood of the barracks. "
+			Display.print("\tThe mess hall's floors shift from the stone of the hallway back to the same wood of the barracks. "
 					+ "Wooden tables- chipped and dented with use over time- stand at attention in two long rows of two down the longer length of the hall. "
 					+ "The room is surprisingly clear and orderly, save the spikes that jut up through the floor- keeping mostly to the center- as if attempting to form a single, larger one- where they only have moved and ruined two tables.\n"
 					+ "1) Go to the hallway\n"
