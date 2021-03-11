@@ -1,9 +1,10 @@
 package thePath;
 
 /**
- * 
- * @author student
- *
+ * <h1>Comabt</h1>
+ * <p>This class processes combat and essentiall runs the loop made in Game. It holds an enemy object that will be pitted against the player until one perishes. </p>
+ * <p>Created: 02/11/2021</p>
+ * @author Jason Snow
  */
 public class Combat {
 	private Enemy foe;
@@ -12,7 +13,10 @@ public class Combat {
 	int hold;
 
 	/**
-	 * 
+	 * This is the no arg constructor for a combat, which sets a blank template.
+	 * <pre>Example:
+	 * {@code Combat() makes a default Combat object.
+	 * }</pre>
 	 */
 	Combat() {
 		foe = new Enemy();
@@ -21,11 +25,18 @@ public class Combat {
 		hold = 1;
 	}
 	/**
-	 * 
-	 * @param hero
-	 * @param choice
-	 * @param type
-	 * @return
+	 * This is the method that handles each round of a fight. First, it checks if combat has already been started. If not, it will generate the proper enemy for that fight and store it.
+	 * It then handles the current round of a fight by calling the processPlayerTurn method and returns an end result.
+	 * The end result is one of four outcomes which include: the player and enemy both took turns but neither died so combat will continue, the enemy died, the player died, or the player attempted to use magic without sufficient mana and will be given the chance to take their turn again.
+	 * One one of the combatants have died, upon that end result the fight is determined to have ended so the next time this method is called it will start a new fight.
+	 * <pre>Example:
+	 * {@code combat.fight(hero, 1, 1) will return a continue or death. The hero is the character, 
+	 * the first 1 is the choice to attack, the second 1 is the type of enemy.
+	 * }</pre>
+	 * @param hero (Character; the character object that will be fighting the enemy)
+	 * @param choice (int; the choice the player has made for their current turn of the fight)
+	 * @param type (int; the type of enemy the hero is fighting)
+	 * @return (int; the result of the current round of combat (continue, player died, enemy died, player falsely attempted magic)
 	 */
 	public int fight(Character hero, int choice, int type) {
 		if (!init) {
@@ -66,10 +77,14 @@ public class Combat {
 		
 	}
 	/**
-	 * 
-	 * @param hero
-	 * @param choice
-	 * @return
+	 * This method is called by fight to determine the result of the choice the character made and then call the proccessEnemyTurn method to 
+	 * determine the result of the enemys actions (assuming the enemy is alive to take a turn). It then returns one of the four possible end results for each round of a fight.
+	 * <pre>Example:
+	 * {@code processPlayerTurn(hero, 1) will either return a continue or death, as the character has chosen to attack this turn and may kill the enemy or be killed.
+	 * }</pre>
+	 * @param hero (Character; the character object in this fight)
+	 * @param choice (int; the choice the user made in this round of the fight)
+	 * @return (int; the result of the players choices and enemies actions, if any)
 	 */
 	public int processPlayerTurn(Character hero, int choice) {
 		if (choice == 1) {
@@ -90,7 +105,7 @@ public class Combat {
 			if (hero.getMana() >= 2) {
 				Display.print("You hold the ball of light in your hand out and it explodes, burning the enemy for 7 damage! The ball then relights. \n");
 				foe.setHP(foe.getHP()-7);
-				hero.setMana(hero.getMana()-2);
+				hero.setMana(hero.getMana()-4);
 			}
 			else {
 				Display.print("You don't have enough mana for that!\n");
@@ -112,7 +127,7 @@ public class Combat {
 			else hero.setDefense(0);
 		}
 		if (foe.getHP() > 0) {
-			processEnemyTurn(hero, choice);	
+			processEnemyTurn(hero);	
 		}
 		else {
 			return 2;
@@ -127,11 +142,13 @@ public class Combat {
 		}
 	}
 	/**
-	 * 
-	 * @param hero
-	 * @param choice
+	 * This method handles the enemies turns. It checks the stored foe type in the combat object and then has the enemy act appropriately, with sometimes random results. It returns nothing as the only thing that needs to be checked after this is the heros health value which is independent of this method.
+	 * <pre>Example:
+	 * {@code combat.processEnemyTurn(hero) will have the enemy take a turn against the hero and ultimately affect the hero hp value, enemy mana value, or enemy defense value.
+	 * }</pre>
+	 * @param hero (Character; the character in this fight against the foe being represented by this method)
 	 */
-	public void processEnemyTurn(Character hero, int choice) {
+	public void processEnemyTurn(Character hero) {
 		if (foeType == 0) {
 			int dealing = foe.getAttack() - hero.getDefense();
 			if (dealing < 0) dealing = 0;
@@ -178,39 +195,37 @@ public class Combat {
 	
 	
 	/**
-	 * 
-	 * @return
+	 * This is the getter method for the init value (short for initiative) which represents whether a fight has started or not.
+	 * In truth, the value represents whether or not the current round is a round after the first.
+	 * and there are varied actions for the starts of fights vs the remainder of it, so this allows the 
+	 * <pre>Example:
+	 * {@code combat.isInit() will return true or false
+	 * }</pre>
+	 * @return init (boolean; whether the current call of this method is a round of combat after the first or not)
 	 */
 	public boolean isInit() {
 		return init;
 	}
 	/**
-	 * 
-	 * @param init
+	 * This is the setter method for the init value, used to set the value after the first round of a fight starts or after a fight ends.
+	 * <pre>Example:
+	 * {@code combat.isInit(false) will set the init value to false.
+	 * }</pre>
+	 * @param init (boolean; whether a started fight is happening or not)
 	 */
 	public void setInit(boolean init) {
 		this.init = init;
 	}
 	/**
-	 * 
-	 * @return
+	 * This is the getter method for the current foeType stored in the combat object, typically used to set the same value for a fight after it has begun.
+	 * <pre>Example:
+	 * {@code combat.getFoeType() might return 0-2
+	 * }</pre>
+	 * @return foeType (int; the type of foe being fought)
 	 */
 	public int getFoeType() {
 		return foeType;
 	}
-	/**
-	 * 
-	 * @param type
-	 */
-	public void setFoeType(int type) {
-		foeType = type;
-	}
-	
-	
-	
-	
-	
-	
 	
 }
 

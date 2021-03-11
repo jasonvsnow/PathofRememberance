@@ -17,9 +17,9 @@ public class Game {
 	
 	/**
 	 * This is the no-arg constructor for a game object.
-	 * <prev>Example: nn 
+	 * <pre>Example:
 	 * {@code Game() will make a default Game object
-	 * }</prev>
+	 * }</pre>
 	 */
 	Game() {
 		hero = new Character();
@@ -29,9 +29,9 @@ public class Game {
 	}
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for HP.
-	 * <prev>Example: 
+	 * <pre>Example: 
 	 * {@code game.getHP() might typically return 1-50 as all other values are death.
-	 * }</prev>
+	 * }</pre>
 	 * @return (int; the amount of hp the Character object currently has)
 	 */
 	public int getHP() {
@@ -39,9 +39,9 @@ public class Game {
 	}
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for Mana.
-	 * <prev>Example: 
+	 * <pre>Example: 
 	 * {@code game.getMana() will typically return 0-20.
-	 * }</prev>
+	 * }</pre>
 	 * @return (int; the amount of mana the Character object currently has)
 	 */
 	public int getMana() {
@@ -49,9 +49,9 @@ public class Game {
 	}
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for coins.
-	 * <prev>Example: 
+	 * <pre>Example: 
 	 * {@code game.getCoins() might return 0 or 1000 coins, as there is no limit on the number of coins acquired. 
-	 * }</prev>
+	 * }</pre>
 	 * @return (int; the amount of coins the Character object currently has)
 	 */
 	public int getCoins() {
@@ -59,9 +59,9 @@ public class Game {
 	}
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for health potions.
-	 * <prev>Example: 
+	 * <pre>Example: 
 	 * {@code game.getHPpotions() might return 0 or more.
-	 * }</prev>
+	 * }</pre>
 	 * @return (int; the amount of health potions the Character object currently has)
 	 */
 	public int getHPpotions() {
@@ -69,9 +69,9 @@ public class Game {
 	}
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for mana potions.
-	 * <prev>Example: 
+	 * <pre>Example: 
 	 * {@code game.getMNpotions() might return 0 or more.
-	 * }</prev>
+	 * }</pre>
 	 * @return (int; the amount of mana potions the Character object currently has)
 	 */
 	public int getMNPotions() {
@@ -79,9 +79,9 @@ public class Game {
 	}
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for attack value.
-	 * <prev>Example: 
+	 * <pre>Example: 
 	 * {@code game.getAttack() might return 0, 1, 5, or 10 as those are the available attack values
-	 * }</prev>
+	 * }</pre>
 	 * @return (int; current attack value of the Character object)
 	 */
 	public int getAttack() {
@@ -89,26 +89,31 @@ public class Game {
 	}
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for defense.
-	 * <prev>Example: 
+	 * <pre>Example: 
 	 * {@code game.getHP() might return 0, 1, 3, or 6 as those are the available defense values 
-	 * }</prev>
+	 * }</pre>
 	 * @return (int; current defense value of the Character object)
 	 */
 	public int getDefense() {
 		return hero.getDefense();
 	}
 	/**
-	 * This method allows other classes to use the getter method for the Character object stored in the Game object for HP.
-	 * <prev>Example: 
-	 * {@code game.getHP() might typically return 1-50 as all other values are death.
-	 * }</prev>
-	 * @return
+	 * This method allows other classes to use the getter method for the Character object stored in the Game object for map.
+	 * <pre>Example: 
+	 * {@code game.isMap() returns true or false
+	 * }</pre>
+	 * @return (boolean; whether the character has the map or not)
 	 */
 	public boolean isMap() {
 		return hero.isMap();
 	}
+	
 	/**
-	 * 
+	 * This method is called by the "Drink HP Potion" button and will cause the character to lose 1 health potion and regain 10 health to a maximum of 50 assuming they are not already at 50 and have a potion available.
+	 * <pre>Example:
+	 * {@code game.drinkHPPotion() will cause the game stored character 
+	 * to expend 1 potion and raise hp by 10 to a maximum of 50 assuming the character isn't dead, has a potion, and is not already at 50.
+	 * }</pre>
 	 */
 	public void drinkHPotion() {
 		if (hero.getHP() > 0) {
@@ -124,14 +129,18 @@ public class Game {
 		}
 	}
 	/**
-	 * 
+	 * This method is called by the "Drink Mana Potion" button and will cause the character to lose 1 mana potion and regain 6 mana to a maximum of 20 assuming they are not already at 20 and have a potion available.
+	 * <pre>Example:
+	 * {@code game.drinkMNPotion() will cause the game stored character 
+	 * to expend 1 potion and raise mana by 6 to a maximum of 20 assuming the character isn't dead, has a potion, and is not already at 20.
+	 * }</pre>
 	 */
 	public void drinkMNPotion() {
 		if (hero.getHP() > 0) {
 			if (hero.getMNPotion() > 0) {
 				if (hero.getMana() < 20) {
 					hero.setMNPotion(hero.getMNPotion()-1);
-					hero.setMana(hero.getMana() + 5);
+					hero.setMana(hero.getMana() + 6);
 					if (hero.getMana() > 20) hero.setMana(20);
 				}
 				else Display.print("You're already at maximum mana! Save that potion for later.\n\n");
@@ -141,10 +150,14 @@ public class Game {
 	}
 	
 	/**
-	 * 
-	 * @param room
-	 * @param choice
-	 * @return
+	 * This runs the majority of the game, aside from combat. This method takes the current room value and the choice value and determines what happens. The choice is given by the button pressed and the room value is stored in game, the character object, as well as Display when it uses this method.
+	 * This method essentially moves a character from one room to another and updates those stored values as such so each choice has the proper result for the room the character is in.
+	 * <pre>Example:
+	 * {@code game.room(0, 1) will return 1, as in room 0 the choice 1 moves you to room 1.
+	 * }</pre>
+	 * @param room (int; the current room to asses the choice for)
+	 * @param choice (int; the choice made for the current room)
+	 * @return reRoom (int; a variable stored in the game object, but which keeps the current room the same until changed to be continuously returned).
 	 */
 	public int room(int room, int choice) {
 
@@ -517,8 +530,11 @@ public class Game {
 
 		
 	/**
-	 * 
-	 * @param seed
+	 * This method is used when combat begins (typically by entering a room). It will display the opening message as appropriate to the type of enemy being fought and then set the room to room 8, which is the room that handles combat. It then prints the first set of choices for a combat, as the set up of this program requires.
+	 * <pre>Example:
+	 * {@code combatStarter(2) will set the room to 8 and display the combat beginning message of a type 2 enemy.
+	 * }</pre>
+	 * @param seed (int; the type of enemy about to be fought and whose message should be displayed before the player action options are displayed)
 	 */
 	public void combatStarter(int seed) {
 		reRoom = 8;
@@ -535,9 +551,6 @@ public class Game {
 					+ "The creature appears to be a skeleton encased in the same material as the spikes, acting a sort of natural armor and leaving only the joints and skull visible- the skull having the same spikes jutting out of the face as the other monsters had."
 					+ "The only noise it makes is the noise of its feet upon the ground as it lunges towards you, bringing a spiked hand forward.\n");
 		}
-		else if (seed == 3) {
-			Display.print("You are fighting the Lord.\n");
-		}
 		Display.print("What will you do?\n"
 				+ "1) Attack\n"
 				+ "2) Defend\n"
@@ -545,7 +558,13 @@ public class Game {
 				+ "\n");
 	}
 	/**
-	 * 
+	 * This method is a solution to the issues I encountered with loops in the Display class. Past versions of this game had, essentially, a guarded loop that would continue until the player finished. However, if a loop doesn't close the Display class will never update, it just all freezes up.
+	 * As a result, the format requires that any information as a result of a choice (including what options are now available as a result) must be displayed before the next choice can be made. Not super complicated but if two rooms ever led to the same room, both would have to display the same message for entering that room once the player did.
+	 * Instead of copy and pasting the same information all over, I made this method so that, once its called, will set the reRoom to the room the character object has stored and print the description method.
+	 * This way, at any time the user enters a room and would get the description (be that after combat or simply entering a non-aggressive room) this method is called to display that rooms information for them and set them into that room as far as Display and the room method are concerned.
+	 * <pre>Example:
+	 * {@code enterRoom() will display one of 9 message strings and then set the return room to the current room value in the character object.
+	 * }</pre>
 	 */
 	public void enterRoom() {
 		reRoom = hero.getRoom();

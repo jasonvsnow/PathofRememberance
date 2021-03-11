@@ -11,8 +11,10 @@ import javafx.scene.layout.*;
 import javafx.scene.image.*;
 
 /**
- * 
- * @author student
+ * <h1>Display</h1>
+ * <p>This class handles all the JavaFX functions of this program. In essence, everything the user will see is because of this code, hence the name (which used to be Help, as the bulk of the code was elsewhere).</p>
+ * <p>Created: 03/11/2021</p>
+ * @author Jason Snow
  *
  */
 public class Display extends Application {
@@ -22,43 +24,39 @@ public class Display extends Application {
 	private Game game = new Game();
 	private boolean started = false;
 	
+
 	/**
-	 * 
-	 * @return
-	 */
-	public int getRoom() {
-		return room;
-	}
-	/**
-	 * 
-	 * @param i
-	 */
-	public void setRoom(int i) {
-		room = i;
-	}
-	/**
-	 * 
-	 * @param s
+	 * This method is used to append text to the text area by calling the text object stored in the Display which is used to display all the text of this text based adventure game to the user.
+	 * <pre>Example:
+	 * {@code Display.print("Hello.") will add the string "Hello" to the current text area. 
+	 * }</pre>
+	 * @param s (String; the string to be added to the text are)
 	 */
 	public static void print(String s) {
 		text.addText(s);
 	}
 	/**
-	 * 
-	 * @param hp
-	 * @param mana
-	 * @param coins
-	 * @param attack
-	 * @param defense
-	 * @param hppotions
-	 * @param mnpotions
+	 * This method is used to update the displayed stats, calling the method of the stored stats object.
+	 * <pre>Example:
+	 * {@code stats.setStats(game.getHP(), game.getMana(), game.getCoins(),game.getAttack(), game.getDefense(), game.getHPpotions(), game.getMNPotions())
+	 * is the most typical use of this method, which gets the information from the game object which gets it from the character object to update the
+	 * stats to match the current character stats.
+	 * }</pre>
+	 * @param hp (int; the current hp value of the character object in the game object)
+	 * @param mana (int; the current mana value of the character object in the game object)
+	 * @param coins (int; the current number of coins of the character object in the game object) 
+	 * @param attack (int; the current attack value of the character object in the game object)
+	 * @param defense (int; the current defense value of the character object in the game object)
+	 * @param hppotions (int: the current number of health potions of the character object in the game object) 
+	 * @param mnpotions (int; the current number of mana potions of the character object in the game object)
 	 */
 	public void setStats(int hp, int mana, int coins, int attack, int defense, int hppotions, int mnpotions) {
 		stats.setStats(hp, mana, coins, attack, defense, hppotions, mnpotions);
 	}
 	
 	/**
-	 * 
+	 * The start method which sets up the stage and scene of the JavaFX and handles the events of buttons pressed and other user input. 
+	 * @throws FileNotFoundException (allows the map image to be displayed)
 	 */
 	public void start(Stage primaryStage) throws FileNotFoundException{
 		//8, 13, 13, 15, 16, 16
@@ -206,8 +204,8 @@ public class Display extends Application {
 		
 	}
 	/**
-	 * 
-	 * @param args
+	 * This methods one and only purpose is to launch the stage and scene and begin the program. 
+	 * @param args (default)
 	 */
 	public static void main(String[] args) {
 		launch(args);
@@ -215,20 +213,28 @@ public class Display extends Application {
 }
 
 /**
- * 
- * @author student
- *
+ * <h1>TextPane</h1>
+ * <p>This class makes an object that can be used in the Display class to show the text to the user. Having it as an object allows it to be more easily updated and affect by outside classes, by means of a caller method in Display that just calls a method in this class.</p>
+ * <p>Created: 03/11/2021</p>
+ * @author Jason Snow
  */
 class TextPane extends Pane {
 	private String s;
 	/**
-	 * 
+	 * The no-arg constructor, simply initializes the string value.
+	 * <pre>Example:
+	 * {@code TextPane() makes a blank textpane object.
+	 * }</pre>
 	 */
 	TextPane() {
 		s = "";
 	}
 	/**
-	 * 
+	 * A void method that updates the displayed text so that it will show all appended text.
+	 * <pre>Example:
+	 * {@code text.paintText() will simply repaint the displayed text area 
+	 * to include all added strings to the s value.
+	 * }</pre>
 	 */
 	private void paintText() {
 		TextArea text = new TextArea();
@@ -242,26 +248,28 @@ class TextPane extends Pane {
 		getChildren().add(text);
 	}
 	/**
-	 * 
-	 * @param s
+	 * This method is used to add text the user is intended to see to this text area, adding the text to the area and then calling the paintText method to update the information displayed to the user.
+	 * <pre>Example:
+	 * {@code text.addText("Hello") will add the string "Hello" to the text area 
+	 * before updating the display so the user can see this addition.
+	 * }</pre>
+	 * @param s (String; the text to be added to the area before update)
 	 */
 	public void addText(String s) {
 		this.s += s;
 		paintText();
 	}
 	/**
-	 * 
+	 * This method 
 	 * @param c
 	 */
-	public void addText(char c) {
-		this.s += c + "";
-		paintText();
-	}
 }
 
 /**
- * 
- * @author student
+ * <h1>StatPane</h1>
+ * <p>This class is used to make an object for holding an HBox used to display the current stats of the character in the Display stage.</p>
+ * <p>Created: 03/11/21</p>
+ * @author Jason Snow
  *
  */
 class StatPane extends HBox {
@@ -274,7 +282,10 @@ class StatPane extends HBox {
 	private String mnpotionsString;
 	
 	/**
-	 * 
+	 * This is the no-arg constructor to make a default StatPane object.
+	 * <pre>Example:
+	 * {@code StatPane() will make a default StatPane object.
+	 * }</pre>
 	 */
 	StatPane() {
 		hpString = "HP: 50";
@@ -287,7 +298,11 @@ class StatPane extends HBox {
 
 	}
 	/**
-	 * 
+	 * This method will update the displayed stats so that as the stats change that change is show and visible to the user to asses.
+	 * <pre>Example:
+	 * {@code stats.paintStats() will update the strings and labels
+	 *  held in the object so that it will display the proper, current stat.
+	 * }</pre>
 	 */
 	private void paintStats() {
 		Label hpLbl = new Label(hpString);
@@ -303,14 +318,19 @@ class StatPane extends HBox {
 		getChildren().addAll(hpLbl, manaLbl, coinsLbl, attackLbl, defenseLbl, hppotionsLbl, mnpotionsLbl);
 	}
 	/**
-	 * 
-	 * @param hp
-	 * @param mana
-	 * @param coins
-	 * @param attack
-	 * @param defense
-	 * @param hppotions
-	 * @param mnpotions
+	 * This method is used to update the displayed stats, calling the paintStats method to update them after the information is updated.
+	 * <pre>Example:
+	 * {@code stats.setStats(game.getHP(), game.getMana(), game.getCoins(),game.getAttack(), game.getDefense(), game.getHPpotions(), game.getMNPotions())
+	 * is the most typical use of this method, which gets the information from the game object which gets it from the character object to update the
+	 * stats to match the current character stats.
+	 * }</pre>
+	 * @param hp (int; the current hp value of the character object in the game object)
+	 * @param mana (int; the current mana value of the character object in the game object)
+	 * @param coins (int; the current number of coins of the character object in the game object) 
+	 * @param attack (int; the current attack value of the character object in the game object)
+	 * @param defense (int; the current defense value of the character object in the game object)
+	 * @param hppotions (int: the current number of health potions of the character object in the game object) 
+	 * @param mnpotions (int; the current number of mana potions of the character object in the game object)
 	 */
 	public void setStats(int hp, int mana, int coins, int attack, int defense, int hppotions, int mnpotions) {
 		hpString = "HP: " + hp;
