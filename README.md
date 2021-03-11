@@ -25,7 +25,7 @@ public void enterRoom() {
 
 
 ## Tests
-There are no tests provided for this version of the Path of Remembrance as there were no methods that returned consistently predictable results or any results at all.
+The test file was made using JUnit4 in Eclipse IDE for Java Developers. To run you'll need both the test and game files accesipble in the same package and a simple run should provide a positive test.
 
 ## Contributors
 PathofRemeberance is an individually driven project, aided and advised on by friends, family, and instructors.
