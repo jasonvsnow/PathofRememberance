@@ -7,63 +7,25 @@ A mini text based adventure game.
 I built this game because I've always enjoyed adventure games, their stories and mysteries, so being able to make some of that myself was exciting and fun.
 
 ## How to Run
-To run PathofRememberance one needs simply to be able to compile .java files, download the one provided, and run the program. The program will prompt you when input is needed until you enter valid input, so playing the game shouldn't be too hard!
+To run PathofRememberance one needs simply to be able to compile .java files, download the one provided, and run the program. The java files should all be able to access and call each other and the MapImage should be in an accesible folder for Display.java. One running, the rest is pretty self explanatory.
 
 ## Code Example
-This is the code that, once the user is past the initial 'tutorial' keeps the game running until the player reaches the end or gives up after dying.
+This code is the beginning of the method used to help maintstream the process of a character entering a room and needing the information from it. The follow else if statements are in similiar make, with a single display message for the appropriate room being entered. A relatively simple bit of code, but which allowed the entire project to remain neat and organized as a result.
 ```
-int room = 2;
-boolean playing = true;
-while (playing == true) {
-	while (room != 15 && hero.getHP() > 0) {
-		room = rooms(room, hero);		
+public void enterRoom() {
+	reRoom = hero.getRoom();
+	if (reRoom == 1) {
+		//Awakening room
+		Display.print("\tThe awakening room is as you left it: the obsidian like table in the center, strange runes scrawled upon the floor, now empty desk tucked into the corner.\n"
+			+ "1) Go to the armory\n"
+			+ "\n");
 	}
-	if (hero.getHP() > 0 && room == 15) {
-		Printer.println("To be continued...");
-		System.out.printf("");
-		playing = false;
-		Printer.println(hero.statString());
-	}
-	else if (hero.getHP() <= 0) {
-		Printer.println("You have fallen...");
-		Printer.println("1) Rise again.");
-		Printer.println("2) Give in to the darkness.");
-		Printer.print("> ");
-		try {
-			choice = input.nextInt();
-			Printer.println("");
-		}
-		catch (InputMismatchException ex) {
-			Printer.println("");
-			input.nextLine();
-			choice = 0;
-		} 
-		if (choice == 1) {
-			Printer.println("Opening your eyes, you find a simple wooden door before you. You push it open and step out, ready to try again.");
-			hero.setHP(40);
-			hero.setDMG(5);
-			hero.setMana(10);
-			hero.setShield(0);
-			hero.setCoins(hero.getCoins()/2);
-			hero.setPotions(hero.getPotions()/2);
-			hero.setDefendCharge(0);
-			hero.setCaptainChamberKey(false);
-			room = 2;
-			playing = true;
-		}
-		else if (choice == 2) {
-			Printer.println("You exhale one final time and close your eyes, letting the darkness take you.");
-			playing = false;
-			Printer.println("");
-			Printer.println("Thank you for playing.");
-		}
-		else Printer.println("Invalid choice. Try again.");
-	}
-}
+	else if //further code omitted for brevities sake
 ```
 
+
 ## Tests
-The test file was made using JUnit4 in Eclipse IDE for Java Developers. To run you'll need both the test and game files accesipble in the same package and a simple run should provide a positive test.
+There are not tests provided for this version of the Path of Rememberance as there were no methods that returned consistentaly predictable results or any results at all.
 
 ## Contributors
 PathofRemeberance is an individually driven project, aided and advised on by friends, family, and instructors.
