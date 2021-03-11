@@ -60,7 +60,9 @@ public class Combat {
 		}
 		else if (hold == 2) {
 			Display.print("You won!\n");
-			hero.setDefense(1);
+			if (hero.getAttack() == 5) hero.setDefense(5);
+			else if (hero.getAttack() == 10) hero.setDefense(8);
+			else hero.setDefense(3);
 			if (foe.getReward() > 1) Display.print("You find " + foe.getReward() + " coins on the enemy.\n");
 			else Display.print("You find " + foe.getReward() + " coin on the enemy.\n");
 			hero.setCoins(hero.getCoins()+foe.getReward());
@@ -167,7 +169,7 @@ public class Combat {
 				int dealing = foe.getAttack() - hero.getDefense();
 				if (dealing < 0) dealing = 0;
 				Display.print("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
-				
+				hero.setHP(hero.getHP()-dealing);
 			}
 		}
 		else if (foeType == 1) {

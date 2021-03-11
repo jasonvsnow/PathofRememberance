@@ -290,16 +290,18 @@ public class Game {
 					hero.setHPPotion(hero.getHPPotion()+1);
 					hero.setCoins(hero.getCoins()-1);
 				}
-				else Display.print("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
+				else {
+					Display.print("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
 						+ "1) Buy a potion of health(1 coin)\n"
 						+ "2) Buy a potion of mana.(2 coins)\n");
-				if (!hero.isCaptainKey()) {
-					Display.print("3) Buy the golden key.(10 coins)\n"
-						+ "4) Leave\n"
-						+ "\n");
+					if (!hero.isCaptainKey()) {
+						Display.print("3) Buy the golden key.(10 coins)\n"
+							+ "4) Leave\n"
+							+ "\n");
+					}
+					else Display.print("3) Leave\n"
+							+ "\n");
 				}
-				else Display.print("3) Leave\n"
-						+ "\n");
 			}
 			else if (choice == 2) {
 				if (hero.getCoins() > 1) {
@@ -316,16 +318,17 @@ public class Game {
 					hero.setMNPotion(hero.getMNPotion()+1);
 					hero.setCoins(hero.getCoins()-2);
 				}
-				else Display.print("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
+				else { Display.print("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
 						+ "1) Buy a potion of health(1 coin)\n"
 						+ "2) Buy a potion of mana.(2 coins)\n");
-				if (!hero.isCaptainKey()) {
-					Display.print("3) Buy the golden key.(10 coins)\n"
-						+ "4) Leave\n"
-						+ "\n");
+					if (!hero.isCaptainKey()) {
+						Display.print("3) Buy the golden key.(10 coins)\n"
+								+ "4) Leave\n"
+								+ "\n");
+					}
+					else Display.print("3) Leave\n"
+								+ "\n");
 				}
-				else Display.print("3) Leave\n"
-						+ "\n");
 			}
 			else if (choice == 3) {
 				if (hero.isCaptainKey()) {
@@ -420,6 +423,10 @@ public class Game {
 			else if (choice == 2) {
 				if (hero.getAttack() == 10) {
 					Display.print("You loot the bodies once more, but find nothing more of value.\n");
+					Display.print(""
+							+ "1) Go to the hallway\n"
+							+ "2) Investigate the bodies.\n"
+							+ "\n");
 				}
 				else {
 					Display.print("You move and shift bodies, looking for something of use when you find a sword made of the same material as the spikes and monsters. "
