@@ -2,7 +2,7 @@ package thePath;
 
 /**
  * <h1>Comabt</h1>
- * <p>This class processes combat and essentiall runs the loop made in Game. It holds an enemy object that will be pitted against the player until one perishes. </p>
+ * <p>This class processes combat and essentially runs the loop made in Game. It holds an enemy object that will be pitted against the player until one perishes. </p>
  * <p>Created: 02/11/2021</p>
  * @author Jason Snow
  */
@@ -10,7 +10,8 @@ public class Combat {
 	private Enemy foe;
 	private int foeType;
 	private boolean init;
-	int hold;
+	private int hold;
+	private String textToPrint = "";
 
 	/**
 	 * This is the no arg constructor for a combat, which sets a blank template.
@@ -49,31 +50,35 @@ public class Combat {
 		hold = processPlayerTurn(hero, choice);
 		if (hold == 0) {
 			init = false;
+			
 			return 0;
 		}
 		else if (hold == 1) {
-			Display.print("1) Attack\n"
+			toPrint("1) Attack\n"
 					+ "2) Defend\n"
 					+ "3) Use Magic\n"
 					+ "\n");
+			
 			return 1;
 		}
 		else if (hold == 2) {
-			Display.print("You won!\n");
+			toPrint("You won!\n");
 			if (hero.getAttack() == 5) hero.setDefense(5);
 			else if (hero.getAttack() == 10) hero.setDefense(8);
 			else hero.setDefense(3);
-			if (foe.getReward() > 1) Display.print("You find " + foe.getReward() + " coins on the enemy.\n");
-			else Display.print("You find " + foe.getReward() + " coin on the enemy.\n");
+			if (foe.getReward() > 1) toPrint("You find " + foe.getReward() + " coins on the enemy.\n");
+			else toPrint("You find " + foe.getReward() + " coin on the enemy.\n");
 			hero.setCoins(hero.getCoins()+foe.getReward());
 			init = false;
+			
 			return 2;
 		}
 		else {
-			Display.print("1) Attack\n"
+			toPrint("1) Attack\n"
 					+ "2) Defend\n"
 					+ "3) Use Magic\n"
 					+ "\n");
+			
 			return 3;
 		}
 		
@@ -92,30 +97,31 @@ public class Combat {
 		if (choice == 1) {
 			int dealt = hero.getAttack()-foe.getDefense();
 			if (dealt < 0) dealt = 0;
-			Display.print("You attack, dealing " + dealt + " damage!\n");
+			toPrint("You attack, dealing " + dealt + " damage!\n");
 			foe.setHP(foe.getHP()-dealt);
 		}
-		if (choice == 2) {
-			Display.print("You defend!\n");
+		else if (choice == 2) {
+			toPrint("You defend!\n");
 			//edit 
 			if (hero.getAttack() == 5) hero.setDefense(5);
 			else if (hero.getAttack() == 10) hero.setDefense(8);
 			else hero.setDefense(3);
 			hero.setDefendCharge(4);
 		}
-		if (choice == 3) {
+		else if (choice == 3) {
 			if (hero.getMana() >= 2) {
-				Display.print("You hold the ball of light in your hand out and it explodes, burning the enemy for 7 damage! The ball then relights. \n");
+				toPrint("You hold the ball of light in your hand out and it explodes, burning the enemy for 7 damage! The ball then relights. \n");
 				foe.setHP(foe.getHP()-7);
 				hero.setMana(hero.getMana()-4);
 			}
 			else {
-				Display.print("You don't have enough mana for that!\n");
-				Display.print(""
+				toPrint("You don't have enough mana for that!\n");
+				toPrint(""
 						+ "1) Attack\n"
 						+ "2) Defend\n"
 						+ "3) Use Magic\n"
 						+ "\n");
+				
 				return 3;
 			}
 		}
@@ -128,18 +134,22 @@ public class Combat {
 			else if (hero.getAttack() == 10) hero.setDefense(5);
 			else hero.setDefense(0);
 		}
+		
 		if (foe.getHP() > 0) {
 			processEnemyTurn(hero);	
 		}
 		else {
+			
 			return 2;
 		}
 		
 		
 		if (hero.getHP() > 0) {
+			
 			return 1;
 		}
 		else {
+			
 			return 0;
 		}
 	}
@@ -154,13 +164,13 @@ public class Combat {
 		if (foeType == 0) {
 			int dealing = foe.getAttack() - hero.getDefense();
 			if (dealing < 0) dealing = 0;
-			Display.print("\nThe wretched green thing screams and slashes at you with black claws, dealing " + dealing + " damage.\n");
+			toPrint("\nThe wretched green thing screams and slashes at you with black claws, dealing " + dealing + " damage.\n");
 			hero.setHP(hero.getHP() - dealing);
 		}
 		else if (foeType == 2) {
 			int ran = (int)(Math.random()*3);
 			if (ran == 0 && foe.getMana() > 0) {
-				Display.print("\nThe creature slams its spikey hand into the ground and beneath you spikes erupt, slamming into you and piercing your defenses, dealing 7 damage to you while also reinforcing the creatures armor.\n");
+				toPrint("\nThe creature slams its spikey hand into the ground and beneath you spikes erupt, slamming into you and piercing your defenses, dealing 7 damage to you while also reinforcing the creatures armor.\n");
 				foe.setMana(foe.getMana()-1);
 				foe.setDefense(foe.getDefense()+1);
 				hero.setHP(hero.getHP()-7);
@@ -168,7 +178,7 @@ public class Combat {
 			else {
 				int dealing = foe.getAttack() - hero.getDefense();
 				if (dealing < 0) dealing = 0;
-				Display.print("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
+				toPrint("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
 				hero.setHP(hero.getHP()-dealing);
 			}
 		}
@@ -177,22 +187,23 @@ public class Combat {
 			if (ran == 0) {
 				int dealing = foe.getAttack() - hero.getDefense();
 				if (dealing < 0) dealing = 0;
-				Display.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
+				toPrint("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
 				hero.setHP(hero.getHP() - dealing);
 			}
 			else {
 				if (foe.getDefense() < 2) {
 					foe.setDefense(2);
-					Display.print("The creature snarls and more spikes suddenly burst out from its skin, hardening its defense.\n");
+					toPrint("The creature snarls and more spikes suddenly burst out from its skin, hardening its defense.\n");
 				}
 				else {
 					int dealing = foe.getAttack() - hero.getDefense();
 					if (dealing < 0) dealing = 0;
-					Display.print("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
+					toPrint("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
 					hero.setHP(hero.getHP() - dealing);
 				}
 			}
 		}
+		
 	}
 	
 	
@@ -227,6 +238,35 @@ public class Combat {
 	 */
 	public int getFoeType() {
 		return foeType;
+	}
+	/**
+	 * This method is used to gather all the text this class will need displayed and store it in a variable until it is needed.
+	 * <pre>Example:
+	 * {@code toPrint("Hello") will append "Hello" to the variable textToPrint.
+	 * }</pre>
+	 * @param message (String; message to add to the storage string)
+	 */
+	public void toPrint(String message) {
+		textToPrint += message;
+	}
+	/**
+	 * This method allows other classes to access the storage string in this method to print it. It is the getter.
+	 * <pre>Example:
+	 * {@code getTextToPrint() returns the textToPrint string
+	 * }</pre>
+	 * @return textToPrint (String; all the stored messages to print from this class)
+	 */
+	public String getTextToPrint() {
+		return textToPrint;
+	}
+	/**
+	 * This method is used to clear all the stored text. It must be called after getTextToPrint is called or else text will be repeated.
+	 * <pre>Example:
+	 * {@code clear() will set textToPrint to "", essentially empty.
+	 * }</pre>
+	 */
+	public void clear() {
+		textToPrint = "";
 	}
 	
 }
