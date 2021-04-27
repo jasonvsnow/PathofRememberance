@@ -237,7 +237,7 @@ public class Character {
 		return map;
 	}
 	/**
-	 * This is the setter method for the map value.
+	 * This is the setter method for the map value. It also calls the setMap method in display to allow access to the map.
 	 * <pre>Example:
 	 * {@code char.setMap(true) will set the map value to true.
 	 * }</pre>
@@ -245,6 +245,7 @@ public class Character {
 	 */
 	public void setMap(boolean map) {
 		this.map = map;
+		Display.setMap(!map);
 	}
 	/**
 	 * This is the getter method for the captainKey value, which indicates if the player has access to the Captain's Chambers.
