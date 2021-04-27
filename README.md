@@ -7,20 +7,32 @@ A mini text based adventure game.
 I built this game because I've always enjoyed adventure games, their stories and mysteries, so being able to make some of that myself was exciting and fun.
 
 ## How to Run
-To run PathofRememberance one needs simply to be able to compile .java files, download the one provided, and run the program. The java files should all be able to access and call each other and the MapImage should be in an accessible folder for Display.java. One running, the rest is pretty self explanatory.
+To run PathofRememberance one needs simply to be able to compile .java files and run javafx, download the one provided, and run the program. The java files should all be able to access and call each other and the MapImage should be in an accessible folder for Display.java. Once running, the rest is pretty self explanatory.
 
 ## Code Example
-This code is the beginning of the method used to help mainstream the process of a character entering a room and needing the information from it. The following else if statements are in similar make, with a single display message for the appropriate room being entered. A relatively simple bit of code, but which allowed the entire project to remain neat and organized as a result.
+This code is the segement that allowed for text to be displayed at a gradual pace. Instead of, like in past versions, the entire chunk of text being displayed in the same jarring instant, this method will slowly print out one letter at a time to create a more gradual and asthetically pleasing processs. It also has a listener that alters the status of an observable boolean which is used to disable input during the printing animation (to avoid overlapping animations that just make a mess).
 ```
-public void enterRoom() {
-	reRoom = hero.getRoom();
-	if (reRoom == 1) {
-		//Awakening room
-		Display.print("\tThe awakening room is as you left it: the obsidian like table in the center, strange runes scrawled upon the floor, now empty desk tucked into the corner.\n"
-			+ "1) Go to the armory\n"
-			+ "\n");
+private static Timeline createTimeline(String message) {
+	char[] chars = message.toCharArray();
+	Timeline timeline = new Timeline();
+	Duration delayBetweenMessages = Duration.seconds(.045);
+	if (speed.equalsIgnoreCase("slow")) delayBetweenMessages = Duration.seconds(.045);
+	else if (speed.equalsIgnoreCase("fast")) delayBetweenMessages = Duration.seconds(.01);
+		
+	Duration frame = delayBetweenMessages;
+		
+	for (int i = 0; i < chars.length; i++) {
+		String msg = chars[i] + "";
+		timeline.getKeyFrames().add(new KeyFrame(frame, e -> text.appendText(msg)));
+		frame = frame.add(delayBetweenMessages);
 	}
-	else if //further code omitted for brevity's sake
+	timeline.statusProperty().addListener((obs, oldStatus, newStatus) -> {
+		readyForInput.set(newStatus == Animation.Status.RUNNING);
+        });
+	text.appendText("\n");
+		
+	return timeline;
+}
 ```
 
 
