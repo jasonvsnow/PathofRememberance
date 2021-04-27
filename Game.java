@@ -124,11 +124,13 @@ public class Game {
 					hero.setHPPotion(hero.getHPPotion()-1);
 					hero.setHP(hero.getHP() + 10);
 					if (hero.getHP() > 50) hero.setHP(50);
+					toPrint("You drink a health potion.\n\n");
 				}
 				else toPrint("You're already at maximum health! Save that potion for later.\n\n");
 			}
 			else toPrint("You don't have any health potions to drink.\n\n");
 		}
+		clear();
 	}
 	/**
 	 * This method is called by the "Drink Mana Potion" button and will cause the character to lose 1 mana potion and regain 6 mana to a maximum of 20 assuming they are not already at 20 and have a potion available.
@@ -144,11 +146,13 @@ public class Game {
 					hero.setMNPotion(hero.getMNPotion()-1);
 					hero.setMana(hero.getMana() + 6);
 					if (hero.getMana() > 20) hero.setMana(20);
+					toPrint("You drink a mana potion.\n\n");
 				}
 				else toPrint("You're already at maximum mana! Save that potion for later.\n\n");
 			}
 			else toPrint("You don't have any mana potions to drink.\n\n");
 		}
+		clear();
 	}
 	
 	/**
@@ -517,7 +521,10 @@ public class Game {
 			int result = 0;
 			if (conflict.isInit()) result = conflict.fight(hero, choice, conflict.getFoeType());
 			else result = conflict.fight(hero, choice, type);
+			toPrint(conflict.getTextToPrint());
+			conflict.clear();
 			if (result == 0) {
+				
 				toPrint("You have been slain.\n"
 						+ "1) Try Again\n"
 						+ "2) Give up\n"
@@ -534,6 +541,7 @@ public class Game {
 				reRoom = 8;
 			}
 		}
+		
 		clear();
 		return reRoom;
 	}
@@ -670,10 +678,22 @@ public class Game {
 					+ "\n");
 		}
 	}
-	
+	/**
+	 * This method is used to gather all the text this class will need displayed and store it in a variable until it is needed.
+	 * <pre>Example:
+	 * {@code toPrint("Hello") will append "Hello" to the variable textToPrint.
+	 * }</pre>
+	 * @param message (String; message to add to the storage string)
+	 */
 	public void toPrint(String message) {
-			textToPrint += message;
+		textToPrint += message;
 	}
+	/**
+	 * This method calls the Display.print() method to print its currently stored string and then resets the string.
+	 * <pre>Example:
+	 * {@code clear() will call Display.print(textToPrint) followed by setting textToPrint to "", essentially empty.
+	 * }</pre>
+	 */
 	public void clear() {
 		Display.print(textToPrint);
 		textToPrint = "";
