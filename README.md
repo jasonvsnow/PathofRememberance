@@ -7,7 +7,7 @@ A mini text based adventure game.
 I built this game because I've always enjoyed adventure games, their stories and mysteries, so being able to make some of that myself was exciting and fun.
 
 ## How to Run
-To run PathofRememberance one needs simply to be able to compile .java files and run javafx, download the one provided, and run the program. The java files should all be able to access and call each other and the MapImage should be in an accessible folder for Display.java. Once running, the rest is pretty self explanatory.
+To run PathofRememberance one needs simply to be able to compile .java files and run javafx, download the one provided, and run the program. The java files should all be able to access and call each other and the MapImage should be in an accessible folder for Display.java. You'll need to start running Display.java, which will generate the GUI you will interact with afterwards until done. Once running, the rest is pretty self explanatory.
 
 ## Code Example
 This code is the segement that allowed for text to be displayed at a gradual pace. Instead of, like in past versions, the entire chunk of text being displayed in the same jarring instant, this method will slowly print out one letter at a time to create a more gradual and asthetically pleasing processs. It also has a listener that alters the status of an observable boolean which is used to disable input during the printing animation (to avoid overlapping animations that just make a mess).
