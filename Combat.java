@@ -73,13 +73,16 @@ public class Combat {
 			
 			return 2;
 		}
-		else {
+		else if (hold == 3) {
 			toPrint("1) Attack\n"
 					+ "2) Defend\n"
 					+ "3) Use Magic\n"
 					+ "\n");
 			
 			return 3;
+		}
+		else {
+			return 4;
 		}
 		
 	}
@@ -124,6 +127,9 @@ public class Combat {
 				
 				return 3;
 			}
+		}
+		else if (choice == 4) {
+			return 4;
 		}
 		
 		if (hero.getDefendCharge() > 0) {

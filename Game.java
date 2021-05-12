@@ -540,9 +540,12 @@ public class Game {
 			else if (result == 3) {
 				reRoom = 8;
 			}
+			else {
+				
+			}
 		}
 		
-		clear();
+		if (!textToPrint.equalsIgnoreCase("")) clear();
 		return reRoom;
 	}
 
@@ -560,7 +563,7 @@ public class Game {
 			toPrint("As you step into the armory, a shriveled little green creature turns to you and howls, lunging at you with murder in its beady red eyes.\n");
 		}
 		else if (seed == 1) {
-			toPrint("A deep groan echoes near you. Turning, you see what looks to be a person wearing some uniform and carrying an old sword."
+			toPrint("A deep groan echoes near you. Turning, you see what looks to be a person wearing some uniform and carrying an old sword. "
 					+ "However, instead of a face, the shambling person has several spikes jutting out of their skull that appear to be made of obsidian. "
 					+ "Similiar spikes protrude from various places on the creatures limbs and torso, all of them shimmeirng in the light as the groaning creature lunges at you, swipping with its sword.\n");
 		}

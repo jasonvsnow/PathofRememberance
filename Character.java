@@ -29,7 +29,7 @@ public class Character {
 	 */
 	Character() {
 		room = 0;
-		hp = 50;
+		hp = 10;
 		mana = 20;
 		coins = 0;
 		HPpotion = 0;
