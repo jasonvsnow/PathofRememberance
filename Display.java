@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.shape.*;
 import javafx.scene.control.*;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.image.*;
@@ -36,10 +37,26 @@ public class Display extends Application {
 	private int room = 0;
 	private static BooleanProperty readyForInput = new SimpleBooleanProperty(true);
 	private static BooleanProperty bindMap = new SimpleBooleanProperty(true);
+	private static DoubleProperty height = new SimpleDoubleProperty();
+	private static DoubleProperty width = new SimpleDoubleProperty();
 	private Game game = new Game();
 	private static String speed = "slow";
 	private static Timeline printer;
-	private static Double buttonSizer = 15.0;
+	//tab pane 
+	private TabPane tabPane = new TabPane();
+	//choice buttons
+	private static Button bt1 = new Button("1");
+	private static Button bt2 = new Button("2");
+	private static Button bt3 = new Button("3");
+	private static Button bt4 = new Button("4");
+	//potion buttons
+	private static Button hppot = new Button("Drink HP Potion");
+	private static Button mnpot = new Button("Drink Mana Potion");
+	//start button
+	private static Button start = new Button("Wake Up");
+	//button size adjuster
+	private static Slider buttonSize = new Slider();
+	private static Slider statSize = new Slider();
 	
 	/**
 	 * The setMap method is used to allow the Character class to change the observable property bindMap in the Display class
@@ -119,25 +136,20 @@ public class Display extends Application {
 		text.setEditable(false);
 		text.setFont(Font.font("Times New Roman", 12));
 		stats.setAlignment(Pos.CENTER);
+		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
+		
 		
 		//min sizes for window
-		primaryStage.setMinHeight(300);
-		primaryStage.setMinWidth(550);
-		//250:25
-		//550:25
+		primaryStage.setMinHeight(400);
+		primaryStage.setMinWidth(600);
+
+		height.bind(primaryStage.heightProperty());
+		width.bind(primaryStage.widthProperty());
 		
 		print("You are asleep\n");
-		
-		//tabPane
-		TabPane tabPane = new TabPane();
+	
 		
 		
-		
-		//choice buttons
-		Button bt1 = new Button("1");
-		Button bt2 = new Button("2");
-		Button bt3 = new Button("3");
-		Button bt4 = new Button("4");
 		//box to hold buttons
 		HBox choiceButtons = new HBox(10);
 		choiceButtons.getChildren().addAll(bt1, bt2, bt3, bt4);
@@ -147,9 +159,7 @@ public class Display extends Application {
 		bt2.disableProperty().bind(readyForInput);
 		bt3.disableProperty().bind(readyForInput);
 		bt4.disableProperty().bind(readyForInput);
-		//potion buttons
-		Button hppot = new Button("Drink HP Potion");
-		Button mnpot = new Button("Drink Mana Potion");
+		
 		hppot.setMinWidth(25);
 		
 		
@@ -166,8 +176,7 @@ public class Display extends Application {
 		buttonHolder.setAlignment(Pos.CENTER);
 		buttonHolder.setHgap(50);
 
-		//start button
-		Button start = new Button("Wake Up");
+		
 		
 		
 
@@ -257,7 +266,7 @@ public class Display extends Application {
 		
 		
 		//button size
-		Slider buttonSize = new Slider();
+		
 		buttonSize.setPrefHeight(50);
 		buttonSize.setPrefWidth(400);
 		buttonSize.setValue(15);
@@ -268,27 +277,34 @@ public class Display extends Application {
 		buttonSize.setMinorTickCount(1);	
 		buttonSize.setMajorTickUnit(5);				
 		buttonSize.valueProperty().addListener(ov -> {
-			
-			
-			buttonSizer = buttonSize.getValue();
-			Double modifier = 40-buttonSizer;
-			Double setbtSize = primaryStage.getHeight()/modifier;
-			if (setbtSize < 13) setbtSize = 13.0;
-			bt1.setFont(Font.font(setbtSize));
-			bt2.setFont(Font.font(setbtSize));
-			bt3.setFont(Font.font(setbtSize));
-			bt4.setFont(Font.font(setbtSize));
-			hppot.setFont(Font.font(setbtSize));
-			mnpot.setFont(Font.font(setbtSize));
-			start.setFont(Font.font(setbtSize));
+			resize();
 		});
 		
+		statSize.setPrefHeight(50);
+		statSize.setPrefWidth(400);
+		statSize.setValue(15);
+		statSize.setShowTickLabels(true);
+		statSize.setShowTickMarks(true);
+		statSize.setMax(25);
+		statSize.setMin(0);			
+		statSize.setMinorTickCount(1);	
+		statSize.setMajorTickUnit(5);				
+		statSize.valueProperty().addListener(ov -> {
+			resize();
+		});
 		
 		
 		//holder of settings
 		VBox settings1 = new VBox(30);
-		//button size
+		//stat size
+		HBox statSizeSettings = new HBox(5);
+		statSizeSettings.setAlignment(Pos.CENTER);
+		Label statSizelbl = new Label("Stat Size: ");
+		statSizelbl.setAlignment(Pos.CENTER_LEFT);
+		statSizeSettings.getChildren().addAll(statSizelbl, statSize);	
+		settings1.getChildren().add(statSizeSettings);
 		
+		//button size
 		HBox buttonSizeSettings = new HBox(5);
 		buttonSizeSettings.setAlignment(Pos.CENTER);
 		Label bttnSize = new Label("Button Size: ");
@@ -344,6 +360,7 @@ public class Display extends Application {
 		adventureTab.setContent(stacker);
 		Tab mapTab = new Tab("Map");
 		mapTab.setContent(mapView);
+		mapTab.disableProperty().bind(bindMap);
 		Tab settingsTab = new Tab("Settings");
 		settingsTab.setContent(settings1);
 		mapTab.setContent(mapView);
@@ -354,53 +371,22 @@ public class Display extends Application {
 		
 		//watchers and listeners
 		primaryStage.heightProperty().addListener(ov -> {
-			Double modifier = 40-buttonSizer;
-			Double setbtSize = primaryStage.getHeight()/modifier;
-			if (setbtSize < 13) setbtSize = 13.0;
-			bt1.setFont(Font.font(setbtSize));
-			bt2.setFont(Font.font(setbtSize));
-			bt3.setFont(Font.font(setbtSize));
-			bt4.setFont(Font.font(setbtSize));
-			hppot.setFont(Font.font(setbtSize));
-			mnpot.setFont(Font.font(setbtSize));
-			start.setFont(Font.font(setbtSize));
+			resize();
 		});
 		primaryStage.widthProperty().addListener(ov -> {
-			Double modifier = 40-buttonSizer;
-			Double setbtSize = primaryStage.getHeight()/modifier;
-			if (setbtSize < 13) setbtSize = 13.0;
-			bt1.setFont(Font.font(setbtSize));
-			bt2.setFont(Font.font(setbtSize));
-			bt3.setFont(Font.font(setbtSize));
-			bt4.setFont(Font.font(setbtSize));
-			hppot.setFont(Font.font(setbtSize));
-			mnpot.setFont(Font.font(setbtSize));
-			start.setFont(Font.font(setbtSize));
+			resize();
 		});
 		
-		
-	    
-	    
 		
 		Scene scene = new Scene(tabPane, 700, 500);
 		primaryStage.setTitle("The Path of Rememberance");
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	
+		scene.getStylesheets().add("mystyle.css");
 		
 		
-		
-	
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 		//actions
 		start.disableProperty().bind(readyForInput);
 		start.setOnAction(e -> {
@@ -479,22 +465,30 @@ public class Display extends Application {
 			statUpdate();
 			
 		});
+
 		
-		adventureTab.setOnClosed(e -> {
-			tabPane.getTabs().add(adventureTab);
-		});
-		mapTab.setOnClosed(e -> {
-			tabPane.getTabs().add(mapTab);
-		});
-		settingsTab.setOnClosed(e -> {
-			tabPane.getTabs().add(settingsTab);
-		});
-		mapTab.disableProperty().bind(bindMap);
 
 
 		
 	}
-
+	public void resize() {
+		Double modifier = 40-buttonSize.getValue();
+		Double setbtSize = height.get()/modifier;
+		if (setbtSize < 13) setbtSize = 13.0;
+		bt1.setFont(Font.font(setbtSize));
+		bt2.setFont(Font.font(setbtSize));
+		bt3.setFont(Font.font(setbtSize));
+		bt4.setFont(Font.font(setbtSize));
+		hppot.setFont(Font.font(setbtSize));
+		mnpot.setFont(Font.font(setbtSize));
+		start.setFont(Font.font(setbtSize));
+		Double mod = 68 - statSize.getValue();
+		Double size = width.get()/mod;
+		stats.setFont(size);
+		
+		tabPane.setTabMinHeight(height.get()/20);
+		tabPane.setTabMinWidth(width.get()/3.45);
+	}
 	/**
 	 * This methods one and only purpose is to launch the stage and scene and begin the program. 
 	 * @param args (default)
@@ -520,6 +514,7 @@ class StatPane extends HBox {
 	private String defenseString;
 	private String hppotionsString;
 	private String mnpotionsString;
+	private Font size;
 	
 	/**
 	 * This is the no-arg constructor to make a default StatPane object.
@@ -535,6 +530,8 @@ class StatPane extends HBox {
 		defenseString = "Defense: 0";
 		hppotionsString = "Hp Potions: 0";
 		mnpotionsString = "Mana Potions: 0";
+		size = new Font(15);
+		
 
 	}
 	/**
@@ -546,12 +543,21 @@ class StatPane extends HBox {
 	 */
 	private void paintStats() {
 		Label hpLbl = new Label(hpString);
+		hpLbl.setFont(size);
 		Label manaLbl = new Label(manaString);
+		manaLbl.setFont(size);
 		Label coinsLbl = new Label(coinsString);
+		coinsLbl.setFont(size);
 		Label attackLbl = new Label(attackString);
+		attackLbl.setFont(size);
 		Label defenseLbl = new Label(defenseString);
+		defenseLbl.setFont(size);
 		Label hppotionsLbl = new Label(hppotionsString);
+		hppotionsLbl.setFont(size);
 		Label mnpotionsLbl = new Label (mnpotionsString);
+		mnpotionsLbl.setFont(size);
+		
+		
 		
 		setSpacing(10);
 		getChildren().clear();
@@ -580,6 +586,10 @@ class StatPane extends HBox {
 		defenseString = "Defense: " + defense;
 		hppotionsString = "HP Potions: " + hppotions;
 		mnpotionsString = "Mana Potions: " + mnpotions;
+		paintStats();
+	}
+	public void setFont(Double fontSize) {
+		size = new Font(fontSize);
 		paintStats();
 	}
 }

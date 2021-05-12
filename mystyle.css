@@ -1,0 +1,32 @@
+.tab-pane .tab-header-area .tab-header-background {
+	 -fx-opacity: 0.0;    
+ }
+
+
+.tab-pane{
+	-fx-background-color: purple;
+}
+
+
+.tab-pane .tab{
+ -fx-background-color: black;
+ -fx-focus-color: transparent;
+ -fx-faint-focus-color: transparent;   
+}
+
+.text-area {
+	-fx-text-fill: white;
+	-fx-highlight-fill: purple;
+	-fx-highlight-text-fill: green;
+	-fx-border-color: blue;
+	-fx-border-width: 40;
+}
+.button {
+	-fx-background-color: black;
+	-fx-text-fill: white;
+}
+
+.text-area .content {
+	-fx-background-color: black;
+	-fx-border-color: blue;
+}
