@@ -4,29 +4,67 @@
 
 
 .tab-pane{
-	-fx-background-color: purple;
+	-fx-background-image: url("background.jpg");
+	-fx-background-size: cover;
 }
-
 
 .tab-pane .tab{
  -fx-background-color: black;
+ -fx-border-color: white;
  -fx-focus-color: transparent;
  -fx-faint-focus-color: transparent;   
 }
 
 .text-area {
 	-fx-text-fill: white;
-	-fx-highlight-fill: purple;
-	-fx-highlight-text-fill: green;
-	-fx-border-color: blue;
-	-fx-border-width: 40;
-}
-.button {
-	-fx-background-color: black;
-	-fx-text-fill: white;
+	-fx-highlight-fill: black;
+	-fx-highlight-text-fill: red;
+	-fx-border-color: black;
+	-fx-border-width: 2;
 }
 
 .text-area .content {
-	-fx-background-color: black;
-	-fx-border-color: blue;
+	-fx-background-color: grey;
+	-fx-border-color: black;
+	-fx-border-width: 2;
 }
+
+.button {
+	-fx-background-color: black;
+	-fx-text-fill: white;
+	-fx-border-color: white;
+}
+
+.border-pane {
+	-fx-border-color: black;
+	
+}
+
+#statLabel {
+	-fx-text-fill: white;
+	-fx-background-color: black;
+	-fx-background-radius: 0 100 0 100;
+}
+
+#settingsLabel {
+	-fx-text-fill: #1a0d00;
+	-fx-font-weight: bold;
+}
+
+.hbox {
+	-fx-background-image: url("sign.png");
+	-fx-background-repeat: no-repeat;
+	
+}
+
+.slider, .slider .axis, .slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: black;
+    -fx-size: 10;
+    -fx-tick-fill: black;
+	-fx-tick-label-fill: black;
+	-fx-control-inner-background: black;
+}
+
+
+
