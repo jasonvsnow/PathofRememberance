@@ -31,10 +31,10 @@ public class Character {
 		room = 0;
 		hp = 50;
 		mana = 20;
-		coins = 99;
-		HPpotion = 99;
-		MNpotion = 99;
-		attack = 10;
+		coins = 0;
+		HPpotion = 0;
+		MNpotion = 0;
+		attack = 1;
 		defense = 0;
 		defendCharge = 0;
 		map = false;

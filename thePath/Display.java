@@ -43,7 +43,11 @@ public class Display extends Application {
 	private static String speed = "slow";
 	private static Timeline printer;
 	//tab pane 
-	private TabPane tabPane = new TabPane();
+	private static TabPane tabPane = new TabPane();
+	//tabs 
+	private static Tab mapTab = new Tab("Map");
+	private static Tab adventureTab = new Tab("Adventure");
+	private static Tab settingsTab = new Tab("Settings");
 	//choice buttons
 	private static Button bt1 = new Button("1");
 	private static Button bt2 = new Button("2");
@@ -60,21 +64,31 @@ public class Display extends Application {
 	private static Slider statSize = new Slider();
 	private static Slider textSize = new Slider();
 	//text speed buttons
+	
 	private static RadioButton slowText = new RadioButton("Slow Text");
 	private static RadioButton fastText = new RadioButton("Fast Text");
 	private static RadioButton instantText = new RadioButton("Instant Text");
 	//text font buttons
+	
 	private static RadioButton font1 = new RadioButton("Arial");
 	private static RadioButton font2 = new RadioButton("Comic Sans MS");
 	private static RadioButton font3 = new RadioButton("Courier");
 	private static RadioButton font4 = new RadioButton("Times New Roman");
 	private static RadioButton font5 = new RadioButton("Verdana");
 	//setting holders (signs)
+	private static FlowPane fontHolder = new FlowPane(10, 10);
+	private static FlowPane speedHolder = new FlowPane(10, 10);
 	private static HBox statSizeSettings = new HBox(20);
 	private static HBox buttonSizeSettings = new HBox(5);
 	private static HBox textSizeSettings = new HBox(15);
 	private static HBox textFontSettings = new HBox(10);
 	private static HBox textSpeedSettings = new HBox(10);
+	//settings labels
+	private static Label statSizelbl = new Label("Stat Size: ");
+	private static Label bttnSize = new Label("Button Size: ");
+	private static Label txtSize = new Label("Text Size: ");
+	private static Label txtFont = new Label("Text Font: ");
+	private static Label txtSpeed = new Label("Text Speed: ");
 	
 	/**
 	 * The setMap method is used to allow the Character class to change the observable property bindMap in the Display class
@@ -157,7 +171,9 @@ public class Display extends Application {
 		text.setFont(Font.font("Times New Roman", 12));
 		stats.setAlignment(Pos.CENTER);
 		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
-		
+		buttonSize.setSnapToTicks(true);
+		statSize.setSnapToTicks(true);
+		textSize.setSnapToTicks(true);
 		
 		//min sizes for window
 		primaryStage.setMinHeight(500);
@@ -212,7 +228,7 @@ public class Display extends Application {
 		pane.setBottom(start);
 		
 		//map
-		FileInputStream inputstream = new FileInputStream("MapImage.jpg");
+		FileInputStream inputstream = new FileInputStream("MapImage.png");
 		Image map = new Image(inputstream);
 		ImageView mapView = new ImageView(map);
 		mapView.fitWidthProperty().bind(tabPane.widthProperty());
@@ -222,18 +238,18 @@ public class Display extends Application {
 		
 		
 		//text size
-		
 		textSize.setPrefHeight(50);
 		textSize.setPrefWidth(400);
-		textSize.setShowTickLabels(true);
+		textSize.setShowTickLabels(false);
 		textSize.setShowTickMarks(true);
 		textSize.setMax(25);
 		textSize.setMin(10);
-		textSize.setMinorTickCount(3);
+		textSize.setMinorTickCount(4);
 		textSize.setMajorTickUnit(5);
 		textSize.valueProperty().addListener(ov -> {
 			text.setFont(Font.font(text.getFont().getFamily(), textSize.getValue()));
 		});
+		textSize.setValue(12);
 		
 		
 		//text speed
@@ -242,7 +258,6 @@ public class Display extends Application {
 		slowText.setToggleGroup(speedGroup);
 		fastText.setToggleGroup(speedGroup);
 		instantText.setToggleGroup(speedGroup);
-		
 		slowText.setSelected(true);
 		slowText.setOnAction(e -> {
 			speed = "slow";
@@ -286,12 +301,12 @@ public class Display extends Application {
 		buttonSize.setPrefHeight(50);
 		buttonSize.setPrefWidth(400);
 		buttonSize.setValue(15);
-		buttonSize.setShowTickLabels(true);
+		buttonSize.setShowTickLabels(false);
 		buttonSize.setShowTickMarks(true);
 		buttonSize.setMax(25);
 		buttonSize.setMin(0);			
 		buttonSize.setMinorTickCount(4);	
-		buttonSize.setMajorTickUnit(5);				
+		buttonSize.setMajorTickUnit(5);		
 		buttonSize.valueProperty().addListener(ov -> {
 			resize();
 		});
@@ -299,7 +314,7 @@ public class Display extends Application {
 		statSize.setPrefHeight(50);
 		statSize.setPrefWidth(400);
 		statSize.setValue(15);
-		statSize.setShowTickLabels(true);
+		statSize.setShowTickLabels(false);
 		statSize.setShowTickMarks(true);
 		statSize.setMax(25);
 		statSize.setMin(0);			
@@ -313,9 +328,7 @@ public class Display extends Application {
 		//holder of settings
 		VBox settings1 = new VBox(0);
 		//stat size
-		
 		statSizeSettings.setAlignment(Pos.CENTER);
-		Label statSizelbl = new Label("Stat Size: ");
 		statSizelbl.setId("settingsLabel");
 		statSizelbl.setAlignment(Pos.CENTER_LEFT);
 		statSizeSettings.getChildren().addAll(statSizelbl, statSize);	
@@ -323,33 +336,27 @@ public class Display extends Application {
 		statSizeSettings.getStyleClass().add("hbox");
 		
 		//button size
-		
 		buttonSizeSettings.setAlignment(Pos.CENTER);
-		Label bttnSize = new Label("Button Size: ");
 		bttnSize.setId("settingsLabel");
 		bttnSize.setAlignment(Pos.CENTER_LEFT);
 		buttonSizeSettings.getChildren().addAll(bttnSize, buttonSize);
-		
 		settings1.getChildren().add(buttonSizeSettings);
 		buttonSizeSettings.getStyleClass().add("hbox");
 		
 		//text size
-		
 		textSizeSettings.setAlignment(Pos.CENTER);
-		Label txtSize = new Label("Text Size: ");
 		txtSize.setId("settingsLabel");
 		txtSize.setAlignment(Pos.CENTER_LEFT);
 		textSizeSettings.getChildren().addAll(txtSize, textSize);	
 		settings1.getChildren().add(textSizeSettings);
 		textSizeSettings.getStyleClass().add("hbox");
 		textSize.setValue(12);
-		//text font
 		
+		//text font
 		textFontSettings.setAlignment(Pos.CENTER);
-		Label txtFont = new Label("Text Font: ");
+		
 		txtFont.setId("settingsLabel");
 		txtFont.setAlignment(Pos.CENTER_LEFT);
-		FlowPane fontHolder = new FlowPane(10, 10);
 		fontHolder.setAlignment(Pos.CENTER);
 		fontHolder.getChildren().addAll(font1, font2, font3, font4, font5);
 		textFontSettings.getChildren().addAll(txtFont, fontHolder);
@@ -357,12 +364,10 @@ public class Display extends Application {
 		textFontSettings.getStyleClass().add("hbox");
 		
 		//text speed
-		;
 		textSpeedSettings.setAlignment(Pos.CENTER);
-		Label txtSpeed = new Label("Text Speed: ");
+		
 		txtSpeed.setId("settingsLabel");
 		txtSpeed.setAlignment(Pos.CENTER_LEFT);
-		FlowPane speedHolder = new FlowPane(10, 10);
 		speedHolder.setAlignment(Pos.CENTER);
 		speedHolder.getChildren().addAll(slowText, fastText, instantText);
 		textSpeedSettings.getChildren().addAll(txtSpeed, speedHolder);
@@ -389,17 +394,13 @@ public class Display extends Application {
 		fadeAway.widthProperty().bind(tabPane.widthProperty());
 		
 		//set tabs
-		Tab adventureTab = new Tab("Adventure");
+		
 		adventureTab.setContent(stacker);
-		Tab mapTab = new Tab("Map");
 		mapTab.setContent(mapView);
 		mapTab.disableProperty().bind(bindMap);
-		Tab settingsTab = new Tab("Settings");
 		settingsTab.setContent(settings1);
 		mapTab.setContent(mapView);
 		tabPane.getTabs().addAll(adventureTab, mapTab, settingsTab);
-		
-		
 		
 		
 		//watchers and listeners
@@ -502,7 +503,7 @@ public class Display extends Application {
 			
 		});
 
-	
+
 
 
 		
@@ -522,6 +523,15 @@ public class Display extends Application {
 		Double size = width.get()/mod;
 		stats.setFont(size);
 		
+		int testing = 14;
+		int holder1 = (int)(height.get()-500)/20;
+		int holder2 = (int)(width.get()-650)/30;
+		if (holder1 > holder2) testing += holder2;
+		else testing += holder1;
+		String holderTest = "-fx-font-size: " + testing;
+		adventureTab.setStyle(holderTest);
+		mapTab.setStyle(holderTest);
+		settingsTab.setStyle(holderTest);
 		
 		statSizeSettings.setMinHeight(height.get()/6);
 		buttonSizeSettings.setMinHeight(height.get()/6);
@@ -544,10 +554,34 @@ public class Display extends Application {
 		textSizeSettings.setStyle(offset);
 		textFontSettings.setStyle(offset);
 		textSpeedSettings.setStyle(offset);
+		
+		String rdbtStyle = "-fx-font-size: " + (12 + ((height.get()-500)/55));
+		fontHolder.setMinWidth(width.get()/2.5);
+		speedHolder.setMinWidth(width.get()/2.5);
+		
+		
+		String labeltextSize = "-fx-font-size: " + (12 + ((height.get()-500)/55));
+		statSizelbl.setStyle(labeltextSize);
+		bttnSize.setStyle(labeltextSize);
+		txtSize.setStyle(labeltextSize);
+		txtFont.setStyle(labeltextSize);
+		txtSpeed.setStyle(labeltextSize);
+		
+		font1.setStyle(rdbtStyle);
+		font2.setStyle(rdbtStyle);
+		font3.setStyle(rdbtStyle);
+		font4.setStyle(rdbtStyle);
+		font5.setStyle(rdbtStyle);
+		slowText.setStyle(rdbtStyle);
+		fastText.setStyle(rdbtStyle);
+		instantText.setStyle(rdbtStyle);
+		
+
 	
 		
-		tabPane.setTabMinHeight(height.get()/20);
-		tabPane.setTabMinWidth(width.get()/3.45);
+		tabPane.setTabMinHeight(height.get()/15);
+		tabPane.setTabMaxHeight(height.get()/15);
+		tabPane.setTabMinWidth(width.get()/3.48);
 	}
 	/**
 	 * This methods one and only purpose is to launch the stage and scene and begin the program. 
