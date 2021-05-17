@@ -1,3 +1,6 @@
+
+
+
 .tab-pane .tab-header-area .tab-header-background {
 	 -fx-opacity: 0.0;    
  }
@@ -12,8 +15,11 @@
  -fx-background-color: black;
  -fx-border-color: white;
  -fx-focus-color: transparent;
- -fx-faint-focus-color: transparent;   
+ -fx-faint-focus-color: transparent;
+ -fx-fill: white;  
+ -fx-text-base-color: white;
 }
+
 
 .text-area {
 	-fx-text-fill: white;
@@ -47,7 +53,7 @@
 }
 
 #settingsLabel {
-	-fx-text-fill: #1a0d00;
+	-fx-text-fill: white;
 	-fx-font-weight: bold;
 }
 
@@ -60,11 +66,17 @@
 .slider, .slider .axis, .slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark {
     -fx-fill: null;
     -fx-stroke: black;
-    -fx-size: 10;
     -fx-tick-fill: black;
 	-fx-tick-label-fill: black;
 	-fx-control-inner-background: black;
+	-fx-stroke-width: 2;
 }
 
 
+
+
+.radio-button {
+	-fx-text-fill: white;
+	
+}
 
