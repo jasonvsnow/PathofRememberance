@@ -10,8 +10,12 @@ public class Combat {
 	private Enemy foe;
 	private int foeType;
 	private boolean init;
-	private int hold;
+	private int result;
 	private String textToPrint = "";
+	private int decision;
+	private boolean magicUsed;
+	//magic choice, attack choice 
+	private int[] info = {0, 0};
 
 	/**
 	 * This is the no arg constructor for a combat, which sets a blank template.
@@ -20,40 +24,42 @@ public class Combat {
 	 * }</pre>
 	 */
 	Combat() {
-		foe = new Enemy();
 		foeType = 0;
 		init = false;
-		hold = 1;
+		result = 1;
+		decision = 0;
+		magicUsed = false;
 	}
-	/**
-	 * This is the method that handles each round of a fight. First, it checks if combat has already been started. If not, it will generate the proper enemy for that fight and store it.
-	 * It then handles the current round of a fight by calling the processPlayerTurn method and returns an end result.
-	 * The end result is one of four outcomes which include: the player and enemy both took turns but neither died so combat will continue, the enemy died, the player died, or the player attempted to use magic without sufficient mana and will be given the chance to take their turn again.
-	 * One one of the combatants have died, upon that end result the fight is determined to have ended so the next time this method is called it will start a new fight.
-	 * <pre>Example:
-	 * {@code combat.fight(hero, 1, 1) will return a continue or death. The hero is the character, 
-	 * the first 1 is the choice to attack, the second 1 is the type of enemy.
-	 * }</pre>
-	 * @param hero (Character; the character object that will be fighting the enemy)
-	 * @param choice (int; the choice the player has made for their current turn of the fight)
-	 * @param type (int; the type of enemy the hero is fighting)
-	 * @return (int; the result of the current round of combat (continue, player died, enemy died, player falsely attempted magic)
-	 */
+	
+	
 	public int fight(Character hero, int choice, int type) {
+		/*
+		 * 0 = player death
+		 * 1 = turn finished
+		 * 2 = player was victorious
+		 * 3 = player is attacking
+		 * 4 = player is using magic
+		 * 5 = invalid input
+		 */
+		
+		//check if combat is continuation or new
 		if (!init) {
 			foeType = type;
 			if (type == 0) foe = new Enemy();
-			else if (type == 1) foe = new Enemy(1);
-			else if (type == 2) foe = new Enemy(2);
+			else foe = new Enemy(type);
 			init = true;
 		}
-		hold = processPlayerTurn(hero, choice);
-		if (hold == 0) {
+		 //have the player act
+		result = processPlayerTurn(hero, choice);
+		
+		//process the result of a turn
+		if (result == 0) {
+			//the player has lost and perished
 			init = false;
-			
 			return 0;
 		}
-		else if (hold == 1) {
+		else if (result == 1) {
+			//combat continues
 			toPrint("1) Attack\n"
 					+ "2) Defend\n"
 					+ "3) Use Magic\n"
@@ -61,7 +67,8 @@ public class Combat {
 			
 			return 1;
 		}
-		else if (hold == 2) {
+		else if (result == 2) {
+			//player victory
 			toPrint("You won!\n");
 			if (hero.getAttack() == 5) hero.setDefense(5);
 			else if (hero.getAttack() == 10) hero.setDefense(8);
@@ -73,144 +80,118 @@ public class Combat {
 			
 			return 2;
 		}
-		else if (hold == 3) {
-			toPrint("1) Attack\n"
-					+ "2) Defend\n"
-					+ "3) Use Magic\n"
-					+ "\n");
-			
+		else if (result == 3){
+			//additional input to complete attack required
 			return 3;
 		}
-		else {
+		else if (result == 4) {
+			//additional input to complete magic required
 			return 4;
 		}
+		else {
+			//invalid error, turn incomplete, etc.
+			return 5;
+		}
+
 		
 	}
-	/**
-	 * This method is called by fight to determine the result of the choice the character made and then call the proccessEnemyTurn method to 
-	 * determine the result of the enemys actions (assuming the enemy is alive to take a turn). It then returns one of the four possible end results for each round of a fight.
-	 * <pre>Example:
-	 * {@code processPlayerTurn(hero, 1) will either return a continue or death, as the character has chosen to attack this turn and may kill the enemy or be killed.
-	 * }</pre>
-	 * @param hero (Character; the character object in this fight)
-	 * @param choice (int; the choice the user made in this round of the fight)
-	 * @return (int; the result of the players choices and enemies actions, if any)
-	 */
+
+	
 	public int processPlayerTurn(Character hero, int choice) {
-		if (choice == 1) {
-			int dealt = hero.getAttack()-foe.getDefense();
-			if (dealt < 0) dealt = 0;
-			toPrint("You attack, dealing " + dealt + " damage!\n");
-			foe.setHP(foe.getHP()-dealt);
-		}
-		else if (choice == 2) {
-			toPrint("You defend!\n");
-			//edit 
-			if (hero.getAttack() == 5) hero.setDefense(5);
-			else if (hero.getAttack() == 10) hero.setDefense(8);
-			else hero.setDefense(3);
-			hero.setDefendCharge(4);
-		}
-		else if (choice == 3) {
-			if (hero.getMana() >= 2) {
-				toPrint("You hold the ball of light in your hand out and it explodes, burning the enemy for 7 damage! The ball then relights. \n");
-				foe.setHP(foe.getHP()-7);
-				hero.setMana(hero.getMana()-4);
-			}
-			else {
-				toPrint("You don't have enough mana for that!\n");
-				toPrint(""
-						+ "1) Attack\n"
-						+ "2) Defend\n"
-						+ "3) Use Magic\n"
-						+ "\n");
-				
+		//player choice making has just started, must choose base action
+		if (decision == 0) {
+			if (choice == 1) {
+				//attack
+				decision = 1; 
 				return 3;
 			}
+			else if (choice == 2) {
+				//attack with magic
+			}
+			else if (choice == 3) {
+				//apply a buff 
+				decision = 3;
+				return 4;
+			}
+			else if (choice == 4) {
+				//apply a debuff
+				decision = 4;
+				return 4;
+			}
 		}
-		else if (choice == 4) {
-			return 4;
+		//player has chosen to attack
+		else if (decision == 1) {
+			if (choice == 1) {
+				//player has chosen to make a standard attack
+			}
+			else if (choice == 2) {
+				//player has chosen to make a quick attack
+			}
+			else if (choice == 3) {
+				//player has chosen to make a heavy attack
+			}
+			else {
+				//invalid input
+			}
 		}
+		//player has chosen to buff themselves
+		else if (decision == 3) {
+			if (choice == 1) {
+				//player has chosen to buff their defense
+			}
+			else if (choice == 2) {
+				//player has chosen to buff their attack
+			}
+
+			else {
+				//invalid input
+			}
+		}
+		//player has chosen to debuff the enemy
+		else if (decision == 4) {
+			if (choice == 1) {
+				//player has chosen to debuff the enemy's defense
+			}
+			else if (choice == 2) {
+				//player has chosen to debuff the enemy's attack
+			}
+
+			else {
+				//invalid input
+			}
+		}
+		//reset defense and attack once counters run out
 		
-		if (hero.getDefendCharge() > 0) {
-			hero.setDefendCharge(hero.getDefendCharge()-1);
-		}
-		else {
-			if (hero.getAttack() == 5) hero.setDefense(2);
-			else if (hero.getAttack() == 10) hero.setDefense(5);
-			else hero.setDefense(0);
-		}
 		
+		
+		
+		
+		
+		//find the result of the enemy turn if alive
 		if (foe.getHP() > 0) {
 			processEnemyTurn(hero);	
 		}
+		//end combat if foe is defeated
 		else {
-			
 			return 2;
 		}
 		
-		
+		//post enemy turn, find out if hero is still alive
 		if (hero.getHP() > 0) {
-			
+			//hero alive, continue combat
 			return 1;
 		}
 		else {
-			
+			//hero has perished
 			return 0;
 		}
 	}
-	/**
-	 * This method handles the enemies turns. It checks the stored foe type in the combat object and then has the enemy act appropriately, with sometimes random results. It returns nothing as the only thing that needs to be checked after this is the heros health value which is independent of this method.
-	 * <pre>Example:
-	 * {@code combat.processEnemyTurn(hero) will have the enemy take a turn against the hero and ultimately affect the hero hp value, enemy mana value, or enemy defense value.
-	 * }</pre>
-	 * @param hero (Character; the character in this fight against the foe being represented by this method)
-	 */
+
 	public void processEnemyTurn(Character hero) {
-		if (foeType == 0) {
-			int dealing = foe.getAttack() - hero.getDefense();
-			if (dealing < 0) dealing = 0;
-			toPrint("\nThe wretched green thing screams and slashes at you with black claws, dealing " + dealing + " damage.\n");
-			hero.setHP(hero.getHP() - dealing);
-		}
-		else if (foeType == 2) {
-			int ran = (int)(Math.random()*3);
-			if (ran == 0 && foe.getMana() > 0) {
-				toPrint("\nThe creature slams its spikey hand into the ground and beneath you spikes erupt, slamming into you and piercing your defenses, dealing 7 damage to you while also reinforcing the creatures armor.\n");
-				foe.setMana(foe.getMana()-1);
-				foe.setDefense(foe.getDefense()+1);
-				hero.setHP(hero.getHP()-7);
-			}
-			else {
-				int dealing = foe.getAttack() - hero.getDefense();
-				if (dealing < 0) dealing = 0;
-				toPrint("\nThe creature slashes twice with its claws, dealing " + dealing + " damage.\n");
-				hero.setHP(hero.getHP()-dealing);
-			}
-		}
-		else if (foeType == 1) {
-			int ran = (int)(Math.random()*3);
-			if (ran == 0) {
-				int dealing = foe.getAttack() - hero.getDefense();
-				if (dealing < 0) dealing = 0;
-				toPrint("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
-				hero.setHP(hero.getHP() - dealing);
-			}
-			else {
-				if (foe.getDefense() < 2) {
-					foe.setDefense(2);
-					toPrint("The creature snarls and more spikes suddenly burst out from its skin, hardening its defense.\n");
-				}
-				else {
-					int dealing = foe.getAttack() - hero.getDefense();
-					if (dealing < 0) dealing = 0;
-					toPrint("\nThe monster slashes with its sword, dealing " + dealing + " damage.\n");
-					hero.setHP(hero.getHP() - dealing);
-				}
-			}
-		}
+		
 		
 	}
+
 	
 	
 	/**

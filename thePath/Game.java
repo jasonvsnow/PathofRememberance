@@ -38,16 +38,7 @@ public class Game {
 	public int getHP() {
 		return hero.getHP();
 	}
-	/**
-	 * This method allows other classes to use the getter method for the Character object stored in the Game object for Mana.
-	 * <pre>Example: 
-	 * {@code game.getMana() will typically return 0-20.
-	 * }</pre>
-	 * @return (int; the amount of mana the Character object currently has)
-	 */
-	public int getMana() {
-		return hero.getMana();
-	}
+
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for coins.
 	 * <pre>Example: 
@@ -68,16 +59,7 @@ public class Game {
 	public int getHPpotions() {
 		return hero.getHPPotion();
 	}
-	/**
-	 * This method allows other classes to use the getter method for the Character object stored in the Game object for mana potions.
-	 * <pre>Example: 
-	 * {@code game.getMNpotions() might return 0 or more.
-	 * }</pre>
-	 * @return (int; the amount of mana potions the Character object currently has)
-	 */
-	public int getMNPotions() {
-		return hero.getMNPotion();
-	}
+
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for attack value.
 	 * <pre>Example: 
@@ -132,28 +114,6 @@ public class Game {
 		}
 		clear();
 	}
-	/**
-	 * This method is called by the "Drink Mana Potion" button and will cause the character to lose 1 mana potion and regain 6 mana to a maximum of 20 assuming they are not already at 20 and have a potion available.
-	 * <pre>Example:
-	 * {@code game.drinkMNPotion() will cause the game stored character 
-	 * to expend 1 potion and raise mana by 6 to a maximum of 20 assuming the character isn't dead, has a potion, and is not already at 20.
-	 * }</pre>
-	 */
-	public void drinkMNPotion() {
-		if (hero.getHP() > 0) {
-			if (hero.getMNPotion() > 0) {
-				if (hero.getMana() < 20) {
-					hero.setMNPotion(hero.getMNPotion()-1);
-					hero.setMana(hero.getMana() + 6);
-					if (hero.getMana() > 20) hero.setMana(20);
-					toPrint("You drink a mana potion.\n\n");
-				}
-				else toPrint("You're already at maximum mana! Save that potion for later.\n\n");
-			}
-			else toPrint("You don't have any mana potions to drink.\n\n");
-		}
-		clear();
-	}
 	
 	/**
 	 * This runs the majority of the game, aside from combat. This method takes the current room value and the choice value and determines what happens. The choice is given by the button pressed and the room value is stored in game, the character object, as well as Display when it uses this method.
@@ -176,7 +136,7 @@ public class Game {
 						+ "\n");
 			if (choice == 1) {
 				toPrint("You summon a power within you and conjure up a ball of light.\n"); //consequence of Action 1 
-				hero.setMana(hero.getMana()-1);
+				hero.setHP(hero.getHP()-1);
 				toPrint("\tYou open your eyes and find yourself laying on a slab of hard material that appears to be obsidian. The floor around the slab is scrawled with runes in white chalk, their meaning unknown to you. "
 						+ "There is a door out of the room as well as a table nearby with a map, dagger, and key upon it.\n");
 				hero.setRoom(1); //set to awakening room
@@ -281,91 +241,7 @@ public class Game {
 		}
 		//shop
 		else if (room == 4) {
-			if (choice == 1) {
-				if (hero.getCoins() > 0) {
-					toPrint("You give the man a gold coin and in exchange receive a single bottle full of red liquid. It probably tastes like strawberries. Hopefully.\n"
-							+ "1) Buy a potion of health(1 coin)\n"
-							+ "2) Buy a potion of mana.(2 coins)\n");
-					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-							+ "4) Leave\n"
-							+ "\n");
-					}
-					else toPrint("3) Leave\n"
-							+ "\n");
-					hero.setHPPotion(hero.getHPPotion()+1);
-					hero.setCoins(hero.getCoins()-1);
-				}
-				else {
-					toPrint("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
-						+ "1) Buy a potion of health(1 coin)\n"
-						+ "2) Buy a potion of mana.(2 coins)\n");
-					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-							+ "4) Leave\n"
-							+ "\n");
-					}
-					else toPrint("3) Leave\n"
-							+ "\n");
-				}
-			}
-			else if (choice == 2) {
-				if (hero.getCoins() > 1) {
-					toPrint("You give the man a gold coin and in exchange receive a single bottle full of shimmering light. Probably feels weird to drink.\n"
-							+ "1) Buy a potion of health(1 coin)\n"
-							+ "2) Buy a potion of mana.(2 coins)\n");
-					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-							+ "4) Leave\n"
-							+ "\n");
-					}
-					else toPrint("3) Leave\n"
-							+ "\n");
-					hero.setMNPotion(hero.getMNPotion()+1);
-					hero.setCoins(hero.getCoins()-2);
-				}
-				else { toPrint("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
-						+ "1) Buy a potion of health(1 coin)\n"
-						+ "2) Buy a potion of mana.(2 coins)\n");
-					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-								+ "4) Leave\n"
-								+ "\n");
-					}
-					else toPrint("3) Leave\n"
-								+ "\n");
-				}
-			}
-			else if (choice == 3) {
-				if (hero.isCaptainKey()) {
-					toPrint("You stand, thank the man for his time, and return to the barracks.\n");
-					hero.setRoom(3);
-					enterRoom();
-				}
-				else {
-					if (hero.getCoins() > 9) {
-						toPrint("You hand over a generous numnber of coins and receive a single golden key in return.\n");
-						hero.setCoins(hero.getCoins()-10);
-						hero.setCaptainKey(true);
-					}
-					else toPrint("You eye the key, but realize you don't have enough to purchase it.\n");
-				}
-				toPrint(""
-						+ "1) Buy a potion of health(1 coin)\n"
-						+ "2) Buy a potion of mana.(2 coins)\n");
-				if (!hero.isCaptainKey()) {
-					toPrint("3) Buy the golden key.(10 coins)\n"
-						+ "4) Leave\n"
-						+ "\n");
-				}
-			}
-			else if (choice == 4) {
-				if (!hero.isCaptainKey()) {
-					toPrint("You stand, thank the man for his time, and return to the barracks.\n");
-					hero.setRoom(3);
-					enterRoom();
-				}
-			}
+			//edit shop
 		}
 		//storage
 		else if (room == 5) {
@@ -470,18 +346,7 @@ public class Game {
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				if (hero.getHP() < 25 || hero.getMana() < 10) {
-					toPrint("You scour the place for anything, but find nothing. By the end of the search, however, you feel refreshed.\n");
-					if (hero.getHP() < 25) hero.setHP(25);
-					if (hero.getMana() < 10) hero.setMana(10);
-				}
-				else {
-					toPrint("You search for something, but nothing seems useful in this room.\n");
-				}
-				toPrint(""
-						+ "1) Go to the hallway\n"
-						+ "2) Search the room\n"
-						+ "\n");
+				//investigate, get some food, refresh yourself
 			}
 		}
 	
@@ -531,18 +396,11 @@ public class Game {
 						+ "\n");
 				reRoom = 100;
 			}
-			else if (result == 1) {
-				reRoom = 8;
-			}
 			else if (result == 2) {
 				enterRoom();
 			}
-			else if (result == 3) {
-				reRoom = 8;
-			}
-			else {
-				
-			}
+			else reRoom = 8;
+
 		}
 		
 		if (!textToPrint.equalsIgnoreCase("")) clear();

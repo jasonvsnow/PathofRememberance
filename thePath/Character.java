@@ -10,13 +10,14 @@ package thePath;
 public class Character {
 	private int room;
 	private int hp;
-	private int mana;
 	private int coins;
 	private int HPpotion;
-	private int MNpotion;
 	private int attack;
 	private int defense;
-	private int defendCharge;
+	private int defendBuff;
+	private int attackBuff;
+	private int defendDebuff;
+	private int attackDebuff;
 	private boolean map;
 	private boolean captainKey;
 	private boolean tutorial;
@@ -30,13 +31,12 @@ public class Character {
 	Character() {
 		room = 0;
 		hp = 50;
-		mana = 20;
 		coins = 0;
 		HPpotion = 0;
-		MNpotion = 0;
 		attack = 1;
 		defense = 0;
-		defendCharge = 0;
+		defendBuff = 0;
+		
 		map = false;
 		captainKey = false;
 		tutorial = true;
@@ -82,26 +82,8 @@ public class Character {
 	public void setHP(int hp) {
 		this.hp = hp;
 	}
-	/**
-	 * This is the getter method for the mana value of the character.
-	 * <pre>Example:
-	 * {@code char.getMana() will typically return 0-24
-	 * }</pre>
-	 * @return mana (int; the current mana the character has)
-	 */
-	public int getMana() {
-		return mana;
-	}
-	/**
-	 * This is the setter method for the mana value of the character.
-	 * <pre>Example:
-	 * {@code char.setMana(10) will set the mana value ot 10
-	 * }</pre>
-	 * @param mana (int; the value to set the current mana of the character to)
-	 */
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
+
+
 	/**
 	 * This is  the getter method for the coins of the character.
 	 * <pre>Example:
@@ -144,26 +126,7 @@ public class Character {
 	public void setHPPotion(int potions) {
 		HPpotion = potions;
 	}
-	/**
-	 * This is the getter method for the number of mana  potions the character has.
-	 * <pre>Example:
-	 * {@code char.getMNPotion() may 0 or higher as there is no upper limit to potions held.
-	 * }</pre>
-	 * @return potions (int; the number of mana potions the character has)
-	 */
-	public int getMNPotion() {
-		return MNpotion;
-	}
-	/**
-	 * This is the setter method for the number of mana potions the character has.
-	 * <pre>Example:
-	 * {@code char.setMNPotion(3) will set the number of mana potions to 3
-	 * }</pre>
-	 * @param potions (int; the number of mana potions the character will now have)
-	 */
-	public void setMNPotion(int potions) {
-		MNpotion = potions;
-	}
+
 	/**
 	 * This is the getter method for the attack value of the character, which is the damage they do with an attack.
 	 * <pre>Example:
@@ -213,8 +176,8 @@ public class Character {
 	 * }</pre>
 	 * @return defendCharge (int; how many rounds of combat the defensive stance has left)
 	 */
-	public int getDefendCharge() {
-		return defendCharge;
+	public int getDefendBuff() {
+		return defendBuff;
 	}
 	/**
 	 * This is the setter method for the defendCharge of the character.
@@ -223,9 +186,26 @@ public class Character {
 	 * }</pre>
 	 * @param defendCharge (int; the number of rounds the current defensive stance has left at the time of setting)
 	 */
-	public void setDefendCharge(int defendCharge) {
-		this.defendCharge = defendCharge;
+	public void setDefendBuff(int defendBuff) {
+		this.defendBuff = defendBuff;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * This is the getter method for the map value, which acts as a key checker as well as allows the user to access the map.
 	 * <pre>Example:

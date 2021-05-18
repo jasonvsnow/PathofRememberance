@@ -31,6 +31,19 @@ import javafx.event.*;
  * @author Jason Snow
  *
  */
+/*
+ * + hero magic counters, methods to access
+ * + method to return hero stable state after enemy (take away effects from attacks)
+ * + shop description and interactions
+ * + enemy behaviors (consider to create priorities, method to sort and act upon priorities) [Elite will be most complex, try to make it think. Grunts and slashers are randomized or very predicatably responsive]
+ * + enemy actions
+ * + player turn processor for various magic options and attack options
+ * + redesign tutorial
+ * 
+ * 
+ * 
+ * 
+ */
 public class Display extends Application {
 	private static TextArea text = new TextArea();
 	private static StatPane stats = new StatPane();
@@ -55,7 +68,6 @@ public class Display extends Application {
 	private static Button bt4 = new Button("4");
 	//potion buttons
 	private static Button hppot = new Button("Drink HP Potion");
-	private static Button mnpot = new Button("Drink Mana Potion");
 	//start button
 	private static Button start = new Button("Wake Up");
 	//settings
@@ -81,8 +93,8 @@ public class Display extends Application {
 	private static HBox statSizeSettings = new HBox(20);
 	private static HBox buttonSizeSettings = new HBox(5);
 	private static HBox textSizeSettings = new HBox(15);
-	private static HBox textFontSettings = new HBox(10);
-	private static HBox textSpeedSettings = new HBox(10);
+	private static HBox textFontSettings = new HBox(0);
+	private static HBox textSpeedSettings = new HBox(0);
 	//settings labels
 	private static Label statSizelbl = new Label("Stat Size: ");
 	private static Label bttnSize = new Label("Button Size: ");
@@ -158,7 +170,7 @@ public class Display extends Application {
 	 * }</pre>
 	 */
 	public void statUpdate() {
-		stats.setStats(game.getHP(), game.getMana(), game.getCoins(),game.getAttack(), game.getDefense(), game.getHPpotions(), game.getMNPotions());
+		stats.setStats(game.getHP(), game.getCoins(),game.getAttack(), game.getDefense(), game.getHPpotions());
 	}
 	
 	/**
@@ -201,14 +213,12 @@ public class Display extends Application {
 		
 		
 		//box to hold buttons
-		VBox potionBox = new VBox(10);
-		potionBox.getChildren().addAll(hppot, mnpot);
+
 		//disable buttons when printing text
 		hppot.disableProperty().bind(readyForInput);
-		mnpot.disableProperty().bind(readyForInput);
 		//Pane for all button holders to be placed
 		FlowPane buttonHolder = new FlowPane();
-		buttonHolder.getChildren().addAll(choiceButtons, potionBox);
+		buttonHolder.getChildren().addAll(choiceButtons, hppot);
 		buttonHolder.setAlignment(Pos.CENTER);
 		buttonHolder.setHgap(50);
 
@@ -279,20 +289,33 @@ public class Display extends Application {
 		font4.setToggleGroup(fontGroup);
 		font5.setToggleGroup(fontGroup);
 		font4.setSelected(true);
+		
+		font1.setFont(Font.font("Arial"));
+		font2.setFont(Font.font("Comic Sans MS"));
+		font3.setFont(Font.font("Courier"));
+		font4.setFont(Font.font("Times New Roman"));
+		font5.setFont(Font.font("Verdana"));
+		
+		
 		font1.setOnAction(e -> {
 			text.setFont(Font.font("Arial", text.getFont().getSize()));
+			resize();
 		});
 		font2.setOnAction(e -> {
 			text.setFont(Font.font("Comic Sans MS", text.getFont().getSize()));
+			resize();
 		});
 		font3.setOnAction(e -> {
 			text.setFont(Font.font("Courier", text.getFont().getSize()));
+			resize();
 		});
 		font4.setOnAction(e -> {
 			text.setFont(Font.font("Times New Roman", text.getFont().getSize()));
+			resize();
 		});
 		font5.setOnAction(e -> {
 			text.setFont(Font.font("Verdana", text.getFont().getSize()));
+			resize();
 		});
 		
 		
@@ -427,6 +450,8 @@ public class Display extends Application {
 				pane.setBottom(buttonHolder);
 				pane.setTop(stats);
 				game = new Game();
+				//remove tutorial on replays
+				
 				statUpdate();
 				game.room(0, 0);
 		});
@@ -496,12 +521,7 @@ public class Display extends Application {
 				
 		});
 		
-		mnpot.setOnAction(e -> {
-			
-			game.drinkMNPotion();
-			statUpdate();
-			
-		});
+
 
 
 
@@ -512,23 +532,26 @@ public class Display extends Application {
 		Double modifier = 40-buttonSize.getValue();
 		Double setbtSize = height.get()/modifier;
 		if (setbtSize < 13) setbtSize = 13.0;
-		bt1.setFont(Font.font(setbtSize));
-		bt2.setFont(Font.font(setbtSize));
-		bt3.setFont(Font.font(setbtSize));
-		bt4.setFont(Font.font(setbtSize));
-		hppot.setFont(Font.font(setbtSize));
-		mnpot.setFont(Font.font(setbtSize));
-		start.setFont(Font.font(setbtSize));
-		Double mod = 68 - statSize.getValue();
+		if (width.get() == 650) 
+			if (setbtSize > 60) setbtSize = 60.0;
+		bt1.setFont(Font.font(text.getFont().getFamily(), setbtSize));
+		bt2.setFont(Font.font(text.getFont().getFamily(), setbtSize));
+		bt3.setFont(Font.font(text.getFont().getFamily(), setbtSize));
+		bt4.setFont(Font.font(text.getFont().getFamily(), setbtSize));
+		hppot.setFont(Font.font(text.getFont().getFamily(), setbtSize));
+		start.setFont(Font.font(text.getFont().getFamily(), setbtSize));
+		
+		Double mod = 60 - statSize.getValue();
 		Double size = width.get()/mod;
-		stats.setFont(size);
+		stats.setFont(text.getFont().getFamily(), size);
 		
 		int testing = 14;
 		int holder1 = (int)(height.get()-500)/20;
 		int holder2 = (int)(width.get()-650)/30;
 		if (holder1 > holder2) testing += holder2;
 		else testing += holder1;
-		String holderTest = "-fx-font-size: " + testing;
+		String holderTest = "-fx-font-size: " + testing
+				+ "; -fx-font-family: " + text.getFont().getFamily();
 		adventureTab.setStyle(holderTest);
 		mapTab.setStyle(holderTest);
 		settingsTab.setStyle(holderTest);
@@ -555,23 +578,32 @@ public class Display extends Application {
 		textFontSettings.setStyle(offset);
 		textSpeedSettings.setStyle(offset);
 		
-		String rdbtStyle = "-fx-font-size: " + (12 + ((height.get()-500)/55));
-		fontHolder.setMinWidth(width.get()/2.5);
-		speedHolder.setMinWidth(width.get()/2.5);
+	
+		fontHolder.setMinWidth(width.get()/2.7);
+		speedHolder.setMinWidth(width.get()/2.7);
 		
 		
-		String labeltextSize = "-fx-font-size: " + (12 + ((height.get()-500)/55));
+		String labeltextSize = "-fx-font-size: " + (12 + ((height.get()-500)/55)) 
+				+ "; -fx-font-family: " + text.getFont().getFamily();
 		statSizelbl.setStyle(labeltextSize);
 		bttnSize.setStyle(labeltextSize);
 		txtSize.setStyle(labeltextSize);
 		txtFont.setStyle(labeltextSize);
 		txtSpeed.setStyle(labeltextSize);
 		
-		font1.setStyle(rdbtStyle);
-		font2.setStyle(rdbtStyle);
-		font3.setStyle(rdbtStyle);
-		font4.setStyle(rdbtStyle);
-		font5.setStyle(rdbtStyle);
+		font1.setStyle( "-fx-font-size: " + (12 + ((height.get()-500)/55))
+				+ "; -fx-font-family: Arial");
+		font2.setStyle( "-fx-font-size: " + (12 + ((height.get()-500)/55))
+				+ "; -fx-font-family: Comic Sans MS");
+		font3.setStyle( "-fx-font-size: " + (12 + ((height.get()-500)/55))
+				+ "; -fx-font-family: Courier");
+		font4.setStyle( "-fx-font-size: " + (12 + ((height.get()-500)/55))
+				+ "; -fx-font-family: Times New Roman");
+		font5.setStyle( "-fx-font-size: " + (12 + ((height.get()-500)/55))
+				+ "; -fx-font-family: Verdana");
+		
+		String rdbtStyle = "-fx-font-size: " + (12 + ((height.get()-500)/55))
+				+ "; -fx-font-family: " + text.getFont().getFamily();
 		slowText.setStyle(rdbtStyle);
 		fastText.setStyle(rdbtStyle);
 		instantText.setStyle(rdbtStyle);
@@ -602,13 +634,11 @@ public class Display extends Application {
  */
 class StatPane extends HBox {
 	private String hpString;
-	private String manaString;
 	private String coinsString;
 	private String attackString;
 	private String defenseString;
 	private String hppotionsString;
-	private String mnpotionsString;
-	private Font size;
+	private Font fontset;
 	
 	/**
 	 * This is the no-arg constructor to make a default StatPane object.
@@ -618,13 +648,11 @@ class StatPane extends HBox {
 	 */
 	StatPane() {
 		hpString = "HP: 50";
-		manaString = "Mana: 20";
 		coinsString = "Coins: 0";
 		attackString = "Attack: 0";
 		defenseString = "Defense: 0";
 		hppotionsString = "Hp Potions: 0";
-		mnpotionsString = "Mana Potions: 0";
-		size = new Font(15);
+		fontset = new Font("Times New Roman", 15);
 		
 
 	}
@@ -637,60 +665,51 @@ class StatPane extends HBox {
 	 */
 	private void paintStats() {
 		Label hpLbl = new Label(hpString);
-		hpLbl.setFont(size);
+		hpLbl.setFont(fontset);
 		hpLbl.setId("statLabel");
-		Label manaLbl = new Label(manaString);
-		manaLbl.setFont(size);
-		manaLbl.setId("statLabel");
 		Label coinsLbl = new Label(coinsString);
-		coinsLbl.setFont(size);
+		coinsLbl.setFont(fontset);
 		coinsLbl.setId("statLabel");
 		Label attackLbl = new Label(attackString);
-		attackLbl.setFont(size);
+		attackLbl.setFont(fontset);
 		attackLbl.setId("statLabel");
 		Label defenseLbl = new Label(defenseString);
-		defenseLbl.setFont(size);
+		defenseLbl.setFont(fontset);
 		defenseLbl.setId("statLabel");
 		Label hppotionsLbl = new Label(hppotionsString);
-		hppotionsLbl.setFont(size);
+		hppotionsLbl.setFont(fontset);
 		hppotionsLbl.setId("statLabel");
-		Label mnpotionsLbl = new Label (mnpotionsString);
-		mnpotionsLbl.setFont(size);
-		mnpotionsLbl.setId("statLabel");
 		
 		
 		
 		setSpacing(10);
 		getChildren().clear();
-		getChildren().addAll(hpLbl, manaLbl, coinsLbl, attackLbl, defenseLbl, hppotionsLbl, mnpotionsLbl);
+		getChildren().addAll(hpLbl, coinsLbl, attackLbl, defenseLbl, hppotionsLbl);
 	}
 	/**
 	 * This method is used to update the displayed stats, calling the paintStats method to update them after the information is updated.
 	 * <pre>Example:
-	 * {@code stats.setStats(game.getHP(), game.getMana(), game.getCoins(),game.getAttack(), game.getDefense(), game.getHPpotions(), game.getMNPotions())
+	 * {@code stats.setStats(game.getHP(), game.getCoins(),game.getAttack(), game.getDefense(), game.getHPpotions())
 	 * is the most typical use of this method, which gets the information from the game object which gets it from the character object to update the
 	 * stats to match the current character stats.
 	 * }</pre>
 	 * @param hp (int; the current hp value of the character object in the game object)
-	 * @param mana (int; the current mana value of the character object in the game object)
 	 * @param coins (int; the current number of coins of the character object in the game object) 
 	 * @param attack (int; the current attack value of the character object in the game object)
 	 * @param defense (int; the current defense value of the character object in the game object)
 	 * @param hppotions (int: the current number of health potions of the character object in the game object) 
 	 * @param mnpotions (int; the current number of mana potions of the character object in the game object)
 	 */
-	public void setStats(int hp, int mana, int coins, int attack, int defense, int hppotions, int mnpotions) {
+	public void setStats(int hp, int coins, int attack, int defense, int hppotions) {
 		hpString = "HP: " + hp;
-		manaString = "Mana: " + mana;
 		coinsString = "Coins: " + coins;
 		attackString = "Attack: " + attack;
 		defenseString = "Defense: " + defense;
 		hppotionsString = "HP Potions: " + hppotions;
-		mnpotionsString = "Mana Potions: " + mnpotions;
 		paintStats();
 	}
-	public void setFont(Double fontSize) {
-		size = new Font(fontSize);
+	public void setFont(String family, Double fontSize) {
+		fontset = new Font(family, fontSize);
 		paintStats();
 	}
 }

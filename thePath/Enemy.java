@@ -6,11 +6,15 @@ package thePath;
  * @author Jason Snow
  */
 public class Enemy {
+	private int type;
 	private int hp;
-	private int mana;
 	private int attack;
 	private int defense;
 	private int reward;
+	private int buffAttack;
+	private int buffDefense;
+	private int debuffDefense;
+	private int debuffAttack;
 	/**
 	 * This is the no-arg constructor of the enemy object.
 	 * <pre>Example:
@@ -18,8 +22,8 @@ public class Enemy {
 	 * }</pre>
 	 */
 	Enemy() {
+		type = 0;
 		hp = 4;
-		mana = 0;
 		attack = 6;
 		defense = 0;
 		reward = 1;
@@ -32,21 +36,140 @@ public class Enemy {
 	 * @param type (int; the type of enemy to construct)
 	 */
 	Enemy(int type) {
+		this.type = type;
 		if (type == 1) {
-			hp = 10;
-			mana = 0;
-			attack = 10;
-			defense = 1;
+			hp = 20;
+			attack = 8;
+			defense = 3;
 			reward = 3;
 		}
-		if (type == 2) {
-			hp = 18;
-			mana = 4;
-			attack = 15;
-			defense = 3;
+		else if (type == 2) {
+			hp = 15;
+			attack = 12;
+			defense = 1;
 			reward = 5;
 		}
+		else if (type == 3) {
+			hp = 25;
+			attack = 9;
+			defense = 4;
+			reward = 100;
+			
+		}
 	}
+	public String enemyAction(Character hero, int[] info) {
+		String toPrint = "";
+		String choice = enemyBehavior(hero, info);
+		//find action
+		if (choice.equalsIgnoreCase("heavy attack")) {
+			//assess action for that type and implement results
+			if (type == 1) {
+				
+			}
+			else if (type == 2) {
+				
+			}
+			else if (type == 3) {
+				
+			}
+		}
+		else if (choice.equalsIgnoreCase("standard attack")) {
+	
+		}
+		
+		
+		return toPrint;
+	}
+	
+	public String enemyBehavior(Character hero, int[] info) {
+		String choice = "";
+		int heavyAttack = 0;
+		int standardAttack = 0;
+		int quickAttack = 0;
+		int defenseDebuff = 0;
+		int attackDebuff = 0;
+		int defenseBuff = 0;
+		int attackBuff = 0;
+		int dispellDebuff = 0;
+	
+		
+		
+		
+		
+		
+		
+		if (type == 3) {
+			//consider what magic, if any, the player just used
+			if (info[0] == 0) {
+				//no magic
+				heavyAttack += 1;
+				standardAttack += 1;
+				quickAttack += 1;
+			}
+			else if (info[0] == 1) {
+				//used magic blast, defense and health lowered, took damage
+				
+				
+			}
+			//other options later considered by player's active magic
+			
+			
+			
+			//consider what attack the player just used
+			if (info[1] == 1) {
+				//standard attack
+			}
+			else if (info[1] == 2 ) {
+				//quick attack
+			}
+			else {
+				//heavy attack
+			}
+			
+			//consider what magic the character has active
+			
+			
+			
+			//consider current health
+			
+			//consider current defense
+			
+			//consider current attack
+			
+			//consider buffAttack
+			if (buffAttack == 0) {
+				//attack buff inactive
+			}
+			else {
+				
+			}
+			//consider buffDefnese
+			if (buffDefense == 0) {
+				//defense buff inactive
+			}
+			else {
+				
+			}
+			//consider debuffDefense
+			if (debuffDefense == 0) {
+				//debuffDefense inactive
+			}
+			else {
+				
+			}
+			//consider debuffAttack
+			if (debuffAttack == 0) {
+				//debuffAttack inactive
+			}
+			else {
+				
+			}	
+			//assess priority	
+		}
+		return choice;
+	}
+	
+	
 	/**
 	 * The getter method for the enemy's health value.
 	 * <pre>Example:
@@ -67,26 +190,8 @@ public class Enemy {
 	public void setHP(int hp) {
 		this.hp = hp;
 	}
-	/**
-	 * The getter method for the enemy's mana value.
-	 * <pre>Example:
-	 * {@code foe.getMana() may return 0-5
-	 * }</pre>
-	 * @return mana (int; the current enemy's mana value)
-	 */
-	public int getMana() {
-		return mana;
-	}
-	/**
-	 * The setter method for the enemy's mana value.
-	 * <pre>Example:
-	 * {@code foe.setMana(1) sets the enemy's mana value to 1
-	 * }</pre>
-	 * @param mana (int; the vaulue to set the enemy's mana value to)
-	 */
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
+
+
 	/**
 	 * The getter method for the enemy's attack value, how much damage they can do.
 	 * <pre>Example:
