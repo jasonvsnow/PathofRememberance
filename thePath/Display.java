@@ -32,14 +32,11 @@ import javafx.event.*;
  *
  */
 /*
- * + hero magic counters, methods to access
- * + method to return hero stable state after enemy (take away effects from attacks)
  * + shop description and interactions
- * + enemy behaviors (consider to create priorities, method to sort and act upon priorities) [Elite will be most complex, try to make it think. Grunts and slashers are randomized or very predicatably responsive]
  * + enemy actions
- * + player turn processor for various magic options and attack options
  * + redesign tutorial
- * 
+ * + list the defense and attack values as the result of an attack
+ * + list the player damage
  * 
  * 
  * 

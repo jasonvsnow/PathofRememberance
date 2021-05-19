@@ -33,8 +33,8 @@ public class Character {
 		hp = 50;
 		coins = 0;
 		HPpotion = 0;
-		attack = 1;
-		defense = 0;
+		attack = 6;
+		defense = 2;
 		defendBuff = 0;
 		
 		map = false;
@@ -168,29 +168,38 @@ public class Character {
 	public void setDefense(int defense) {
 		this.defense = defense;
 	}
-	/**
-	 * This is the getter method for the defendCharge of the character which acts as a counter in combat for how long the defensive stance will remain effective.
-	 * <pre>Example:
-	 * {@code char.getDefendCharge() will return 0-4, 
-	 * as those are the maximum and minimum used values of this value.
-	 * }</pre>
-	 * @return defendCharge (int; how many rounds of combat the defensive stance has left)
-	 */
+	
+	
+	
 	public int getDefendBuff() {
 		return defendBuff;
 	}
-	/**
-	 * This is the setter method for the defendCharge of the character.
-	 * <pre>Example:
-	 * {@code char.setDefendCharge(4) will set the defendCharge value to 4
-	 * }</pre>
-	 * @param defendCharge (int; the number of rounds the current defensive stance has left at the time of setting)
-	 */
+	
+	
 	public void setDefendBuff(int defendBuff) {
 		this.defendBuff = defendBuff;
 	}
 	
+	public int getAttackBuff () {
+		return attackBuff;
+	}
+	public void setAttackBuff(int attackBuff) {
+		this.attackBuff = attackBuff;
+	}
 	
+	public int getDefendDebuff() {
+		return defendDebuff;
+	}
+	public void setDefendDebuff(int defendDebuff) {
+		this.defendDebuff = defendDebuff;
+	}
+	
+	public int getAttackDebuff() {
+		return attackDebuff;
+	}
+	public void setAttackDebuff(int attackDebuff) {
+		this.attackDebuff = attackDebuff;
+	}
 	
 	
 	

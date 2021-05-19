@@ -159,9 +159,8 @@ public class Game {
 				if (hero.isMap()) {
 					if (hero.isTutorial()) {
 						toPrint("You insert the key into the door and twist, unlocking the door and swinging it open with a creak to enter the armory.\n");
-						hero.setTutorial(false);
 						hero.setRoom(2);
-						type = 0;
+						type = 3;
 						combatStarter(type);
 					}
 					else {
@@ -178,7 +177,7 @@ public class Game {
 			}
 			else if (choice == 2) {
 				if (!(hero.isMap())) {
-					hero.setAttack(2);
+					hero.setAttack(6);
 					toPrint("You take the items from the table.\n"
 							+ "1) Go to the armory\n"
 							+ "\n");
@@ -418,22 +417,25 @@ public class Game {
 	public void combatStarter(int seed) {
 		reRoom = 8;
 		if (seed == 0) {
-			toPrint("As you step into the armory, a shriveled little green creature turns to you and howls, lunging at you with murder in its beady red eyes.\n");
+			toPrint("Tutorial\n");
 		}
 		else if (seed == 1) {
-			toPrint("A deep groan echoes near you. Turning, you see what looks to be a person wearing some uniform and carrying an old sword. "
-					+ "However, instead of a face, the shambling person has several spikes jutting out of their skull that appear to be made of obsidian. "
-					+ "Similiar spikes protrude from various places on the creatures limbs and torso, all of them shimmeirng in the light as the groaning creature lunges at you, swipping with its sword.\n");
+			toPrint("A deep, guttural growl suddenly draws your attention to a shambling corpse wearing tattered, ripped clothing; the body, animated by some unknown force, bears bulbous, glowing green growths across its body. "
+					+ "It carries an old, slightly rusted weapon but despite the dilapidated nature, you have no doubt the weapon can do damage.\n");
 		}
 		else if (seed == 2) {
 			toPrint("There is a sound like metal scrapping as a nearby spike splits open and out crawls a creature. "
 					+ "The creature appears to be a skeleton encased in the same material as the spikes, acting a sort of natural armor and leaving only the joints and skull visible- the skull having the same spikes jutting out of the face as the other monsters had."
 					+ "The only noise it makes is the noise of its feet upon the ground as it lunges towards you, bringing a spiked hand forward.\n");
 		}
+		else if (seed == 3) {
+			toPrint("Its getting real now, buddy boy.");
+		}
 		toPrint("What will you do?\n"
-				+ "1) Attack\n"
-				+ "2) Defend\n"
-				+ "3) Use Magic\n"
+				+ "1) Attack with weapons\n"
+				+ "2) Attack with magic(2 hp)\n"
+				+ "3) Buff yourself(3 hp)\n"
+				+ "4) Debuff enemy(5 hp)\n"
 				+ "\n");
 	}
 	/**

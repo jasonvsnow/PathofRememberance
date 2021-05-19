@@ -14,8 +14,7 @@ public class Combat {
 	private String textToPrint = "";
 	private int decision;
 	private boolean magicUsed;
-	//magic choice, attack choice 
-	private int[] info = {0, 0};
+	private int attack;
 
 	/**
 	 * This is the no arg constructor for a combat, which sets a blank template.
@@ -33,6 +32,10 @@ public class Combat {
 	
 	
 	public int fight(Character hero, int choice, int type) {
+		if (type == 0) {
+			return tutorial(hero, choice);
+		}
+		
 		/*
 		 * 0 = player death
 		 * 1 = turn finished
@@ -45,8 +48,7 @@ public class Combat {
 		//check if combat is continuation or new
 		if (!init) {
 			foeType = type;
-			if (type == 0) foe = new Enemy();
-			else foe = new Enemy(type);
+			foe = new Enemy(type);
 			init = true;
 		}
 		 //have the player act
@@ -60,9 +62,33 @@ public class Combat {
 		}
 		else if (result == 1) {
 			//combat continues
-			toPrint("1) Attack\n"
-					+ "2) Defend\n"
-					+ "3) Use Magic\n"
+			String activeMagic = "";
+			String previous = "";
+			if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendBuff() > 0) {
+				activeMagic += "(Active Magic:";
+				if (hero.getAttackBuff() > 0) {
+					activeMagic += " AttackBuff(" + hero.getAttackBuff() + ")";
+					previous = ",";
+				}
+				if (hero.getDefendBuff() > 0) { 
+					activeMagic += previous + " DefendBuff(" + hero.getDefendBuff() + ")";
+					previous = ",";
+				}
+				if (hero.getAttackDebuff() > 0) { 
+					activeMagic += previous + " AttackDebuff";
+					previous = ",";
+				}
+				if (hero.getDefendDebuff() > 0)  {
+					activeMagic += previous + " DefendDebuff";
+				}
+				activeMagic += ")";
+			}
+			toPrint("What will you do?\n"
+					+ activeMagic + "\n"
+					+ "1) Attack with weapons\n"
+					+ "2) Attack with magic(2 hp)\n"
+					+ "3) Buff yourself(3 hp)\n"
+					+ "4) Debuff enemy(5 hp)\n"
 					+ "\n");
 			
 			return 1;
@@ -70,9 +96,6 @@ public class Combat {
 		else if (result == 2) {
 			//player victory
 			toPrint("You won!\n");
-			if (hero.getAttack() == 5) hero.setDefense(5);
-			else if (hero.getAttack() == 10) hero.setDefense(8);
-			else hero.setDefense(3);
 			if (foe.getReward() > 1) toPrint("You find " + foe.getReward() + " coins on the enemy.\n");
 			else toPrint("You find " + foe.getReward() + " coin on the enemy.\n");
 			hero.setCoins(hero.getCoins()+foe.getReward());
@@ -80,16 +103,36 @@ public class Combat {
 			
 			return 2;
 		}
-		else if (result == 3){
-			//additional input to complete attack required
-			return 3;
-		}
-		else if (result == 4) {
-			//additional input to complete magic required
-			return 4;
+		else if (result == 3) {
+			String activeMagic = "";
+			String previous = "";
+			if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendBuff() > 0) {
+				activeMagic += "(Active Magic:";
+				if (hero.getAttackBuff() > 0) {
+					activeMagic += " AttackBuff(" + hero.getAttackBuff() + ")";
+					previous = ",";
+				}
+				if (hero.getDefendBuff() > 0) { 
+					activeMagic += previous + " DefendBuff(" + hero.getDefendBuff() + ")";
+					previous = ",";
+				}
+				if (hero.getAttackDebuff() > 0) { 
+					activeMagic += previous + " AttackDebuff";
+					previous = ",";
+				}
+				if (hero.getDefendDebuff() > 0)  {
+					activeMagic += previous + " DefendDebuff";
+				}
+				activeMagic += ")";
+			}
+			toPrint("Finish your turn with an attack.\n"
+					+ activeMagic + "\n"
+					+ "1) Attack with weapons\n"
+					+ "2) Attack with magic(2 hp)\n"
+					+ "\n");
+			return 1;
 		}
 		else {
-			//invalid error, turn incomplete, etc.
 			return 5;
 		}
 
@@ -102,97 +145,357 @@ public class Combat {
 		if (decision == 0) {
 			if (choice == 1) {
 				//attack
+				toPrint("Select attack: \n"
+						+ "1) Standard Attack\n"
+						+ "2) Quick Attack\n"
+						+ "3) Heavy Attack\n"
+						+ "4) Cancel\n"
+						+ "\n");
 				decision = 1; 
-				return 3;
+				return 5;
 			}
 			else if (choice == 2) {
-				//attack with magic
+				if (hero.getHP() > 2) {
+					//attack with magic
+					toPrint("You make a basic magic attack.\n");
+					hero.setHP(hero.getHP()-2);
+					hero.setDefense(hero.getDefense()-1);
+					//damage foe
+					attack = 4;
+				}
+				else return 5;
 			}
 			else if (choice == 3) {
-				//apply a buff 
-				decision = 3;
-				return 4;
+				if (!magicUsed && hero.getHP() > 3) {
+					if (hero.getAttackBuff() == 0 || hero.getDefendBuff() == 0) {
+						//apply a buff
+						String active1 = "";
+						String active2 = "";
+						if (hero.getAttackBuff() > 0) active1 = "(Active)";
+						if (hero.getDefendBuff() > 0) active2 = "(Active)";
+						
+						toPrint("Select buff: \n"
+								+ "1) Buff attack" + active1 + "\n"
+								+ "2) Buff defense" + active2 + "\n"
+								+ "3) Cancel\n"
+								+ "\n");
+						decision = 3;
+					}
+					else {
+						toPrint("Both buffs are active.\n\n");
+						return 1;
+					}
+					
+				}
+				return 5;
 			}
 			else if (choice == 4) {
-				//apply a debuff
-				decision = 4;
-				return 4;
+				if (!magicUsed && hero.getHP() > 5) {
+					if (hero.getAttackDebuff() == 0 || hero.getDefendDebuff() == 0) {
+						//apply a debuff
+						String active1 = "";
+						String active2 = "";
+						if (hero.getAttackDebuff() > 0) active1 = "(Active)";
+						if (hero.getDefendDebuff() > 0) active2 = "(Active)";
+						toPrint("Select debuff: \n"
+								+ "1) Debuff attack" + active1 + "\n"
+								+ "2) Debuff defense" + active2 + "\n"
+								+ "3) Cancel\n"
+								+ "\n");
+						decision = 4;
+					}
+					else { 
+						toPrint("Both debuffs are active.\n\n");
+						return 1;
+					}
+				}
+				return 5;
 			}
 		}
+		
 		//player has chosen to attack
 		else if (decision == 1) {
 			if (choice == 1) {
-				//player has chosen to make a standard attack
+				//get info
+				
+				//describe standard attack
+				toPrint("You made a basic attack.\n");
+				attack = 1;
+				decision = 0;
 			}
 			else if (choice == 2) {
-				//player has chosen to make a quick attack
+				//get info
+				
+				//set stats
+				hero.setDefense(hero.getDefense()+3);
+				
+				//describe quick attack
+				toPrint("You made a quick attack.\n");
+				attack = 2;
+				decision = 0;
 			}
 			else if (choice == 3) {
-				//player has chosen to make a heavy attack
+				//get info
+				
+				//set stats
+				hero.setDefense(hero.getDefense()-2);
+				
+				//player describe heavy attack
+				toPrint("You made a heavy attack.\n");
+				attack = 3;
+				decision = 0;
 			}
-			else {
-				//invalid input
+			else if (choice == 4) {
+				decision = 0;
+				if (magicUsed) return 3;
+				else return 1;
 			}
 		}
 		//player has chosen to buff themselves
 		else if (decision == 3) {
 			if (choice == 1) {
-				//player has chosen to buff their defense
+				//player has chosen to buff their attack
+				if (hero.getAttackBuff() == 0) {
+					toPrint("You buffed your attack.\n\n");
+					//set stats
+					hero.setHP(hero.getHP()-3);
+					hero.setAttackBuff(3);
+					hero.setAttack(hero.getAttack()+2);
+					magicUsed = true;
+					decision = 0;
+					return 3;
+				}
+				else {
+					toPrint("The attack buff is already active.\n");
+					String active1 = "";
+					String active2 = "";
+					if (hero.getAttackBuff() > 0) active1 = "(Active)";
+					if (hero.getDefendBuff() > 0) active2 = "(Active)";
+					
+					toPrint("Select buff: \n"
+							+ "1) Buff attack" + active1 + "\n"
+							+ "2) Buff defense" + active2 + "\n"
+							+ "3) Cancel\n"
+							+ "\n");
+					return 5;
+				}
 			}
 			else if (choice == 2) {
-				//player has chosen to buff their attack
+				if (hero.getDefendBuff() == 0) {
+					//player has chosen to buff their defense
+					toPrint("You buffed your defense.\n\n");
+					//set stats
+					hero.setHP(hero.getHP()-3);
+					hero.setDefendBuff(3);
+					hero.setDefense(hero.getDefense()+2);
+					magicUsed = true;
+					decision = 0;
+					return 3;
+				}
+				else {
+					toPrint("The defend buff is already active.\n");
+					String active1 = "";
+					String active2 = "";
+					if (hero.getAttackBuff() > 0) active1 = "(Active)";
+					if (hero.getDefendBuff() > 0) active2 = "(Active)";
+					toPrint("Select buff: \n"
+							+ "1) Buff attack" + active1 + "\n"
+							+ "2) Buff defense" + active2 + "\n"
+							+ "3) Cancel\n"
+							+ "\n");
+					return 5;
+				}
 			}
-
+			else if (choice == 3) {
+				decision = 0;
+				return 1;
+			}
 			else {
 				//invalid input
+				return 5;
 			}
 		}
 		//player has chosen to debuff the enemy
 		else if (decision == 4) {
 			if (choice == 1) {
-				//player has chosen to debuff the enemy's defense
+				if (hero.getAttackDebuff() == 0) {
+					//player has chosen to debuff the enemy's attack
+					toPrint("You debuffed your enemy's attack.\n\n");
+					hero.setHP(hero.getHP()-5);
+					hero.setAttackDebuff(1);
+					foe.setAttack(foe.getAttack()-2);
+					magicUsed = true;
+					decision = 0;
+					return 3;
+				}
+				else {
+					toPrint("The attack debuff is already active.\n");
+					String active1 = "";
+					String active2 = "";
+					if (hero.getAttackDebuff() > 0) active1 = "(Active)";
+					if (hero.getDefendDebuff() > 0) active2 = "(Active)";
+					toPrint("Select debuff: \n"
+							+ "1) Debuff attack" + active1 + "\n"
+							+ "2) Debuff defense" + active2 + "\n"
+							+ "3) Cancel\n"
+							+ "\n");
+					decision = 4;
+					return 5;
+				}
 			}
 			else if (choice == 2) {
-				//player has chosen to debuff the enemy's attack
+				if (hero.getDefendDebuff() == 0) {
+					//player has chosen to debuff the enemy's defense
+					toPrint("You debuffed your enemy's defense.\n\n");
+					hero.setHP(hero.getHP()-5);
+					hero.setDefendDebuff(1);
+					foe.setDefense(foe.getDefense()-2);
+					magicUsed = true;
+					decision = 0;
+					return 3;
+				}
+				else {
+					toPrint("The defense debuff is already active.\n");
+					String active1 = "";
+					String active2 = "";
+					if (hero.getAttackDebuff() > 0) active1 = "(Active)";
+					if (hero.getDefendDebuff() > 0) active2 = "(Active)";
+					toPrint("Select debuff: \n"
+							+ "1) Debuff attack" + active1 + "\n"
+							+ "2) Debuff defense" + active2 + "\n"
+							+ "3) Cancel\n"
+							+ "\n");
+					decision = 4;
+					return 5;
+				}
 			}
-
+			else if (choice == 3) {
+				decision = 0;
+				return 1;
+			}
 			else {
 				//invalid input
+				return 5;
 			}
 		}
-		//reset defense and attack once counters run out
-		
-		
-		
-		
-		
 		
 		//find the result of the enemy turn if alive
 		if (foe.getHP() > 0) {
-			processEnemyTurn(hero);	
+			
+			//resolve enemy buffs and debuffs if any
+			if (foe.getBuffAttack() > 0) {
+				foe.setBuffAttack(foe.getBuffAttack()-1);
+				if (foe.getBuffAttack() == 0) {
+					toPrint("The enemy attack buff has ended.\n");
+					foe.setAttack(foe.getAttack()-2);
+				}
+			}
+			if (foe.getBuffDefense() > 0) {
+				foe.setBuffDefense(foe.getBuffDefense()-1);
+				if (foe.getBuffDefense() == 0) {
+					toPrint("The enemy defense buff has ended.\n");
+					foe.setDefense(foe.getDefense()-2);
+				}
+			}
+			if (foe.getDebuffAttack() > 0) {
+				foe.setDebuffAttack(foe.getDebuffAttack()-1);
+				if (foe.getDebuffAttack() == 0) {
+					toPrint("The enemy attack debuff has ended.\n");
+					hero.setAttack(hero.getAttack()+2);
+				}
+			}
+			if (foe.getDebuffDefense() > 0) {
+				foe.setDebuffDefense(foe.getDebuffDefense()-1);
+				if (foe.getDebuffDefense() == 0) {
+					toPrint("The enemy defense debuff has ended.\n");
+					hero.setDefense(hero.getDefense()+2);
+				}
+			}
+			
+			
+			
+			toPrint(foe.enemyAction(hero, attack));
+			toPrint("\n");
 		}
 		//end combat if foe is defeated
 		else {
+			if (attack == 2) {
+				hero.setDefense(hero.getDefense()-3);
+			}
+			else if (attack == 3) {
+				hero.setDefense(hero.getDefense()+2);
+			}
+			else if (attack == 4) {
+				hero.setDefense(hero.getDefense()+1);
+			}
+			if (hero.getAttackBuff() > 0) {
+				hero.setAttackBuff(0);
+				hero.setAttack(hero.getAttack()-2);
+			}
+			if (hero.getDefendBuff() > 0) {
+				hero.setDefendBuff(0);
+				hero.setDefense(hero.getDefense()-2);
+			}
+			hero.setAttackDebuff(0);
+			hero.setDefendBuff(0);
+			attack = 0;
+			magicUsed = false;
 			return 2;
 		}
 		
 		//post enemy turn, find out if hero is still alive
 		if (hero.getHP() > 0) {
 			//hero alive, continue combat
+			if (attack == 2) {
+				hero.setDefense(hero.getDefense()-3);
+			}
+			else if (attack == 3) {
+				hero.setDefense(hero.getDefense()+2);
+			}
+			else if (attack == 4) {
+				hero.setDefense(hero.getDefense()+1);
+			}
+			
+			
+			//resolve expired states (don't forget attack and magic used)
+			if (hero.getAttackBuff() > 0) {
+				hero.setAttackBuff(hero.getAttackBuff()-1);
+				if (hero.getAttackBuff() == 0) {
+					toPrint("Your attack buff has ended.\n");
+					hero.setAttack(hero.getAttack()-2);
+				}
+			}
+			if (hero.getDefendBuff() > 0) {
+				hero.setDefendBuff(hero.getDefendBuff()-1);
+				if (hero.getDefendBuff() == 0) {
+					toPrint("Your defense buff has ended.\n");
+					hero.setDefense(hero.getDefense()-2);
+				}
+			}
+		
+			
+			attack = 0;
+			magicUsed = false;
 			return 1;
 		}
 		else {
 			//hero has perished
+			attack = 0;
+			magicUsed = false;
 			return 0;
 		}
 	}
 
-	public void processEnemyTurn(Character hero) {
+
+	public int tutorial(Character hero, int choice) {
 		
+		
+		
+		
+		
+		return 1;
 		
 	}
-
-	
 	
 	/**
 	 * This is the getter method for the init value (short for initiative) which represents whether a fight has started or not.
