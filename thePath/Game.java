@@ -28,6 +28,13 @@ public class Game {
 		reRoom = 0;
 		type = 0;
 	}
+	public void restart() {
+		hero.setHP(50);
+		reRoom = -1;
+		conflict = new Combat();
+		type = 0;
+	}
+	
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for HP.
 	 * <pre>Example: 
@@ -126,7 +133,13 @@ public class Game {
 	 * @return reRoom (int; a variable stored in the game object, but which keeps the current room the same until changed to be continuously returned).
 	 */
 	public int room(int room, int choice) {
-
+		//restarting
+		if (room == -1) {
+			//back to it
+			if (choice == 0) {
+				//intro again
+			}
+		}
 		//waking up
 		if (room == 0) {
 			if (choice == 0)
@@ -160,7 +173,7 @@ public class Game {
 					if (hero.isTutorial()) {
 						toPrint("You insert the key into the door and twist, unlocking the door and swinging it open with a creak to enter the armory.\n");
 						hero.setRoom(2);
-						type = 3;
+						type = 0;
 						combatStarter(type);
 					}
 					else {
@@ -417,26 +430,39 @@ public class Game {
 	public void combatStarter(int seed) {
 		reRoom = 8;
 		if (seed == 0) {
-			toPrint("Tutorial\n");
+			toPrint("A noise sounds nearby and you look to see a rotten, shambling body stumble towards you, skin pale and lifeless, eyes sunken and gone.\n"
+					+ "(Combat has started! After an enemy is introduced, the following messsage will display to show you your combat options)"
+				
+					+ "\n");
 		}
 		else if (seed == 1) {
 			toPrint("A deep, guttural growl suddenly draws your attention to a shambling corpse wearing tattered, ripped clothing; the body, animated by some unknown force, bears bulbous, glowing green growths across its body. "
-					+ "It carries an old, slightly rusted weapon but despite the dilapidated nature, you have no doubt the weapon can do damage.\n");
+					+ "It carries an old, slightly rusted weapon but despite the dilapidated nature, you have no doubt the weapon can do damage."
+					+ "\n");
 		}
 		else if (seed == 2) {
-			toPrint("There is a sound like metal scrapping as a nearby spike splits open and out crawls a creature. "
-					+ "The creature appears to be a skeleton encased in the same material as the spikes, acting a sort of natural armor and leaving only the joints and skull visible- the skull having the same spikes jutting out of the face as the other monsters had."
-					+ "The only noise it makes is the noise of its feet upon the ground as it lunges towards you, bringing a spiked hand forward.\n");
+			toPrint("A squelching, wet sound fills the room as you look at one of the green growths protruding from the wall; "
+					+ "a hole has opened and something is slowly pushed out, covered in the green slime within the pulsing sack. "
+					+ "The creature stands to face you: it is thin and pale, with four arms that each end in vicious, clawed hands. "
+					+ "Razor sharp teeth clack together while four glowing green eyes stare you down. "
+					+ "You have just enough time to draw your sword before it rushes you with surprising speed."
+					+ "\n");
 		}
 		else if (seed == 3) {
-			toPrint("Its getting real now, buddy boy.");
+			toPrint("Standing in the center of the room is a massive creature, at least a torso’s length taller than yourself. "
+					+ "Four green-skinned arms are rest folded across its chest as it calmly regards you with four beady eyes. "
+					+ "It speaks in a deep, booming voice before two hands reach down to grab a pair of axes off its belt; "
+					+ "as it does, a series of tattoos suddenly glow upon its body- tattoos rather similar to yours. "
+					+ "The creature bellows and charges you, axes swinging." + 
+					"\n");
 		}
 		toPrint("What will you do?\n"
 				+ "1) Attack with weapons\n"
-				+ "2) Attack with magic(2 hp)\n"
+				+ "2) Attack with magic(3 hp)\n"
 				+ "3) Buff yourself(3 hp)\n"
 				+ "4) Debuff enemy(5 hp)\n"
 				+ "\n");
+		if (seed == 0) toPrint("\n(As you can see, the magic you can use will cost certain amounts of your life. Lets start off using a buff. Click the \"3\" button to proceed)");
 	}
 	/**
 	 * This method is a solution to the issues I encountered with loops in the Display class. Past versions of this game had, essentially, a guarded loop that would continue until the player finished. However, if a loop doesn't close the Display class will never update, it just all freezes up.
@@ -468,7 +494,8 @@ public class Game {
 			//barracks
 			toPrint("\tThe barracks walls are the same heavy stone, but its floor is wooden boards- boards pierced, shattered, and pushed aside by spikes of various sizes. "
 					+ "With diameters ranging from mere inches to three feet and lengths reaching a staggering six feet at times, the spikes mostly jut up from the floor around the edges of the room, but a few pierce in from the north wall as well. "
-					+ "The bunks that were once the resting places and storage areas of whoever lived here are pierced, pushed aside, or shattered by the spikes along the edges. Of the four rows of bunks, the two in the center remain mostly untouched, left in a state of disarray- the drawers beneath each that held the clothes and personal effects of the people are either empty or messy, but hold nothing of value.\n"
+					+ "The bunks that were once the resting places and storage areas of whoever lived here are pierced, pushed aside, or shattered by the spikes along the edges. "
+					+ "Of the four rows of bunks, the two in the center remain mostly untouched, left in a state of disarray- the drawers beneath each that held the clothes and personal effects of the people are either empty or messy, but hold nothing of value.\n"
 					+ "1) Go to the shop\n"
 					+ "2) Go to the storage.\n"
 					+ "3) Go to the hallway.\n"

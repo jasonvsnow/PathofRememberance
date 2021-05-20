@@ -446,11 +446,10 @@ public class Display extends Application {
 		start.setOnAction(e -> {
 				pane.setBottom(buttonHolder);
 				pane.setTop(stats);
-				game = new Game();
-				//remove tutorial on replays
-				
+				if (game.isMap()) game.restart();
+				else game = new Game();
 				statUpdate();
-				game.room(0, 0);
+				game.room(-1, 0);
 		});
 		
 		bt1.setOnAction(e -> {
@@ -459,11 +458,11 @@ public class Display extends Application {
 					statUpdate();
 				}
 				else {
-					print("You decide to push on. You may be surrounded by darkness, but you realize that is merely because your eyes are closed and you are asleep.\n\n");
+					print("You decide to push on.\n\n");
 					room = 0;
 					pane.setTop(null);
 					pane.setBottom(start);
-					bindMap.setValue(true);
+					
 				}
 		});
 		
@@ -512,7 +511,6 @@ public class Display extends Application {
 		});
 		
 		hppot.setOnAction(e -> {
-			
 				game.drinkHPotion();
 				statUpdate();
 				

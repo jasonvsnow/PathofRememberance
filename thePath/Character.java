@@ -20,6 +20,7 @@ public class Character {
 	private int attackDebuff;
 	private boolean map;
 	private boolean captainKey;
+	private int foodScrap;
 	private boolean tutorial;
 	
 	/**
@@ -30,15 +31,18 @@ public class Character {
 	 */
 	Character() {
 		room = 0;
-		hp = 50;
+		hp = 40;
 		coins = 0;
 		HPpotion = 0;
-		attack = 6;
-		defense = 2;
+		attack = 1;
+		defense = 0;
 		defendBuff = 0;
-		
+		attackBuff = 0;
+		defendDebuff = 0;
+		attackDebuff = 0;
 		map = false;
 		captainKey = false;
+		foodScrap = 0;
 		tutorial = true;
 	}
 	/**
@@ -275,6 +279,12 @@ public class Character {
 	 */
 	public void setTutorial(boolean tutorial) {
 		this.tutorial = tutorial;
+	}
+	public int isFoodScrap() {
+		return foodScrap;
+	}
+	public void setFoodScrap(int foodScrap) {
+		this.foodScrap = foodScrap;
 	}
 	
 	

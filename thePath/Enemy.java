@@ -37,8 +37,8 @@ public class Enemy {
 		}
 		else if (type == 2) {
 			hp = 15;
-			attack = 5;
-			defense = 1;
+			attack = 6;
+			defense = 4;
 			reward = 5;
 		}
 		else if (type == 3) {
@@ -54,21 +54,70 @@ public class Enemy {
 		String toPrint = "";
 		int[] choice = enemyBehavior(hero, attackChoice);
 		if (type == 1) {
-			if (choice[1] == 1) {
+			if (choice[1] == 0) {
 				int damage = attack - hero.getDefense();
+				if (damage < 0) damage = 0;
 				hero.setHP(hero.getHP()-damage);
-				toPrint += "Grunt standard attack.";
+				if (damage > 0) toPrint += "The zombie jabs with its sword, stabbing through your defense for  " + damage + " damage.\n";
+				else toPrint += "Jabbing at your gut, the zombie fails to cut you while you smoothly parry with your own blades.\n";
+				lastAttack = 0;
+			}
+			else if (choice[1] == 1) {
+				//quick attack
+				int damage = (attack-3) - hero.getDefense();
+				if (damage < 0) damage = 0;
+				hero.setHP(hero.getHP()-damage);
+				if (damage > 0) toPrint += "Instead of using its blade, the undead opens its mouth and spews a green liquid at you while keeping its blade up to defend, dealing " + damage + " damage as the liquid sizzles and burns upon you.\n";
+				else toPrint += "The body tries to spit a burning poison upon you but you rapidly shove it back, causing the attack to harmlessly splatter across the floor; the thing’s defenses are up all the same.\n";
+				defense += 2;
+				lastAttack = 1;
+				
 			}
 			else if (choice[1] == 2) {
-				//quick attack
-			}
-			else if (choice[1] == 3) {
 				//heavy attack
-			}
-			
+				int damage = (attack+4) - hero.getDefense();
+				if (damage < 0) damage = 0;
+				hero.setHP(hero.getHP()-damage);
+				if (damage > 0) toPrint += "Grabbing the hilt of its weapon in two hands, the corpse snarls as it brings down a heavy attack, slashing into with greater force for " + damage + " damage but leaving itself open to retribution.\n";
+				else toPrint += "The corpse throws all its might into an attack but fails to penetrate your defenses and still leaves itself  open in the process.\n";
+				defense -= 2;
+				lastAttack = 2;
+			}	
 		}
 		else if (type == 2) {
-			
+			//magic
+			if (choice[0] == 0) {
+				//attack buff
+				hp -= 2;
+				buffAttack = 3;
+				attack += 2;
+				toPrint += "The creature shrieks and writhes in pain as glowing green veins appear across its body."
+						+ " It's claws begin to glow with a soft green as it stops and lunges at you once more.\n";
+			}
+			else if (choice[0] == 1) {
+				//dispell defense buff
+				hp -= 2;
+				defense += 2;
+				hero.setDefendDebuff(0);
+				toPrint += "The creature snarls at the runes you have caused to appear on it and it slashes at them, cutting into its own skin to ruin the design. "
+						+ "While brutal, it is effective and your debuff upon its defenses comes to an end before it lashes out at you again.\n";
+			}
+			else if (choice[0] == 2) {
+				//dispell attk buff
+				hp -= 2;
+				attack += 2;
+				hero.setAttackDebuff(0);
+				toPrint += "The creature struggles across the chains that hamper its ability to fight before beginning to glow a soft green."
+						+ " The spectral chains suddenly snap and fall to the floor before the creature lashes out again.\n";
+			}
+			int damage = attack-hero.getDefense();
+			if (damage < 0) damage = 0;
+			if (damage > 0) toPrint += "The creature slashes with " + choice[1] + " claws, dealing " + damage + " damage with each one for a total of "
+					+ damage*choice[1] + " damage.\n";
+			else toPrint += "The creature unleashes an assault of " + choice[1] + " four rapid attacks upon you but you fend off any real damage and escape unharmed.\n";
+			hero.setHP(hero.getHP()- (damage*choice[1]));
+			defense -= choice[1];
+			if (defense < 0) defense = 0;
 		}
 		else {
 			//int[] biggest = {attackDebuff, defenseDebuff, attackBuff, defenseBuff, dispellDefenseDebuff, dispellAttackDebuff};
@@ -80,70 +129,74 @@ public class Enemy {
 				hero.setAttack(hero.getAttack()-2);
 				debuffAttack = 3;
 				hp -= 2;
-				toPrint += "The elite debuffs your attack.\n";
+				toPrint += "The enemy bellows a word of power and misty green ropes wrap around your arms and weapons, hindering your attacks' effectiveness.\n";
 			}
 			else if (choice[0] == 1) {
 				//defense Debuff
 				hero.setAttack(hero.getAttack()-2);
 				debuffAttack = 3;
 				hp -= 2;
-				toPrint += "The elitre debuffs your defense.\n";
+				toPrint += "The brute hisses something in its strange tongue before you feel your feet grow heavy, seeming to stick to the ground. "
+						+ "This makes it difficult to move about and avoid attacks, leaving you open to damage.\n";
 			}
 			else if (choice[0] == 2) {
 				//attackBuff
 				attack += 2;
 				buffAttack = 3;
 				hp -= 2;
-				toPrint += "The elite buffs its attacks.\n";
+				toPrint += "Raising its arms and giving a shout, the tattoos on the monster's arms glow before the arms swell in size, giving your foe greater strength and power by which to beat you into submission.\n";
 			}
 			else if (choice[0] == 3) {
 				//defenseDebuff
 				defense += 2;
 				buffDefense = 3;
 				hp -= 2;
-				toPrint += "The elite buffs its defense.\n";
+				toPrint += "The monster uses two of its hands to trace a glyph in the air before a set of misty, spectral armor appears upon its form to help protect it from damage.\n";
 			}
 			else if (choice[0] == 4) {
 				//dispellDefenseDebuff
 				hero.setDefendDebuff(0);
 				defense += 2;
 				hp -= 2;
-				toPrint += "The elite dispells your debuff on its defense.\n";
+				toPrint += "Frustrated with your runes that leave it open to attack, your foe hunkers down before its own markings glow and dispell the ones you have placed upon it.\n";
 			}
 			else {
 				//dispellAttackDebuff
 				hero.setAttackDebuff(0);
 				attack += 2;
 				hp -= 2;
-				toPrint += "The elite dispells your debuff on its attack.\n";
+				toPrint += "Your opponent pauses a moment to grab the magical chains binding it and snap them off before following up with a now more powerful attack.\n";
 			}
 			
 			
-			if (choice[1] == 1) {
+			if (choice[1] == 0) {
 				//standard attack
 				int damage = attack-hero.getDefense();
 				if (damage < 0) damage = 0;
-				lastAttack = 1;
+				lastAttack = 0;
 				hero.setHP(hero.getHP()-damage);
-				toPrint += "The elite slashes, dealing " + damage + " damage.\n";
+				if (damage > 0) toPrint += "The behemoth sweeps both blades across itself, crossing them in the air to ensure you cannot escape the blow as it slashes into you for " + damage + " damage.\n";
+				else toPrint += "The monster sweeps one blade out but you blocked it with your sword and catch the follow up with the flat of your dagger, struggling a moment before shoving the attacks back, avoiding harm.\n";
 			}
-			else if (choice[1] == 2) {
+			else if (choice[1] == 1) {
 				//quick attack
 				int damage = (attack-6)-hero.getDefense();
 				if (damage < 0) damage = 0;
 				defense += 3;
-				lastAttack = 2;
+				lastAttack = 1;
 				hero.setHP(hero.getHP()-damage);
-				toPrint += "The elite quick slashes, dealing " + damage + " damage.\n";
+				if (damage > 0) toPrint += "The monster attacks four times in rapid succession, quick, light blows that never open it to counterattack; the flurry of attacks deals  " + damage + " damage to you.\n";
+				else toPrint += "The behemoth attempts to overwhelm you with a flurry but you quickly step away and raise your defenses to batter away the offense.\n";
 			}
 			else {
 				//heavy attack
 				int damage = (attack+5)-hero.getDefense();
 				if (damage < 0) damage = 0;
 				defense -= 4;
-				lastAttack = 3;
+				lastAttack = 2;
 				hero.setHP(hero.getHP()-damage);
-				toPrint += "The elite heavy slashes, dealing " + damage + " damage.\n";
+				if (damage > 0) toPrint += "The monster raises both axes and brings them down together ina  single, mighty attack that deals" + damage + " damage.\n";
+				else toPrint += "The brute attempts to crush you with both axes at once, but the slow speed of the attack gives you ample time to avoid it.\n";
 			}
 			
 		}
@@ -152,7 +205,7 @@ public class Enemy {
 	}
 	
 	public int[] enemyBehavior(Character hero, int attackChoice) {
-		int[] choice = {0, 0};
+		int[] choice = {-1, 0};
 		int heavyAttack = 0;
 		int standardAttack = 0;
 		int quickAttack = 0;
@@ -164,14 +217,99 @@ public class Enemy {
 		int dispellAttackDebuff = 0;
 		
 		if (type == 1) {
-			int spaz = (int)(Math.random()*3)+1;
-			choice[1] = spaz;
+			if (attackChoice == 1) {
+				heavyAttack += 1;
+				standardAttack += 1;
+				quickAttack += 1;
+			}
+			else if (attackChoice == 2) {
+				standardAttack += 1;
+				quickAttack += 1;
+			}
+			else if (attackChoice == 3) {
+				heavyAttack += 1;
+				quickAttack += 1;
+			}
+			else {
+				standardAttack += 1;
+				heavyAttack += 1;
+			}
+			int max = 0;
+			Stack<Integer> equal = new Stack<Integer>();
+			int[] biggest = {standardAttack, quickAttack, heavyAttack};
+			//find max
+			for (int i = 0; i < biggest.length; i++) {
+				if (biggest[i] > max) {
+					max = biggest[i];
+				}
+			}
+			//store all possible choices
+			for (int i = 0; i < biggest.length; i++) {
+				if (biggest[i] == max) {
+					equal.push(i);
+				}
+			}
+			int chosen = 0;
+			//pick random among all options
+			int random = (int)(Math.random()*equal.size())+1;
+			for (int i = 0; i < random; i++) {
+				chosen = equal.pop();
+			}
+			choice[1] = chosen;
 		}
 		else if (type == 2) {
-			int spaz = (int)(Math.random()*3)+1;
-			choice[1] = spaz;
+			int many = (int)((Math.random()*4)+1);
+			choice[1] = many;
+			
+			
+			if (hero.getDefendDebuff() > 0) {
+				int ran = (int)(Math.random()*6)+1;
+				if (ran >= 5) {
+					dispellDefenseDebuff += 1;
+				}
+				else dispellDefenseDebuff -= 5;
+			}
+			if (hero.getAttackDebuff() > 0) {
+				int ran = (int)(Math.random()*6)+1;
+				if (ran >= 5) {
+					dispellAttackDebuff += 1;
+				}
+				else dispellAttackDebuff -= 5;
+			}
+			if (attack <= 4) {
+				if (buffAttack > 0) attackBuff -= 5;
+				else attackBuff += 1;
+			}
+			int max = 0;
+			Stack<Integer> equal = new Stack<Integer>();
+			int[] biggest = {attackBuff, dispellDefenseDebuff, dispellAttackDebuff};
+			//find max
+			for (int i = 0; i < biggest.length; i++) {
+				if (biggest[i] > max) {
+					max = biggest[i];
+				}
+			}
+			//store all possible choices
+			for (int i = 0; i < biggest.length; i++) {
+				if (biggest[i] == max) {
+					equal.push(i);
+				}
+			}
+			int chosen = 0;
+			//pick random among all options
+			int random = (int)(Math.random()*equal.size())+1;
+			for (int i = 0; i < random; i++) {
+				chosen = equal.pop();
+			}
+			choice[0] = chosen;
+			/* 
+			 * 0 = attackBuff
+			 * 1 = dispellDefDebuff
+			 * 2 = dispellAtkDebuff
+			 */
 		}
 		else {
+			
 			//consider what attack the player just used
 			if (attackChoice == 1) {
 				//standard attack
@@ -194,11 +332,11 @@ public class Enemy {
 			}
 			//consider what magic the character has active
 			if (hero.getAttackDebuff() > 0) {
-				dispellAttackDebuff += 5;
+				dispellAttackDebuff += 2;
 			}
 			else dispellAttackDebuff -= 100;
 			if (hero.getDefendDebuff() > 0) {
-				dispellDefenseDebuff += 5;
+				dispellDefenseDebuff += 2;
 			}
 			else dispellDefenseDebuff -= 100;
 			if (hero.getAttackBuff() > 0) {
@@ -218,7 +356,7 @@ public class Enemy {
 				heavyAttack -= 2;
 				if (hp > 2) {
 					defenseBuff += 1;
-					dispellDefenseDebuff += 5;
+					dispellDefenseDebuff += 1;
 				}
 			}
 			else if (hp >= 11 && hp <= 20){
@@ -454,6 +592,9 @@ public class Enemy {
 	}
 	public void setLastAttack(int lastAttack) {
 		this.lastAttack = lastAttack;
+	}
+	public int getType() {
+		return type;
 	}
 	
 }

@@ -13,6 +13,7 @@ public class Combat {
 	private int result;
 	private String textToPrint = "";
 	private int decision;
+	private int step;
 	private boolean magicUsed;
 	private int attack;
 
@@ -27,6 +28,7 @@ public class Combat {
 		init = false;
 		result = 1;
 		decision = 0;
+		step = 0;
 		magicUsed = false;
 	}
 	
@@ -86,7 +88,7 @@ public class Combat {
 			toPrint("What will you do?\n"
 					+ activeMagic + "\n"
 					+ "1) Attack with weapons\n"
-					+ "2) Attack with magic(2 hp)\n"
+					+ "2) Attack with magic(3 hp)\n"
 					+ "3) Buff yourself(3 hp)\n"
 					+ "4) Debuff enemy(5 hp)\n"
 					+ "\n");
@@ -95,12 +97,10 @@ public class Combat {
 		}
 		else if (result == 2) {
 			//player victory
-			toPrint("You won!\n");
-			if (foe.getReward() > 1) toPrint("You find " + foe.getReward() + " coins on the enemy.\n");
-			else toPrint("You find " + foe.getReward() + " coin on the enemy.\n");
+			toPrint("You are victorious!\n");
+			toPrint("From the place your foe fell, " + foe.getReward() + " ghost-like silver coins float up and drift towards you, fading with a soft whoosh as they touch you.\n");
 			hero.setCoins(hero.getCoins()+foe.getReward());
 			init = false;
-			
 			return 2;
 		}
 		else if (result == 3) {
@@ -128,7 +128,7 @@ public class Combat {
 			toPrint("Finish your turn with an attack.\n"
 					+ activeMagic + "\n"
 					+ "1) Attack with weapons\n"
-					+ "2) Attack with magic(2 hp)\n"
+					+ "2) Attack with magic(3 hp)\n"
 					+ "\n");
 			return 1;
 		}
@@ -157,9 +157,17 @@ public class Combat {
 			else if (choice == 2) {
 				if (hero.getHP() > 2) {
 					//attack with magic
-					toPrint("You make a basic magic attack.\n");
-					hero.setHP(hero.getHP()-2);
+					foe.setHP(foe.getHP()-(hero.getAttack()+2));
+					hero.setHP(hero.getHP()-3);
 					hero.setDefense(hero.getDefense()-1);
+					if (foe.getHP() > 0) {
+						toPrint("You sheathe your sword for a moment so you have your hand free. Holding it out towards your opponent, you think a single word: burn."
+								+ " Your opoonent ignites into flames for a brief moment, causing them to take " + hero.getAttack()+2 + " damage, though they quickly fade leaving your enemy burned.\n");
+					}
+					else {
+						toPrint("You sheathe your sword and lunge at your opoonent. Using your dagger to open their defenses, you place your hand upon it; "
+								+ "your foe bursts into flames, howling as it is consumed by the heat and reduced to ash.\n");
+					}
 					//damage foe
 					attack = 4;
 				}
@@ -217,31 +225,86 @@ public class Combat {
 		else if (decision == 1) {
 			if (choice == 1) {
 				//get info
-				
-				//describe standard attack
-				toPrint("You made a basic attack.\n");
+				int damage = hero.getAttack()-foe.getDefense();
+				if (damage < 0) damage = 0;
+				foe.setHP(foe.getHP()-damage);
+				if (foe.getHP() > 0) {
+					if (damage > 0) toPrint("You slash once with your sword and follow up with your dagger, dealing " + damage + " damage to your foe.\n");
+					else toPrint("You attempt to slash with both of your blades, but your foe manages to block the damage from both.\n");
+				}
+				else {
+					if (foe.getType() == 1) {
+						toPrint("You bring your sword down upon the zombie's weapon arm, severing it and cuasing the old blade to fall to the floor. "
+								+ "The creature is stunned before your dagger jabs into it and finishes the job; the corpse falls back, little more than a body now.\n");
+					}
+					else if (foe.getType() == 2) {
+						toPrint("You slash with your sword which the creature catches with all four arms, seeming rather satisfied with itself, until your bring your dagger up into the side of its head. "
+								+ "The body slowly slumps before crumbling down upon the ground.\n");
+					}
+					else {
+						toPrint("The brute raises its axes to bring a heavy attack down upon you but your interuppt with a slash across the gut, followed by a dagger to the side. "
+								+ "The monster is stunned before the marks upon it begin to glow bright; in a flash of green, the figure vanishes.\n");
+					}
+				}
 				attack = 1;
 				decision = 0;
 			}
 			else if (choice == 2) {
 				//get info
-				
+				int damage = (hero.getAttack()-3)-foe.getDefense();
+				if (damage < 0) damage = 0;
+				foe.setHP(foe.getHP()-damage); 
+				if (foe.getHP() > 0) {
+					if (damage > 0) toPrint("Being cautious but quick, you feint with your sword and slash with your dagger to leave a cut across your opponent for " + damage + " damage.\n");
+					else toPrint("You attempt to quickly slash your opponent while keeping a defensive guard, but defense of your enemy was too great to pierce with such a weak attack.\n");
+				}
+				else {
+					if (foe.getType() == 1) {
+						toPrint("The zombie begins to pull back its arm for yet another attack when you lunge, planting your dagger firmly in its skull; "
+								+ "a final growl, confused, escapes it before it stumbles back off your blade and down to the ground.\n");
+					}
+					else if (foe.getType() == 2) {
+						toPrint("You quickly slash with your dagger, cutting across each of the creature's arms. "
+								+ "It howls in pain until your thrust your dagger into its howling maw, cutting off the cries permanently.\n");
+					}
+					else {
+						toPrint("Using your smaller size to your advantage, you slide under the monster before you."
+								+ " Before it can turn to face you, you slash, cut, and stab with a flurry of blows until it slumps forward and stops moving."
+								+ " As it lays there, defeated, the tattoos upon its skin glow until, in a flash of green, the body vanishes.\n");
+					}
+				}
 				//set stats
 				hero.setDefense(hero.getDefense()+3);
-				
-				//describe quick attack
-				toPrint("You made a quick attack.\n");
 				attack = 2;
 				decision = 0;
 			}
 			else if (choice == 3) {
 				//get info
-				
+				int damage = (hero.getAttack()+4)-foe.getDefense();
+				if (damage < 0) damage = 0;
+				foe.setHP(foe.getHP()-damage); 
+				if (foe.getHP() > 0) {
+					if (damage > 0) toPrint("You thrust foward with your sword, stabbing into the opponent before you for " + damage + " damge, leaving yourself open as you do.\n");
+					else toPrint("You thrust forward without regard for your own defense, but your blade does not manage to pierce the defenses of your foe.\n");
+				}
+				else {
+					if (foe.getType() == 1) {
+						toPrint("Giving a shout, you pierce the undead right through the chest, twisting your blade before ripping it out for a deep, devestating cut that leaves the corpse slumped upon the ground."
+								+ "\n");
+					}
+					else if (foe.getType() == 2) {
+						toPrint("You bring your blade down in a heavy strike. All four arms reach up to stop it but the sheet force of the attack cuts through them before the blade sinks into the creature's head;"
+								+ " the thing goes limp and is a threat no more."
+								+ "\n");
+					}
+					else {
+						toPrint("Summoning all of your power and energy, you slash across the mosnter's leg, causing it to drop to one knee in pain. "
+								+ "With the head now in easy reach, it takes only one quick swipe to seperate it from the shoulders. "
+								+ "The tattoos of your foe's corpse glow before the entire form fades away, vanished into thin air.\n");
+					}
+				}
 				//set stats
 				hero.setDefense(hero.getDefense()-2);
-				
-				//player describe heavy attack
-				toPrint("You made a heavy attack.\n");
 				attack = 3;
 				decision = 0;
 			}
@@ -256,7 +319,7 @@ public class Combat {
 			if (choice == 1) {
 				//player has chosen to buff their attack
 				if (hero.getAttackBuff() == 0) {
-					toPrint("You buffed your attack.\n\n");
+					toPrint("You grip the hilts of your weapons tight; there is a burning pain and a sizzling noise before your blades glow red, their deadliness increased.\n\n");
 					//set stats
 					hero.setHP(hero.getHP()-3);
 					hero.setAttackBuff(3);
@@ -283,7 +346,7 @@ public class Combat {
 			else if (choice == 2) {
 				if (hero.getDefendBuff() == 0) {
 					//player has chosen to buff their defense
-					toPrint("You buffed your defense.\n\n");
+					toPrint("You cross your blades and convert some of your life into a fainy, shimmering red field around you that will aid to defend you.\n\n");
 					//set stats
 					hero.setHP(hero.getHP()-3);
 					hero.setDefendBuff(3);
@@ -293,7 +356,7 @@ public class Combat {
 					return 3;
 				}
 				else {
-					toPrint("The defend buff is already active.\n");
+					toPrint("The defense buff is already active.\n");
 					String active1 = "";
 					String active2 = "";
 					if (hero.getAttackBuff() > 0) active1 = "(Active)";
@@ -320,7 +383,7 @@ public class Combat {
 			if (choice == 1) {
 				if (hero.getAttackDebuff() == 0) {
 					//player has chosen to debuff the enemy's attack
-					toPrint("You debuffed your enemy's attack.\n\n");
+					toPrint("You raise your blades and, in unison, red, spectral chains raise up and bind the weapons of your foe, hampering their attacks.\n\n");
 					hero.setHP(hero.getHP()-5);
 					hero.setAttackDebuff(1);
 					foe.setAttack(foe.getAttack()-2);
@@ -346,7 +409,7 @@ public class Combat {
 			else if (choice == 2) {
 				if (hero.getDefendDebuff() == 0) {
 					//player has chosen to debuff the enemy's defense
-					toPrint("You debuffed your enemy's defense.\n\n");
+					toPrint("You summon that power within you and cause a series of runes and shapes to cover your foe, leaving them weak and open to attack.\n\n");
 					hero.setHP(hero.getHP()-5);
 					hero.setDefendDebuff(1);
 					foe.setDefense(foe.getDefense()-2);
@@ -381,39 +444,49 @@ public class Combat {
 		
 		//find the result of the enemy turn if alive
 		if (foe.getHP() > 0) {
-			
 			//resolve enemy buffs and debuffs if any
 			if (foe.getBuffAttack() > 0) {
 				foe.setBuffAttack(foe.getBuffAttack()-1);
 				if (foe.getBuffAttack() == 0) {
-					toPrint("The enemy attack buff has ended.\n");
+					if (foe.getType() == 2) toPrint("The glow upon the creature's claws fades.\n");
+					else toPrint("The brute's arms slowly shrink to their proper size, its attacks no longer so deadly.");
 					foe.setAttack(foe.getAttack()-2);
 				}
 			}
 			if (foe.getBuffDefense() > 0) {
 				foe.setBuffDefense(foe.getBuffDefense()-1);
 				if (foe.getBuffDefense() == 0) {
-					toPrint("The enemy defense buff has ended.\n");
+					toPrint("The magical armor upon the monster slowly fades away, leaving it with lowered defense.\n");
 					foe.setDefense(foe.getDefense()-2);
 				}
 			}
 			if (foe.getDebuffAttack() > 0) {
 				foe.setDebuffAttack(foe.getDebuffAttack()-1);
 				if (foe.getDebuffAttack() == 0) {
-					toPrint("The enemy attack debuff has ended.\n");
+					toPrint("The ropes that bind your slowly slacken before slipping off and away, your attacks no longer hampered.\n");
 					hero.setAttack(hero.getAttack()+2);
 				}
 			}
 			if (foe.getDebuffDefense() > 0) {
 				foe.setDebuffDefense(foe.getDebuffDefense()-1);
 				if (foe.getDebuffDefense() == 0) {
-					toPrint("The enemy defense debuff has ended.\n");
+					toPrint("Your feet suddenly feel lighter and you can move more nimbly to avoid daamge, the magic having worn off.\n");
 					hero.setDefense(hero.getDefense()+2);
 				}
 			}
-			
-			
-			
+			//reset attack states but not attack
+			if (foe.getType() == 1) {
+				if (foe.getLastAttack() == 1) foe.setDefense(foe.getDefense()-2);
+				else if (foe.getLastAttack() == 2) foe.setDefense(foe.getDefense()+2);
+			}
+			else if (foe.getType() == 3) {
+				if (foe.getLastAttack() == 1) foe.setDefense(foe.getDefense()-3);
+				else if (foe.getLastAttack() == 2) foe.setDefense(foe.getDefense()+4);
+			}
+			else {
+				if (hero.getDefendDebuff() > 0) foe.setDefense(2);
+				else foe.setDefense(4);
+			}
 			toPrint(foe.enemyAction(hero, attack));
 			toPrint("\n");
 		}
@@ -455,25 +528,21 @@ public class Combat {
 			else if (attack == 4) {
 				hero.setDefense(hero.getDefense()+1);
 			}
-			
-			
 			//resolve expired states (don't forget attack and magic used)
 			if (hero.getAttackBuff() > 0) {
 				hero.setAttackBuff(hero.getAttackBuff()-1);
 				if (hero.getAttackBuff() == 0) {
-					toPrint("Your attack buff has ended.\n");
+					toPrint("You watch the glow of your weapons fade as you feel the magic fueling them dampen and fade.\n");
 					hero.setAttack(hero.getAttack()-2);
 				}
 			}
 			if (hero.getDefendBuff() > 0) {
 				hero.setDefendBuff(hero.getDefendBuff()-1);
 				if (hero.getDefendBuff() == 0) {
-					toPrint("Your defense buff has ended.\n");
+					toPrint("The protective field around dims and fades, leaving you with only your standard defenses.\n");
 					hero.setDefense(hero.getDefense()-2);
 				}
 			}
-		
-			
 			attack = 0;
 			magicUsed = false;
 			return 1;
@@ -488,13 +557,166 @@ public class Combat {
 
 
 	public int tutorial(Character hero, int choice) {
+		if (step == 0) {
+			if (choice == 3) {
+				toPrint("Select buff: \n"
+						+ "1) Buff attack\n"
+						+ "2) Buff defense\n"
+						+ "3) Cancel\n"
+						+ "\n");
+				toPrint("\n(Good job! Now you can choose a buff to apply, or you can cancel and make a different choice. Let's choose to buff our defense so when the enemy attacks we're well protected)\n\n");
+				step += 1;
+				return 1;
+			}
+			else return 5;
+		}
 		
-		
-		
-		
-		
-		return 1;
-		
+		if (step == 1) {
+			if (choice == 2) {
+				toPrint("You cross your blades and convert some of your life into a fainy, shimmering red field around you that will aid to defend you.\n\n");
+				hero.setDefense(hero.getDefense()+2);
+				hero.setDefendBuff(3);
+				hero.setHP(hero.getHP()-3);
+				toPrint("Finish your turn with an attack.\n"
+						+ "(Active Magic: DefendBuff(3))\n"
+						+ "1) Attack with weapons\n"
+						+ "2) Attack with magic(3 hp)\n"
+						+ "\n");
+				toPrint("\n(Awesome! Now, as you see, you lose a little health but your defense has increased. "
+						+ "You will also notice you're shown how long you have left with increased defense. As long as the buff or debuff is active, you cannot activate it again- but dont' worry, it only ends before your turn so you can always put it back up if you want.) "
+						+ "\n"
+						+ "(Your turn still isn't over. You must always make an attack on a turn (you may use one type of magic, but no more than one on a single turn, though magic is not required for a turn))"
+						+ "\n"
+						+ "\n"
+						+ "(Attacking with magic costs life and lowers your defense a little for the enemy's next turn, but it ignores all enemy defense. For now, make a weapon attack)\n"
+						+ "\n");
+				step += 1;
+				return 1;
+			}
+			else return 5;
+		}
+	
+		else if (step == 2) {
+			if (choice == 1) {
+				toPrint("Select attack: \n"
+						+ "1) Standard Attack\n"
+						+ "2) Quick Attack\n"
+						+ "3) Heavy Attack\n"
+						+ "4) Cancel\n"
+						+ "\n");
+				toPrint("\n(Great work. You will see you have three kind of weapon attacks; standard attacks do basic damage and don't change your defense. Quick attacks do less damage but increase your defense for the enemy's next turn. Heavy attacks do increased damage but lower your defense for the enemy's next turn.)\n"
+						+ "(Since you don't know how hard this thing hits or how tough it is, try hitting it with a standard attack.)\n\n");
+				step += 1;
+				return 1;
+			}
+			else return 5;
+		}
+		else if (step == 3) {
+			if (choice == 1) {
+				toPrint("You slash with your sword and dagger, cutting into the undead monster before you for 4 damage.\n");
+				toPrint("\n(When you attack, you will see how much damage you did (sometimes you might deal no damage if the enemy's defense is high enough). Now that you've attacked, your turn is done and the enemy will take its turn.)\n\n");
+				toPrint("The zombie swipes with gnarled, boney  hand, dealing  3 damage to you.\n");
+				hero.setHP(hero.getHP()-3);
+				toPrint("\n(Now it's your turn again)\n");
+				toPrint("What will you do?\n"
+						+ "(Active Magic: DefendBuff(2))\n"
+						+ "1) Attack with weapons\n"
+						+ "2) Attack with magic(3 hp)\n"
+						+ "3) Buff yourself(3 hp)\n"
+						+ "4) Debuff enemy(5 hp)\n"
+						+ "\n");
+				toPrint("\n(Since a turn passed, you're that much closer to your defense buff going away. Keep that in mind! For now, lets debuff the enemies defense so we can kill it more quickly (debuffs will not go away unless your enemy uses magic to dispell it, which will cost it life and use up its chance to do magic that turn))\n\n");
+				step += 1;
+				return 1;
+			}
+			else return 5;
+		}
+		//
+		else if (step == 4) {
+			if (choice == 4) {
+				toPrint("Select debuff: \n"
+						+ "1) Debuff attack" + "\n"
+						+ "2) Debuff defense" +  "\n"
+						+ "3) Cancel\n"
+						+ "\n");
+				step += 1;
+				return 1;
+			}
+			else return 5;
+			
+		}
+		else if (step == 5) {
+			if (choice == 2) {
+				toPrint("You summon that power within you and cause a series of runes and shapes to cover your foe, leaving them weak and open to attack.\n\n");
+				hero.setHP(hero.getHP()-5);
+				hero.setDefendDebuff(1);
+				toPrint("\n(Good job! Now before we finish this weakling off, let's heal with some potions. You can drink as many potions as you want at any time, so stock up on these bad boys. After you're at full health (50) finsih this fight wiht a heavy attack.)\n\n");
+				String activeMagic = "";
+				String previous = "";
+				if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendBuff() > 0) {
+					activeMagic += "(Active Magic:";
+					if (hero.getAttackBuff() > 0) {
+						activeMagic += " AttackBuff(" + hero.getAttackBuff() + ")";
+						previous = ",";
+					}
+					if (hero.getDefendBuff() > 0) { 
+						activeMagic += previous + " DefendBuff(" + hero.getDefendBuff() + ")";
+						previous = ",";
+					}
+					if (hero.getAttackDebuff() > 0) { 
+						activeMagic += previous + " AttackDebuff";
+						previous = ",";
+					}
+					if (hero.getDefendDebuff() > 0)  {
+						activeMagic += previous + " DefendDebuff";
+					}
+					activeMagic += ")";
+				}
+				toPrint("Finish your turn with an attack.\n"
+						+ activeMagic + "\n"
+						+ "1) Attack with weapons\n"
+						+ "2) Attack with magic(3 hp)\n"
+						+ "\n");
+				step += 1;
+				return 1;
+			}
+			else return 5;
+		}
+		else if (step == 6) {
+			if (choice == 1) {
+				if (hero.getHP() != 50) {
+					toPrint("\n(Heal up with potions before you finish the fight!)\n\n");
+					return 5;
+				}
+				else {
+					toPrint("Select attack: \n"
+							+ "1) Standard Attack\n"
+							+ "2) Quick Attack\n"
+							+ "3) Heavy Attack\n"
+							+ "4) Cancel\n"
+							+ "\n");
+					step += 1;
+					return 1;
+				}
+			}
+			else return 5;
+		}
+		else if (step == 7) {
+			if (choice == 3) {
+				toPrint("You bring your blade down in a mighty thrust, slicing the zombie clean in two.\n");
+				toPrint("You are victorious!\n");
+				toPrint("From the place your foe fell, a ghost-like silver coin floats up and drift towards you, fading with a soft whoosh as it touches you.\n");
+				hero.setCoins(hero.getCoins()+1);
+				toPrint("\n(You did it! Now you know all there is to combat. Good luck and be victorious!)\n\n");
+				hero.setTutorial(false);
+				init = false;
+				return 2;
+			}
+			else return 5;
+		}
+		else {
+			return 5;
+		}
 	}
 	
 	/**
