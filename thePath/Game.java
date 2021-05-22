@@ -137,8 +137,15 @@ public class Game {
 		if (room == -1) {
 			//back to it
 			if (choice == 0) {
-				//intro again
+				toPrint("You open your eyes and find yourself standing in the awakening room once more. "
+						+ "You have lost all your potions, yet retain all else you had gathered so far. "
+						+ "At least you feel refreshed.\n");
+				toPrint(""
+						+ "1) Leave through the door\n"
+						+ "2) Take the items from the table.\n"
+						+ "\n");		
 			}
+			reRoom = 1;
 		}
 		//waking up
 		if (room == 0) {
@@ -148,10 +155,15 @@ public class Game {
 						+ "2) Do Nothing\n"
 						+ "\n");
 			if (choice == 1) {
-				toPrint("You summon a power within you and conjure up a ball of light.\n"); //consequence of Action 1 
+				toPrint("You take a moment to think of how to make light and, as if in response, tattoos upon your skin begin to glow "
+						+ "As they do, however, you feel a slight, burning pain and feel yourself grow a little more damaged, the magic costing some of your life.\n"); //consequence of Action 1 
+				
 				hero.setHP(hero.getHP()-1);
-				toPrint("\tYou open your eyes and find yourself laying on a slab of hard material that appears to be obsidian. The floor around the slab is scrawled with runes in white chalk, their meaning unknown to you. "
-						+ "There is a door out of the room as well as a table nearby with a map, dagger, and key upon it.\n");
+				toPrint("\tYou open your eyes and find yourself laying on a slab of hard material that appears to be obsidian. "
+						+ "The stone walls and floor fo the room are covered in scorch marks ash stains. "
+						+ "There is a door out of the room as well as a table nearby with a map and key upon it, as well as a sword and dagger; "
+						+ "both of which are made of the same material as the table upon which you awoke.\n");
+			
 				hero.setRoom(1); //set to awakening room
 				reRoom = 1;
 				toPrint(""
@@ -211,22 +223,12 @@ public class Game {
 				hero.setRoom(1);
 				enterRoom();
 			}
-			else if (choice == 3) {
-				if (hero.getAttack() <= 2) {
-					toPrint("You decide to abanon your dagger for a more trusty sword.\n"
-							+ "1) Go to the barracks\n"
-							+ "2) Go to the awakening room.\n"
-							+ "\n");
-					hero.setAttack(5);
-					hero.setDefense(2);
-				}
-			}
 		}
 		//barracks
 		else if (room == 3) {
 			if (choice == 1) {
 				toPrint("You approach the northern wall which has no visible door as the map might indicate, at least until you step near it- "
-						+ "in the center where here are no spikes jutting out- and the stones themselves neatly slide apart to permit you within, light streaming out to greet you.\n");
+						+ "in the center where here are no intrusive green growths- and the stones themselves neatly slide apart to permit you within, light streaming out to greet you.\n");
 				hero.setRoom(4);
 				enterRoom();
 			}
@@ -278,7 +280,7 @@ public class Game {
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				toPrint("The training room is seperated only by an archway you walk through, having to step over a large spike taking up much of the space.\n");
+				toPrint("The training room is seperated only by an archway you walk through, having to step over a large, pulsing sack of the green goo taking up much of the space.\n");
 				hero.setRoom(7);
 				type = (int)(Math.random()*3);
 				if (type > 0) combatStarter(type);
@@ -308,37 +310,24 @@ public class Game {
 		//training room
 		else if (room == 7) {
 			if (choice == 1) {
-				toPrint("You return to the hallway, stepping over the spike in the archway.\n");
+				toPrint("You return to the hallway, stepping over the sack in the archway.\n");
 				hero.setRoom(6);
 				type = (int)(Math.random()*3);
 				if (type > 0) combatStarter(type);
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				if (hero.getAttack() == 10) {
-					toPrint("You loot the bodies once more, but find nothing more of value.\n");
-					toPrint(""
-							+ "1) Go to the hallway\n"
-							+ "2) Investigate the bodies.\n"
-							+ "\n");
-				}
-				else {
-					toPrint("You move and shift bodies, looking for something of use when you find a sword made of the same material as the spikes and monsters. "
-							+ "Alongside it a shield. They both seem better to your current weapony, so you take them.\n");
-					hero.setAttack(10);
-					hero.setDefense(5);
-					toPrint(""
-							+ "1) Go to the hallway\n"
-							+ "2) Investigate the bodies.\n"
-							+ "\n");
-				}
+				toPrint("You look over the bodies and find...\n");
+				toPrint(""
+						+ "1) Go to the hallway\n"
+						+ "2) Investigate the bodies.\n"
+						+ "\n");
 			}
 		}
 		//captain's room
 		else if (room == 9) {
 			if (choice == 1) {
-				toPrint("You muster your strength as you approach the window. Raising up your blade, you smash it down upon the spikes and a faint crack appears. "
-						+ "Again, again, you smash your blade into the spikes with a fanatic strength until, rather suddenly, they shatter. "
+				toPrint("You muster your strength as you approach the window. Raising up your blade, you slash and hack away the growths until the window is revealed. " 
 						+ "Light streams in through the window and as you look out you see bright blue skies above. Crawling out of the window, you drop down to the grass below. "
 						+ "You are out. You are free. It's going to be alright.\n");
 				reRoom = 98;
@@ -377,7 +366,7 @@ public class Game {
 			}
 		}
 		
-		
+		//maybe edit this
 		else if (room == 100) {
 			if (choice == 1) {
 				toPrint("You will not give into the darkness! Though it surrounds you now, you realize you are but sleeping.\n\n\n"
@@ -477,7 +466,7 @@ public class Game {
 		reRoom = hero.getRoom();
 		if (reRoom == 1) {
 			//Awakening room
-			toPrint("\tThe awakening room is as you left it: the obsidian like table in the center, strange runes scrawled upon the floor, now empty desk tucked into the corner.\n"
+			toPrint("\tThe awakening room is as you left it: the obsidian like table in the center, ash and burn marks all around, now empty desk tucked into the corner.\n"
 					+ "1) Go to the armory\n"
 					+ "\n");
 		}
@@ -487,14 +476,14 @@ public class Game {
 					+ "Racks and tables alike surely once held a great array of impressive weaponry and armor, though now lay barren or holding only rusting, broken weaponry. \n"
 					+ "1) Go to the barracks\n"
 					+ "2) Go to the awakening room.\n");
-					if (hero.getAttack() <= 2) toPrint("3) Search for better equipment.\n");
 					toPrint("\n");	
 		}
 		else if (reRoom == 3) {
 			//barracks
-			toPrint("\tThe barracks walls are the same heavy stone, but its floor is wooden boards- boards pierced, shattered, and pushed aside by spikes of various sizes. "
-					+ "With diameters ranging from mere inches to three feet and lengths reaching a staggering six feet at times, the spikes mostly jut up from the floor around the edges of the room, but a few pierce in from the north wall as well. "
-					+ "The bunks that were once the resting places and storage areas of whoever lived here are pierced, pushed aside, or shattered by the spikes along the edges. "
+			toPrint("\tThe barracks walls are the same heavy stone, but its floor is wooden boards through which strange, disgusting green growths have pushed and shoved their way, emerging. "
+					+ "They appear like large sack of slime or go, or simply a leather skin stretched over some hidden bone structure. It is alien and disgusting, but you leave it be. "
+					+ "The invasive growths mostly seep and spill up from the floor around the edges of the room, but a few pierce in from the north wall as well. "
+					+ "The bunks that were once the resting places and storage areas of whoever lived here are pushed aside and even grown over by the material along the edges. "
 					+ "Of the four rows of bunks, the two in the center remain mostly untouched, left in a state of disarray- the drawers beneath each that held the clothes and personal effects of the people are either empty or messy, but hold nothing of value.\n"
 					+ "1) Go to the shop\n"
 					+ "2) Go to the storage.\n"
@@ -510,19 +499,18 @@ public class Game {
 					+ "The face of the figure is hidden in the shadows of his hood, but the long, grey beard that spills out over the red cloth he wears moves as he speaks, motioning with a bony hand towards the single chair near you.\n "
 					+ "\t\"Please, sit. See my wares.\"\n "
 					+ "\tAnd as you sit, he presents all he has to sell to you.\n"
-					+ "1) Buy a potion of health(1 coin)\n"
-					+ "2) Buy a potion of mana.(2 coins)\n");
+					+ "1) Buy a potion of health(1 coin)\n");
 			if (!hero.isCaptainKey()) {
-				toPrint("3) Buy the golden key.(10 coins)\n"
-					+ "4) Leave\n"
+				toPrint("2) Buy the golden key.(10 coins)\n"
+					+ "3) Leave\n"
 					+ "\n");
 			}
-			else toPrint("3) Leave\n"
+			else toPrint("2) Leave\n"
 					+ "\n");
 		}
 		else if (reRoom == 5) {
 			//storage
-			toPrint("\tThe storage room has a single, massive black spike jutting through it up from the floor into the ceiling above. "
+			toPrint("\tThe storage room has a single, massive green strand jutting through it up from the floor into the ceiling above. "
 					+ "All about the room, various boxes and crates hold old, rotting food; threadbare, moth eaten uniforms; various, aged supplies; and some are simply empty or their contents spilled across the floor. "
 					+ "Others are smashed open.\n"
 					+ "1) Go to the barracks\n"
@@ -532,7 +520,8 @@ public class Game {
 		}
 		else if (reRoom == 6) {
 			//hallway
-			toPrint("\tThe hallway's stone floor is broken and shattered by the many spikes jutting throughout it, out of and into walls and floors alike, making navigating it a little difficult.\n"
+			toPrint("\tThe hallway's stone floor is broken and dislocated by the many growths that have forced their way up throughout it, out of and into walls and floors alike, making navigating it a little difficult. "
+					+ "As the map said, towards the end where you might be able to move further on, the hallway has caved in and been filled completely by the seemingly every present green material. \n"
 					+ "1) Go to the barracks\n"
 					+ "2) Go to the training room\n"
 					+ "3) Go to the mess hall\n"
@@ -544,14 +533,12 @@ public class Game {
 			toPrint("\tThe training room holds a pit of sand with an elevated wooden walkway around it. "
 					+ "It also seems to be the scene of a battle of the past. "
 					+ "Bodies, long since rotted and smelling, lay scattered across the sand and walkway, black blood stains adorning the ground and walls around them. "
-					+ "The bodies all wear the uniforms of the creatures with the spikes for faces- though these bodies seem to be normal people themselves, all hold the same weapons as seen in the armory, and there is no sign of the opposition. "
-					+ "The door on the other side of the room that should lead to the anteroom is blocked, the path filled with the black, glistening spikes.\n"
 					+ "1) Go to the hallway\n"
 					+ "2) Investigate the bodies.\n"
 					+ "\n");
 		}
 		else if (reRoom == 9) {
-			toPrint("\tAs you enter the captian's chamber, you see a window blocked up by the black spikes. The well made bed, the cluttered desk, the chest locked in the corner, it all seems to fade away as you gaze upon the window.\n"
+			toPrint("\tAs you enter the captian's chamber, you see a window blocked up by the green material. The well made bed, the cluttered desk, the chest locked in the corner, it all seems to fade away as you gaze upon the window.\n"
 					+ "1) Break out the window, escape.\n"
 					+ "2) Return to the hallway, remain.\n"
 					+ "\n");
@@ -562,7 +549,7 @@ public class Game {
 			//mess hall
 			toPrint("\tThe mess hall's floors shift from the stone of the hallway back to the same wood of the barracks. "
 					+ "Wooden tables- chipped and dented with use over time- stand at attention in two long rows of two down the longer length of the hall. "
-					+ "The room is surprisingly clear and orderly, save the spikes that jut up through the floor- keeping mostly to the center- as if attempting to form a single, larger one- where they only have moved and ruined two tables.\n"
+					+ "The room is surprisingly clear and orderly, save the few notably large growths that spill up from the floor- keeping mostly to the center- as if attempting to form a single, larger one- where they only have moved and ruined two tables.\n"
 					+ "1) Go to the hallway\n"
 					+ "2) Search the room\n"
 					+ "\n");
