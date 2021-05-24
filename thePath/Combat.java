@@ -592,7 +592,7 @@ public class Combat {
 						+ "2) Buff defense\n"
 						+ "3) Cancel\n"
 						+ "\n");
-				toPrint("\n(Good job! Now you can choose a buff to apply, or you can cancel and make a different choice. Let's choose to buff our defense so when the enemy attacks we’re well protected)\n\n");
+				toPrint("\n(Good job! Now you can choose a buff to apply, or you can cancel and make a different choice. Choose to buff our defense so when the enemy attacks you're well protected)\n\n");
 				step += 1;
 				return 1;
 			}
@@ -653,7 +653,7 @@ public class Combat {
 						+ "3) Buff yourself(3 hp)\n"
 						+ "4) Debuff enemy(5 hp)\n"
 						+ "\n");
-				toPrint("\n(Since a turn passed, you're that much closer to your defense buff going away. Keep that in mind! For now, lets debuff the enemies defense so we can kill it more quickly (debuffs will not go away unless your enemy uses magic to dispel it, which will cost it life and use up its chance to do magic that turn))\n\n");
+				toPrint("\n(Since a turn passed, you're that much closer to your defense buff going away. Keep that in mind! For now, lets debuff the enemies defense so you can kill it more quickly (debuffs will not go away unless your enemy uses magic to dispel it, which will cost it life and use up its chance to do magic that turn))\n\n");
 				step += 1;
 				return 1;
 			}
@@ -679,7 +679,7 @@ public class Combat {
 				hero.setHP(hero.getHP()-5);
 				hero.setDefendDebuff(1);
 				hero.setHPPotion(3);
-				toPrint("\n(Good job! Now before we finish this weakling off, let's heal with some potions. You can drink as many potions as you want at any time, so stock up on these bad boys. After you're at full health (50) finish this fight with a heavy attack.)\n\n");
+				toPrint("\n(Good job! Now before you finish this weakling off, heal with some potions. You can drink as many potions as you want at any time, so stock up on these bad boys. After you're at full health (50) finish this fight with a heavy attack.)\n\n");
 				String activeMagic = "";
 				String previous = "";
 				if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendBuff() > 0) {
