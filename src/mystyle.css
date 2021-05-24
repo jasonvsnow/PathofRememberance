@@ -1,0 +1,105 @@
+
+
+
+.tab-pane .tab-header-area .tab-header-background {
+	 -fx-opacity: 0.0;    
+ }
+
+
+.tab-pane{
+	-fx-background-image: url("background.jpg");
+	-fx-background-size: cover;
+}
+
+.tab-pane .tab{
+ -fx-background-color: black;
+ -fx-border-color: white;
+ -fx-focus-color: transparent;
+ -fx-faint-focus-color: transparent;
+ -fx-fill: white;  
+ -fx-text-base-color: white;
+}
+
+
+.text-area {
+	-fx-text-fill: white;
+	-fx-highlight-fill: black;
+	-fx-highlight-text-fill: red;
+	-fx-background-color: rgba(50,50,50,0.4);
+	-fx-border-width: 2;
+}
+
+.text-area .content {
+	-fx-background-color: grey;
+	-fx-background-opacity: 0.5;
+	-fx-border-color: black;
+	-fx-border-width: 2;
+}
+
+.text-area .scroll-pane {
+	-fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+	-fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+	-fx-background-color: transparent;
+}
+
+
+
+
+
+
+
+
+
+
+.button {
+	-fx-background-color: black;
+	-fx-text-fill: white;
+	-fx-border-color: white;
+}
+
+.border-pane {
+	-fx-border-color: black;
+	
+}
+
+#statLabel {
+	-fx-text-fill: white;
+	-fx-background-color: black;
+	-fx-background-radius: 0 100 0 100;
+}
+
+#settingsLabel {
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+}
+
+.hbox {
+	-fx-background-image: url("sign.png");
+	-fx-background-repeat: no-repeat;
+	
+}
+
+.slider, .slider .axis, .slider .axis .axis-tick-mark, .slider .axis .axis-minor-tick-mark {
+    -fx-fill: null;
+    -fx-stroke: black;
+    -fx-tick-fill: black;
+	-fx-tick-label-fill: black;
+	-fx-control-inner-background: black;
+	-fx-stroke-width: 2;
+}
+
+
+
+
+.radio-button {
+	-fx-text-fill: white;
+	
+}
+

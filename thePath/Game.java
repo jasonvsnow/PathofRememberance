@@ -29,6 +29,22 @@ public class Game {
 		type = 0;
 	}
 	/**
+	 * This method is used to set the character object and game to the proper points should the character perish but wish to continue.
+	 * <pre>Example:
+	 * {@code game.restart() will set hp to 50 then coins and potions to 0, the restart state. 
+	 * It will then set reRoom to -1 and make a new combat and set enemy type to 0
+	 * }</pre>
+	 */
+	public void restart() {
+		hero.setHP(50);
+		hero.setHPPotion(0);
+		hero.setCoins(0);
+		reRoom = -1;
+		conflict = new Combat();
+		type = 0;
+	}
+	
+	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for HP.
 	 * <pre>Example: 
 	 * {@code game.getHP() might typically return 1-50 as all other values are death.
@@ -38,16 +54,7 @@ public class Game {
 	public int getHP() {
 		return hero.getHP();
 	}
-	/**
-	 * This method allows other classes to use the getter method for the Character object stored in the Game object for Mana.
-	 * <pre>Example: 
-	 * {@code game.getMana() will typically return 0-20.
-	 * }</pre>
-	 * @return (int; the amount of mana the Character object currently has)
-	 */
-	public int getMana() {
-		return hero.getMana();
-	}
+
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for coins.
 	 * <pre>Example: 
@@ -68,16 +75,7 @@ public class Game {
 	public int getHPpotions() {
 		return hero.getHPPotion();
 	}
-	/**
-	 * This method allows other classes to use the getter method for the Character object stored in the Game object for mana potions.
-	 * <pre>Example: 
-	 * {@code game.getMNpotions() might return 0 or more.
-	 * }</pre>
-	 * @return (int; the amount of mana potions the Character object currently has)
-	 */
-	public int getMNPotions() {
-		return hero.getMNPotion();
-	}
+
 	/**
 	 * This method allows other classes to use the getter method for the Character object stored in the Game object for attack value.
 	 * <pre>Example: 
@@ -132,28 +130,6 @@ public class Game {
 		}
 		clear();
 	}
-	/**
-	 * This method is called by the "Drink Mana Potion" button and will cause the character to lose 1 mana potion and regain 6 mana to a maximum of 20 assuming they are not already at 20 and have a potion available.
-	 * <pre>Example:
-	 * {@code game.drinkMNPotion() will cause the game stored character 
-	 * to expend 1 potion and raise mana by 6 to a maximum of 20 assuming the character isn't dead, has a potion, and is not already at 20.
-	 * }</pre>
-	 */
-	public void drinkMNPotion() {
-		if (hero.getHP() > 0) {
-			if (hero.getMNPotion() > 0) {
-				if (hero.getMana() < 20) {
-					hero.setMNPotion(hero.getMNPotion()-1);
-					hero.setMana(hero.getMana() + 6);
-					if (hero.getMana() > 20) hero.setMana(20);
-					toPrint("You drink a mana potion.\n\n");
-				}
-				else toPrint("You're already at maximum mana! Save that potion for later.\n\n");
-			}
-			else toPrint("You don't have any mana potions to drink.\n\n");
-		}
-		clear();
-	}
 	
 	/**
 	 * This runs the majority of the game, aside from combat. This method takes the current room value and the choice value and determines what happens. The choice is given by the button pressed and the room value is stored in game, the character object, as well as Display when it uses this method.
@@ -166,19 +142,38 @@ public class Game {
 	 * @return reRoom (int; a variable stored in the game object, but which keeps the current room the same until changed to be continuously returned).
 	 */
 	public int room(int room, int choice) {
-
+		//restarting
+		if (room == -1) {
+			//back to it
+			if (choice == 0) {
+				toPrint("You open your eyes and find yourself standing in the awakening room once more. "
+						+ "You have lost all your potions and coins, yet retain all else you had gathered so far. "
+						+ "At least you feel refreshed.\n");
+				toPrint(""
+						+ "1) Go to the armory\n"
+						+ "\n");		
+			}
+			reRoom = 1;
+			hero.setRoom(1);
+		}
 		//waking up
 		if (room == 0) {
-			if (choice == 0)
+			if (choice == 0) {
 				toPrint("You come to consciousness surrounded by darkness, unable to see anything.\n"
 						+ "1) Make a light\n"
-						+ "2) Do Nothing\n"
-						+ "\n");
-			if (choice == 1) {
-				toPrint("You summon a power within you and conjure up a ball of light.\n"); //consequence of Action 1 
-				hero.setMana(hero.getMana()-1);
-				toPrint("\tYou open your eyes and find yourself laying on a slab of hard material that appears to be obsidian. The floor around the slab is scrawled with runes in white chalk, their meaning unknown to you. "
-						+ "There is a door out of the room as well as a table nearby with a map, dagger, and key upon it.\n");
+						+ "2) Do Nothing\n");
+						if (hero.isTutorial()) toPrint("3) Turn off tutorial\n\n");
+						else toPrint("3) Turn on tutorial\n\n");
+			}
+			else if (choice == 1) {
+				toPrint("You take a moment to think of how to make light and, as if in response, tattoos upon your skin begin to glow "
+						+ "As they do, however, you feel a slight, burning pain and feel yourself grow a little more damaged, the magic costing some of your life.\n"); //consequence of Action 1 
+				
+				hero.setHP(hero.getHP()-1);
+				toPrint("\tYou open your eyes and find yourself laying on a slab of hard material that appears to be obsidian. "
+						+ "The stone walls and floor fo the room are covered in scorch marks ash stains. "
+						+ "There is a door out of the room as well as a table nearby with a map and key upon it, as well as a sword and dagger; "
+						+ "both of which are made of the same material as the table upon which you awoke.\n");
 				hero.setRoom(1); //set to awakening room
 				reRoom = 1;
 				toPrint(""
@@ -186,11 +181,36 @@ public class Game {
 						+ "2) Take the items from the table.\n"
 						+ "\n");
 			}
-			if (choice == 2) {
+			else if (choice == 2) {
 				toPrint("You do nothing. This is unlikely to get you anywhere.\n"
 						+ "1) Make a light\n"
-						+ "2) Do Nothing\n"
-						+ "\n");
+						+ "2) Do Nothing\n");
+						if (hero.isTutorial()) toPrint("3) Turn off tutorial\n"
+							+ "\n");
+						else toPrint("3) Turn on tutorial\n\n");
+			}
+			else if (choice == 3) {
+				if (hero.isTutorial()) {
+					hero.setTutorial(false);
+					hero.setHP(50);
+					hero.setCoins(1);
+					toPrint("Tutorial disabled\n"
+							+ "1) Make a light\n"
+							+ "2) Do Nothing\n"
+							+ "3) Turn on tutorial\n"
+							+ "\n");
+				}
+				else {
+					hero.setTutorial(true);
+					hero.setHP(40);
+					hero.setCoins(0);
+					toPrint("Tutorial enabled\n"
+							+ "1) Make a light\n"
+							+ "2) Do Nothing\n"
+							+ "3) Turn off tutorial\n"
+							+ "\n");
+				}
+				
 			}
 		}
 		//Awakening Room
@@ -199,13 +219,12 @@ public class Game {
 				if (hero.isMap()) {
 					if (hero.isTutorial()) {
 						toPrint("You insert the key into the door and twist, unlocking the door and swinging it open with a creak to enter the armory.\n");
-						hero.setTutorial(false);
 						hero.setRoom(2);
 						type = 0;
 						combatStarter(type);
 					}
 					else {
-						toPrint("You leave through the door to enter the armory once agian.");
+						toPrint("You leave through the door to enter the armory once again.");
 						hero.setRoom(2);
 						enterRoom();
 					}
@@ -218,7 +237,8 @@ public class Game {
 			}
 			else if (choice == 2) {
 				if (!(hero.isMap())) {
-					hero.setAttack(2);
+					hero.setAttack(6);
+					hero.setDefense(2);
 					toPrint("You take the items from the table.\n"
 							+ "1) Go to the armory\n"
 							+ "\n");
@@ -239,22 +259,12 @@ public class Game {
 				hero.setRoom(1);
 				enterRoom();
 			}
-			else if (choice == 3) {
-				if (hero.getAttack() <= 2) {
-					toPrint("You decide to abanon your dagger for a more trusty sword.\n"
-							+ "1) Go to the barracks\n"
-							+ "2) Go to the awakening room.\n"
-							+ "\n");
-					hero.setAttack(5);
-					hero.setDefense(2);
-				}
-			}
 		}
 		//barracks
 		else if (room == 3) {
 			if (choice == 1) {
 				toPrint("You approach the northern wall which has no visible door as the map might indicate, at least until you step near it- "
-						+ "in the center where here are no spikes jutting out- and the stones themselves neatly slide apart to permit you within, light streaming out to greet you.\n");
+						+ "in the center where here are no intrusive green growths- and the stones themselves neatly slide apart to permit you within, light streaming out to greet you.\n");
 				hero.setRoom(4);
 				enterRoom();
 			}
@@ -282,86 +292,70 @@ public class Game {
 		//shop
 		else if (room == 4) {
 			if (choice == 1) {
-				if (hero.getCoins() > 0) {
-					toPrint("You give the man a gold coin and in exchange receive a single bottle full of red liquid. It probably tastes like strawberries. Hopefully.\n"
-							+ "1) Buy a potion of health(1 coin)\n"
-							+ "2) Buy a potion of mana.(2 coins)\n");
+				if (hero.getCoins() >= 2) {
+					toPrint("You indicate the health potion and the man smiles. "
+							+ "He holds up two fingers and two of the silvery coins you have collected from your foes drift out from you and into his now outstretched palm. "
+							+ "He offers you the potion, which you take.\n");
+					hero.setCoins(hero.getCoins()-2);
+					hero.setHPPotion(hero.getHPPotion()+1);
+					toPrint("1) Buy a potion of health(2 coins)\n");
 					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-							+ "4) Leave\n"
+						toPrint("2) Buy the golden key.(10 coins)\n"
+							+ "3) Leave\n"
 							+ "\n");
 					}
-					else toPrint("3) Leave\n"
+					else toPrint("2) Leave\n"
 							+ "\n");
-					hero.setHPPotion(hero.getHPPotion()+1);
-					hero.setCoins(hero.getCoins()-1);
 				}
 				else {
-					toPrint("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
-						+ "1) Buy a potion of health(1 coin)\n"
-						+ "2) Buy a potion of mana.(2 coins)\n");
+					toPrint("The man shakes his head. You don't have enough coins to buy that ware.\n"	
+						+ "1) Buy a potion of health(2 coins)\n");
 					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-							+ "4) Leave\n"
-							+ "\n");
+						toPrint("2) Buy the golden key.(10 coins)\n"
+								+ "3) Leave\n"
+								+ "\n");
 					}
-					else toPrint("3) Leave\n"
-							+ "\n");
+					else toPrint("2) Leave\n"
+							+ "\n");;
 				}
 			}
 			else if (choice == 2) {
-				if (hero.getCoins() > 1) {
-					toPrint("You give the man a gold coin and in exchange receive a single bottle full of shimmering light. Probably feels weird to drink.\n"
-							+ "1) Buy a potion of health(1 coin)\n"
-							+ "2) Buy a potion of mana.(2 coins)\n");
-					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-							+ "4) Leave\n"
-							+ "\n");
-					}
-					else toPrint("3) Leave\n"
-							+ "\n");
-					hero.setMNPotion(hero.getMNPotion()+1);
-					hero.setCoins(hero.getCoins()-2);
-				}
-				else { toPrint("You go to grab a coin to offer the man, but find you have none. You'll have to come back later.\n"
-						+ "1) Buy a potion of health(1 coin)\n"
-						+ "2) Buy a potion of mana.(2 coins)\n");
-					if (!hero.isCaptainKey()) {
-						toPrint("3) Buy the golden key.(10 coins)\n"
-								+ "4) Leave\n"
+				if (!hero.isCaptainKey()) {
+					if (hero.getCoins() >= 10) {
+						toPrint("Indicating the key, the man gives a nod. Snapping his fingers, ten of the silvery coins you have collected leap over and into his palm before he offers you the sole key.\n");
+						hero.setCaptainKey(true);
+						hero.setCoins(hero.getCoins()-10);
+						toPrint("1) Buy a potion of health(2 coins)\n");
+						if (!hero.isCaptainKey()) {
+							toPrint("2) Buy the golden key.(10 coins)\n"
+								+ "3) Leave\n"
+								+ "\n");
+						}
+						else toPrint("2) Leave\n"
 								+ "\n");
 					}
-					else toPrint("3) Leave\n"
+					else {
+						toPrint("The man shakes his head. You don't have enough coins to buy that ware.\n"
+							+ "1) Buy a potion of health(2 coins)\n");
+						if (!hero.isCaptainKey()) {
+							toPrint("2) Buy the golden key.(10 coins)\n"
+									+ "3) Leave\n"
+									+ "\n");
+						}
+						else toPrint("2) Leave\n"
 								+ "\n");
+					}
 				}
-			}
-			else if (choice == 3) {
-				if (hero.isCaptainKey()) {
-					toPrint("You stand, thank the man for his time, and return to the barracks.\n");
+				else {
+					toPrint("You stand, thanking the man for his time, and step back through the wall that parted for you into the barracks. The wall closes behind you with a heavy thunk.\n");
 					hero.setRoom(3);
 					enterRoom();
 				}
-				else {
-					if (hero.getCoins() > 9) {
-						toPrint("You hand over a generous numnber of coins and receive a single golden key in return.\n");
-						hero.setCoins(hero.getCoins()-10);
-						hero.setCaptainKey(true);
-					}
-					else toPrint("You eye the key, but realize you don't have enough to purchase it.\n");
-				}
-				toPrint(""
-						+ "1) Buy a potion of health(1 coin)\n"
-						+ "2) Buy a potion of mana.(2 coins)\n");
-				if (!hero.isCaptainKey()) {
-					toPrint("3) Buy the golden key.(10 coins)\n"
-						+ "4) Leave\n"
-						+ "\n");
-				}
+				
 			}
-			else if (choice == 4) {
+			else if (choice == 3) {
 				if (!hero.isCaptainKey()) {
-					toPrint("You stand, thank the man for his time, and return to the barracks.\n");
+					toPrint("You stand, thanking the man for his time, and step back through the wall that parted for you into the barracks. The wall closes behind you with a heavy thunk.\n");
 					hero.setRoom(3);
 					enterRoom();
 				}
@@ -390,7 +384,7 @@ public class Game {
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				toPrint("The training room is seperated only by an archway you walk through, having to step over a large spike taking up much of the space.\n");
+				toPrint("The training room is seperated only by an archway you walk through, having to step over a large, pulsing sack of the green goo taking up much of the space.\n");
 				hero.setRoom(7);
 				type = (int)(Math.random()*3);
 				if (type > 0) combatStarter(type);
@@ -406,59 +400,37 @@ public class Game {
 			else if (choice == 4) {
 				if (hero.isCaptainKey()) {
 					toPrint("Using the key you got from the shop keeper, you slide it into the door and with a click hear it unlock. You push the door opena and step inside.");
-					type = 2;
+					type = 3;
 					combatStarter(type);
 				}
 				else toPrint("The door is locked. You try the key you got from the awakening room, but to no avail. You need a different key.\n"
 						+ "1) Go to the barracks\n"
 						+ "2) Go to the training room\n"
 						+ "3) Go to the mess hall\n"
-						+ "2) Go to the captain's chamber.\n"
+						+ "4) Go to the captain's chamber.\n"
 						+ "\n");
 			}
 		}
 		//training room
 		else if (room == 7) {
 			if (choice == 1) {
-				toPrint("You return to the hallway, stepping over the spike in the archway.\n");
+				toPrint("You return to the hallway, stepping over the sack in the archway.\n");
 				hero.setRoom(6);
 				type = (int)(Math.random()*3);
 				if (type > 0) combatStarter(type);
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				if (hero.getAttack() == 10) {
-					toPrint("You loot the bodies once more, but find nothing more of value.\n");
-					toPrint(""
-							+ "1) Go to the hallway\n"
-							+ "2) Investigate the bodies.\n"
-							+ "\n");
-				}
-				else {
-					toPrint("You move and shift bodies, looking for something of use when you find a sword made of the same material as the spikes and monsters. "
-							+ "Alongside it a shield. They both seem better to your current weapony, so you take them.\n");
-					hero.setAttack(10);
-					hero.setDefense(5);
-					toPrint(""
-							+ "1) Go to the hallway\n"
-							+ "2) Investigate the bodies.\n"
-							+ "\n");
-				}
+				toPrint("You look over the bodies and find...\n");
+				toPrint(""
+						+ "1) Go to the hallway\n"
+						+ "2) Investigate the bodies.\n"
+						+ "\n");
 			}
 		}
 		//captain's room
 		else if (room == 9) {
-			if (choice == 1) {
-				toPrint("You muster your strength as you approach the window. Raising up your blade, you smash it down upon the spikes and a faint crack appears. "
-						+ "Again, again, you smash your blade into the spikes with a fanatic strength until, rather suddenly, they shatter. "
-						+ "Light streams in through the window and as you look out you see bright blue skies above. Crawling out of the window, you drop down to the grass below. "
-						+ "You are out. You are free. It's going to be alright.\n");
-				reRoom = 98;
-			}
-			else if (choice == 2) {
-				toPrint("You turn away from the window, for whatever reason choosing to remain in this place. As you step into the hallway once more, you feel a finality in that choice. You will remain.\n");
-				reRoom = 99;
-			}
+			
 		}
 		//mess hall
 		else if (room == 10) {
@@ -470,37 +442,17 @@ public class Game {
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				if (hero.getHP() < 25 || hero.getMana() < 10) {
-					toPrint("You scour the place for anything, but find nothing. By the end of the search, however, you feel refreshed.\n");
-					if (hero.getHP() < 25) hero.setHP(25);
-					if (hero.getMana() < 10) hero.setMana(10);
-				}
-				else {
-					toPrint("You search for something, but nothing seems useful in this room.\n");
-				}
-				toPrint(""
-						+ "1) Go to the hallway\n"
-						+ "2) Search the room\n"
-						+ "\n");
-			}
-		}
-	
-			
-			
-			
-		else if (room == 98) {
-			if (choice < 0) {
-				toPrint("It's going to be alright.\n");
+				toPrint("You serach the area for some food and find some that is, miraculously, still fresh. "
+						+ "The hunger in your belly drives you to throw away a little caution and take the risk of eating it.\n");
+				if (hero.getHP() < 25) hero.setHP(25);
+				toPrint("1) Go to the hallway\n"
+				+ "2) Search the room\n"
+				+ "\n");
+				
 			}
 		}
 		
-		else if (room == 99) {
-			if (choice < 0) {
-				toPrint("You will remain.\n\n");
-			}
-		}
-		
-		
+		//maybe edit this
 		else if (room == 100) {
 			if (choice == 1) {
 				toPrint("You will not give into the darkness! Though it surrounds you now, you realize you are but sleeping.\n\n\n"
@@ -531,18 +483,14 @@ public class Game {
 						+ "\n");
 				reRoom = 100;
 			}
-			else if (result == 1) {
-				reRoom = 8;
-			}
 			else if (result == 2) {
 				enterRoom();
 			}
-			else if (result == 3) {
-				reRoom = 8;
-			}
+			else reRoom = 8;
+
 		}
 		
-		clear();
+		if (!textToPrint.equalsIgnoreCase("")) clear();
 		return reRoom;
 	}
 
@@ -557,23 +505,39 @@ public class Game {
 	public void combatStarter(int seed) {
 		reRoom = 8;
 		if (seed == 0) {
-			toPrint("As you step into the armory, a shriveled little green creature turns to you and howls, lunging at you with murder in its beady red eyes.\n");
+			toPrint("A noise sounds nearby and you look to see a rotten, shambling body stumble towards you, skin pale and lifeless, eyes sunken and gone.\n"
+					+ "(Combat has started! After an enemy is introduced, the following messsage will display to show you your combat options)"
+				
+					+ "\n");
 		}
 		else if (seed == 1) {
-			toPrint("A deep groan echoes near you. Turning, you see what looks to be a person wearing some uniform and carrying an old sword."
-					+ "However, instead of a face, the shambling person has several spikes jutting out of their skull that appear to be made of obsidian. "
-					+ "Similiar spikes protrude from various places on the creatures limbs and torso, all of them shimmeirng in the light as the groaning creature lunges at you, swipping with its sword.\n");
+			toPrint("A deep, guttural growl suddenly draws your attention to a shambling corpse wearing tattered, ripped clothing; the body, animated by some unknown force, bears bulbous, glowing green growths across its body. "
+					+ "It carries an old, slightly rusted weapon but despite the dilapidated nature, you have no doubt the weapon can do damage."
+					+ "\n");
 		}
 		else if (seed == 2) {
-			toPrint("There is a sound like metal scrapping as a nearby spike splits open and out crawls a creature. "
-					+ "The creature appears to be a skeleton encased in the same material as the spikes, acting a sort of natural armor and leaving only the joints and skull visible- the skull having the same spikes jutting out of the face as the other monsters had."
-					+ "The only noise it makes is the noise of its feet upon the ground as it lunges towards you, bringing a spiked hand forward.\n");
+			toPrint("A squelching, wet sound fills the room as you look at one of the green growths protruding from the wall; "
+					+ "a hole has opened and something is slowly pushed out, covered in the green slime within the pulsing sack. "
+					+ "The creature stands to face you: it is thin and pale, with four arms that each end in vicious, clawed hands. "
+					+ "Razor sharp teeth clack together while four glowing green eyes stare you down. "
+					+ "You have just enough time to draw your sword before it rushes you with surprising speed."
+					+ "\n");
+		}
+		else if (seed == 3) {
+			toPrint("Standing in the center of the room is a massive creature, at least a torso’s length taller than yourself. "
+					+ "Four green-skinned arms are rest folded across its chest as it calmly regards you with four beady eyes. "
+					+ "It speaks in a deep, booming voice before two hands reach down to grab a pair of axes off its belt; "
+					+ "as it does, a series of tattoos suddenly glow upon its body- tattoos rather similar to yours. "
+					+ "The creature bellows and charges you, axes swinging." + 
+					"\n");
 		}
 		toPrint("What will you do?\n"
-				+ "1) Attack\n"
-				+ "2) Defend\n"
-				+ "3) Use Magic\n"
+				+ "1) Attack with weapons\n"
+				+ "2) Attack with magic(3 hp)\n"
+				+ "3) Buff yourself(3 hp)\n"
+				+ "4) Debuff enemy(5 hp)\n"
 				+ "\n");
+		if (seed == 0) toPrint("(As you can see, the magic you can use will cost certain amounts of your life. Lets start off using a buff. Click the \"3\" button to proceed)\n");
 	}
 	/**
 	 * This method is a solution to the issues I encountered with loops in the Display class. Past versions of this game had, essentially, a guarded loop that would continue until the player finished. However, if a loop doesn't close the Display class will never update, it just all freezes up.
@@ -588,7 +552,7 @@ public class Game {
 		reRoom = hero.getRoom();
 		if (reRoom == 1) {
 			//Awakening room
-			toPrint("\tThe awakening room is as you left it: the obsidian like table in the center, strange runes scrawled upon the floor, now empty desk tucked into the corner.\n"
+			toPrint("\tThe awakening room is as you left it: the obsidian like table in the center, ash and burn marks all around, now empty desk tucked into the corner.\n"
 					+ "1) Go to the armory\n"
 					+ "\n");
 		}
@@ -598,14 +562,15 @@ public class Game {
 					+ "Racks and tables alike surely once held a great array of impressive weaponry and armor, though now lay barren or holding only rusting, broken weaponry. \n"
 					+ "1) Go to the barracks\n"
 					+ "2) Go to the awakening room.\n");
-					if (hero.getAttack() <= 2) toPrint("3) Search for better equipment.\n");
 					toPrint("\n");	
 		}
 		else if (reRoom == 3) {
 			//barracks
-			toPrint("\tThe barracks walls are the same heavy stone, but its floor is wooden boards- boards pierced, shattered, and pushed aside by spikes of various sizes. "
-					+ "With diameters ranging from mere inches to three feet and lengths reaching a staggering six feet at times, the spikes mostly jut up from the floor around the edges of the room, but a few pierce in from the north wall as well. "
-					+ "The bunks that were once the resting places and storage areas of whoever lived here are pierced, pushed aside, or shattered by the spikes along the edges. Of the four rows of bunks, the two in the center remain mostly untouched, left in a state of disarray- the drawers beneath each that held the clothes and personal effects of the people are either empty or messy, but hold nothing of value.\n"
+			toPrint("\tThe barracks walls are the same heavy stone, but its floor is wooden boards through which strange, disgusting green growths have pushed and shoved their way, emerging. "
+					+ "They appear like large sack of slime or go, or simply a leather skin stretched over some hidden bone structure. It is alien and disgusting, but you leave it be. "
+					+ "The invasive growths mostly seep and spill up from the floor around the edges of the room, but a few pierce in from the north wall as well. "
+					+ "The bunks that were once the resting places and storage areas of whoever lived here are pushed aside and even grown over by the material along the edges. "
+					+ "Of the four rows of bunks, the two in the center remain mostly untouched, left in a state of disarray- the drawers beneath each that held the clothes and personal effects of the people are either empty or messy, but hold nothing of value.\n"
 					+ "1) Go to the shop\n"
 					+ "2) Go to the storage.\n"
 					+ "3) Go to the hallway.\n"
@@ -617,22 +582,21 @@ public class Game {
 			toPrint("\tAs you step through the entrance made in the wall, you find yourself in a small room that actually holds its own lightning provided by the four braziers that sit in the corners of the room which has wooden log walls, smooth boards upon the floor, and rafters instead of a proper ceiling. "
 					+ "A thick, fur carpet covers most of the floor save the edges and upon this is set a large desk, piled with papers, covered in coins, and bearing a set of plain scales. "
 					+ "Before the desk a plain wooden chair is set and behind it a much more plush chair holds a cloaked figure. "
-					+ "The face of the figure is hidden in the shadows of his hood, but the long, grey beard that spills out over the red cloth he wears moves as he speaks, motioning with a bony hand towards the single chair near you.\n "
+					+ "The face of the figure is hidden in the shadows of his hood, but the long, grey beard that spills out over the red cloth he and wears moves as he speaks, motioning with a bony hand towards the single chair near you.\n "
 					+ "\t\"Please, sit. See my wares.\"\n "
 					+ "\tAnd as you sit, he presents all he has to sell to you.\n"
-					+ "1) Buy a potion of health(1 coin)\n"
-					+ "2) Buy a potion of mana.(2 coins)\n");
+					+ "1) Buy a potion of health(2 coins)\n");
 			if (!hero.isCaptainKey()) {
-				toPrint("3) Buy the golden key.(10 coins)\n"
-					+ "4) Leave\n"
+				toPrint("2) Buy the golden key.(10 coins)\n"
+					+ "3) Leave\n"
 					+ "\n");
 			}
-			else toPrint("3) Leave\n"
+			else toPrint("2) Leave\n"
 					+ "\n");
 		}
 		else if (reRoom == 5) {
 			//storage
-			toPrint("\tThe storage room has a single, massive black spike jutting through it up from the floor into the ceiling above. "
+			toPrint("\tThe storage room has a single, massive green strand jutting through it up from the floor into the ceiling above. "
 					+ "All about the room, various boxes and crates hold old, rotting food; threadbare, moth eaten uniforms; various, aged supplies; and some are simply empty or their contents spilled across the floor. "
 					+ "Others are smashed open.\n"
 					+ "1) Go to the barracks\n"
@@ -642,11 +606,12 @@ public class Game {
 		}
 		else if (reRoom == 6) {
 			//hallway
-			toPrint("\tThe hallway's stone floor is broken and shattered by the many spikes jutting throughout it, out of and into walls and floors alike, making navigating it a little difficult.\n"
+			toPrint("\tThe hallway's stone floor is broken and dislocated by the many growths that have forced their way up throughout it, out of and into walls and floors alike, making navigating it a little difficult. "
+					+ "As the map said, towards the end where you might be able to move further on, the hallway has caved in and been filled completely by the seemingly every present green material. \n"
 					+ "1) Go to the barracks\n"
 					+ "2) Go to the training room\n"
 					+ "3) Go to the mess hall\n"
-					+ "2) Go to the captain's chamber.\n"
+					+ "4) Go to the captain's chamber.\n"
 					+ "\n");
 		}
 		else if (reRoom == 7) {
@@ -654,14 +619,12 @@ public class Game {
 			toPrint("\tThe training room holds a pit of sand with an elevated wooden walkway around it. "
 					+ "It also seems to be the scene of a battle of the past. "
 					+ "Bodies, long since rotted and smelling, lay scattered across the sand and walkway, black blood stains adorning the ground and walls around them. "
-					+ "The bodies all wear the uniforms of the creatures with the spikes for faces- though these bodies seem to be normal people themselves, all hold the same weapons as seen in the armory, and there is no sign of the opposition. "
-					+ "The door on the other side of the room that should lead to the anteroom is blocked, the path filled with the black, glistening spikes.\n"
 					+ "1) Go to the hallway\n"
 					+ "2) Investigate the bodies.\n"
 					+ "\n");
 		}
 		else if (reRoom == 9) {
-			toPrint("\tAs you enter the captian's chamber, you see a window blocked up by the black spikes. The well made bed, the cluttered desk, the chest locked in the corner, it all seems to fade away as you gaze upon the window.\n"
+			toPrint("\tAs you enter the captian's chamber, you see a window blocked up by the green material. The well made bed, the cluttered desk, the chest locked in the corner, it all seems to fade away as you gaze upon the window.\n"
 					+ "1) Break out the window, escape.\n"
 					+ "2) Return to the hallway, remain.\n"
 					+ "\n");
@@ -672,7 +635,7 @@ public class Game {
 			//mess hall
 			toPrint("\tThe mess hall's floors shift from the stone of the hallway back to the same wood of the barracks. "
 					+ "Wooden tables- chipped and dented with use over time- stand at attention in two long rows of two down the longer length of the hall. "
-					+ "The room is surprisingly clear and orderly, save the spikes that jut up through the floor- keeping mostly to the center- as if attempting to form a single, larger one- where they only have moved and ruined two tables.\n"
+					+ "The room is surprisingly clear and orderly, save the few notably large growths that spill up from the floor- keeping mostly to the center- as if attempting to form a single, larger one- where they only have moved and ruined two tables.\n"
 					+ "1) Go to the hallway\n"
 					+ "2) Search the room\n"
 					+ "\n");

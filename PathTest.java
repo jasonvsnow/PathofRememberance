@@ -14,13 +14,9 @@ class PathTest {
 	@Test
 	public void getHP() {
 		Game test = new Game();
-		assertEquals(test.getHP(), 50);
+		assertEquals(test.getHP(), 40);
 	}
-	@Test
-	public void getMana() {
-		Game test = new Game();
-		assertEquals(test.getMana(), 20);
-	}
+
 	@Test
 	public void getCoins() {
 		Game test = new Game();
@@ -36,11 +32,7 @@ class PathTest {
 		Game test = new Game();
 		assertEquals(test.getDefense(), 0);
 	}
-	@Test
-	public void getMNPotion() {
-		Game test = new Game();
-		assertEquals(test.getMNPotions(), 0);
-	}
+
 	@Test
 	public void getHPPotions() {
 		Game test = new Game();
@@ -54,28 +46,24 @@ class PathTest {
 	
 	@Test
 	public void getEnemyAttack() {
-		Enemy test = new Enemy();
-		assertEquals(test.getAttack(), 6);
+		Enemy test = new Enemy(1);
+		assertEquals(test.getAttack(), 8);
 	}
 	@Test
 	public void getEnemyHP() {
-		Enemy test = new Enemy();
-		assertEquals(test.getHP(), 4);
+		Enemy test = new Enemy(1);
+		assertEquals(test.getHP(), 20);
 	}
 	@Test
 	public void getEnemyDefense() {
-		Enemy test = new Enemy();
-		assertEquals(test.getDefense(), 0);
+		Enemy test = new Enemy(1);
+		assertEquals(test.getDefense(), 2);
 	}
-	@Test
-	public void getEnemyMana() {
-		Enemy test = new Enemy();
-		assertEquals(test.getMana(), 0);
-	}
+
 	@Test
 	public void getReward() {
-		Enemy test = new Enemy();
-		assertEquals(test.getReward(), 1);
+		Enemy test = new Enemy(1);
+		assertEquals(test.getReward(), 3);
 	}
 	
 	@Test
@@ -93,13 +81,9 @@ class PathTest {
 	@Test
 	public void getCharacterHP() {
 		Character test = new Character();
-		assertEquals(test.getHP(), 50);
+		assertEquals(test.getHP(), 40);
 	}
-	@Test
-	public void getCharacterMana() {
-		Character test = new Character();
-		assertEquals(test.getMana(), 20);
-	}
+
 	@Test
 	public void getCharacterCoins() {
 		Character test = new Character();
@@ -115,11 +99,7 @@ class PathTest {
 		Character test = new Character();
 		assertEquals(test.getDefense(), 0);
 	}
-	@Test
-	public void getCharacterMNPotion() {
-		Character test = new Character();
-		assertEquals(test.getMNPotion(), 0);
-	}
+
 	@Test
 	public void getCharacterHPPotions() {
 		Character test = new Character();
@@ -136,11 +116,6 @@ class PathTest {
 		assertEquals(test.getRoom(), 0);
 	}
 	@Test
-	public void getDefendCharge() {
-		Character test = new Character();
-		assertEquals(test.getMNPotion(), 0);
-	}
-	@Test
 	public void isCaptainKey() {
 		Character test = new Character();
 		assertFalse(test.isCaptainKey());
@@ -150,7 +125,57 @@ class PathTest {
 		Character test = new Character();
 		assertTrue(test.isTutorial());
 	}
-
+	@Test
+	public void getDefendBuff() {
+		Character test = new Character();
+		assertEquals(test.getDefendBuff(), 0);
+	}
+	@Test
+	public void getAttackBuff() {
+		Character test = new Character();
+		assertEquals(test.getAttackBuff(), 0);
+	}
+	
+	@Test
+	public void getDefendDebbuff() {
+		Character test = new Character();
+		assertEquals(test.getDefendDebuff(), 0);
+	}
+	
+	@Test
+	public void getAttackDebuff() {
+		Character test = new Character();
+		assertEquals(test.getAttackDebuff(), 0);
+	}
+	
+	@Test
+	public void getType() {
+		Enemy test = new Enemy(1);
+		assertEquals(test.getType(), 1);
+	}
+	@Test
+	public void getBuffAttack() {
+		Enemy test = new Enemy(1);
+		assertEquals(test.getBuffAttack(), 0);
+	}
+	@Test
+	public void getBuffDefenaw() {
+		Enemy test = new Enemy(1);
+		assertEquals(test.getBuffDefense(), 0);
+	}
+	@Test
+	public void getDebuffAttack() {
+		Enemy test = new Enemy(1);
+		assertEquals(test.getDebuffAttack(), 0);
+	}
+	@Test
+	public void getDefbuffDefense() {
+		Enemy test = new Enemy(1);
+		assertEquals(test.getDebuffDefense(), 0);
+	}
+	
+	
+	
 	
 	
 	

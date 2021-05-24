@@ -10,13 +10,14 @@ package thePath;
 public class Character {
 	private int room;
 	private int hp;
-	private int mana;
 	private int coins;
 	private int HPpotion;
-	private int MNpotion;
 	private int attack;
 	private int defense;
-	private int defendCharge;
+	private int defendBuff;
+	private int attackBuff;
+	private int defendDebuff;
+	private int attackDebuff;
 	private boolean map;
 	private boolean captainKey;
 	private boolean tutorial;
@@ -29,14 +30,15 @@ public class Character {
 	 */
 	Character() {
 		room = 0;
-		hp = 50;
-		mana = 20;
+		hp = 40;
 		coins = 0;
 		HPpotion = 0;
-		MNpotion = 0;
 		attack = 1;
 		defense = 0;
-		defendCharge = 0;
+		defendBuff = 0;
+		attackBuff = 0;
+		defendDebuff = 0;
+		attackDebuff = 0;
 		map = false;
 		captainKey = false;
 		tutorial = true;
@@ -82,26 +84,8 @@ public class Character {
 	public void setHP(int hp) {
 		this.hp = hp;
 	}
-	/**
-	 * This is the getter method for the mana value of the character.
-	 * <pre>Example:
-	 * {@code char.getMana() will typically return 0-24
-	 * }</pre>
-	 * @return mana (int; the current mana the character has)
-	 */
-	public int getMana() {
-		return mana;
-	}
-	/**
-	 * This is the setter method for the mana value of the character.
-	 * <pre>Example:
-	 * {@code char.setMana(10) will set the mana value ot 10
-	 * }</pre>
-	 * @param mana (int; the value to set the current mana of the character to)
-	 */
-	public void setMana(int mana) {
-		this.mana = mana;
-	}
+
+
 	/**
 	 * This is  the getter method for the coins of the character.
 	 * <pre>Example:
@@ -144,26 +128,7 @@ public class Character {
 	public void setHPPotion(int potions) {
 		HPpotion = potions;
 	}
-	/**
-	 * This is the getter method for the number of mana  potions the character has.
-	 * <pre>Example:
-	 * {@code char.getMNPotion() may 0 or higher as there is no upper limit to potions held.
-	 * }</pre>
-	 * @return potions (int; the number of mana potions the character has)
-	 */
-	public int getMNPotion() {
-		return MNpotion;
-	}
-	/**
-	 * This is the setter method for the number of mana potions the character has.
-	 * <pre>Example:
-	 * {@code char.setMNPotion(3) will set the number of mana potions to 3
-	 * }</pre>
-	 * @param potions (int; the number of mana potions the character will now have)
-	 */
-	public void setMNPotion(int potions) {
-		MNpotion = potions;
-	}
+
 	/**
 	 * This is the getter method for the attack value of the character, which is the damage they do with an attack.
 	 * <pre>Example:
@@ -205,27 +170,95 @@ public class Character {
 	public void setDefense(int defense) {
 		this.defense = defense;
 	}
+	
+	
 	/**
-	 * This is the getter method for the defendCharge of the character which acts as a counter in combat for how long the defensive stance will remain effective.
+	 * This is the getter method for the defendBuff value of the character, which is a counter used to determine how long a buff has left 
+	 * (also used to determine if it is active at all)
 	 * <pre>Example:
-	 * {@code char.getDefendCharge() will return 0-4, 
-	 * as those are the maximum and minimum used values of this value.
+	 * {@code heor.getDefendBuff() might return 0-3 depending on how many turns the buff has left
 	 * }</pre>
-	 * @return defendCharge (int; how many rounds of combat the defensive stance has left)
+	 * @return (int; the current rounds left on the defend buff)
 	 */
-	public int getDefendCharge() {
-		return defendCharge;
+	public int getDefendBuff() {
+		return defendBuff;
 	}
 	/**
-	 * This is the setter method for the defendCharge of the character.
+	 * This is the setter method for the defendBuff value.
 	 * <pre>Example:
-	 * {@code char.setDefendCharge(4) will set the defendCharge value to 4
+	 * {@code hero.setDefendBuff(3) will set the defendBuff value to 3
 	 * }</pre>
-	 * @param defendCharge (int; the number of rounds the current defensive stance has left at the time of setting)
+	 * @param defendBuff (int; the value to set defendBuff to)
 	 */
-	public void setDefendCharge(int defendCharge) {
-		this.defendCharge = defendCharge;
+	public void setDefendBuff(int defendBuff) {
+		this.defendBuff = defendBuff;
 	}
+	
+	/**
+	 * This is the getter method for the attackBuff value of the character, which is a counter used to determine how long a buff has left 
+	 * (also used to determine if it is active at all)
+	 * <pre>Example:
+	 * {@code heor.getAttackBuff() might return 0-3 depending on how many turns the buff has left
+	 * }</pre>
+	 * @return (int; the current rounds left on the attack buff)
+	 */
+	public int getAttackBuff () {
+		return attackBuff;
+	}
+	/**
+	 * This is the setter method for the attackBuff value.
+	 * <pre>Example:
+	 * {@code hero.setAttackBuff(3) will set the attackBuff value to 3
+	 * }</pre>
+	 * @param attackBuff (int; the value to set attackBuff to)
+	 */
+	public void setAttackBuff(int attackBuff) {
+		this.attackBuff = attackBuff;
+	}
+	
+	/**
+	 * This is the getter method for the defendDebuff value which determines if the defendDebff is active or not
+	 * <pre>Example:
+	 * {@code hero.getDefendDebuff() might return 0 or 1 (0 is inactive, 1 is active)
+	 * }</pre>
+	 * @return (int; 1 or 0, if the defendDebuff is active or inactive)
+	 */
+	public int getDefendDebuff() {
+		return defendDebuff;
+	}
+	/**
+	 * This is the setter method for the defendDebuff value
+	 * <pre>Example:
+	 * {@code hero.setDefendDebuff(1) will set the defendDebuff value to 1
+	 * }</pre>
+	 * @param defendDebuff (int; the value to set defendDebuff to)
+	 */
+	public void setDefendDebuff(int defendDebuff) {
+		this.defendDebuff = defendDebuff;
+	}
+	
+	/**
+	 * This is the getter method for the attackDebuff value which determines if the attackDebuff is active or not
+	 * <pre>Example:
+	 * {@code hero.getAttackDebuff() might return 0 or 1 (0 is inactive, 1 is active)
+	 * }</pre>
+	 * @return (int; 1 or 0, if the attackDebuff is active or inactive)
+	 */
+	public int getAttackDebuff() {
+		return attackDebuff;
+	}
+	/**
+	 * This is the setter method for the attackDebuff value
+	 * <pre>Example:
+	 * {@code hero.setAttackDebuff(1) will set the attackDebuff value to 1
+	 * }</pre>
+	 * @param attackDebuff (int; the value to set attackDebuff to)
+	 */
+	public void setAttackDebuff(int attackDebuff) {
+		this.attackDebuff = attackDebuff;
+	}
+	
+
 	/**
 	 * This is the getter method for the map value, which acts as a key checker as well as allows the user to access the map.
 	 * <pre>Example:
@@ -287,8 +320,5 @@ public class Character {
 	public void setTutorial(boolean tutorial) {
 		this.tutorial = tutorial;
 	}
-	
-	
-	
 	
 }
