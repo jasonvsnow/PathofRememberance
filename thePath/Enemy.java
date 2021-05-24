@@ -109,7 +109,7 @@ public class Enemy {
 			}
 			else if (choice[0] == 1) {
 				if (hero.getDefendDebuff() > 0) {
-					//dispell defense buff
+					//dispel defense buff
 					hp -= 2;
 					defense += 2;
 					hero.setDefendDebuff(0);
@@ -120,7 +120,7 @@ public class Enemy {
 			}
 			else if (choice[0] == 2) {
 				if (hero.getAttackDebuff() > 0) {
-					//dispell attk buff
+					//dispel attack buff
 					hp -= 2;
 					attack += 2;
 					hero.setAttackDebuff(0);
@@ -176,7 +176,7 @@ public class Enemy {
 				hero.setDefendDebuff(0);
 				defense += 2;
 				hp -= 2;
-				toPrint += "Frustrated with your runes that leave it open to attack, your foe hunkers down before its own markings glow and dispell the ones you have placed upon it.\n";
+				toPrint += "Frustrated with your runes that leave it open to attack, your foe hunkers down before its own markings glow and dispel the ones you have placed upon it.\n";
 			}
 			else {
 				//dispellAttackDebuff
@@ -221,6 +221,8 @@ public class Enemy {
 	
 		return toPrint;
 	}
+
+
 	/**
 	 * This method is used to determine how an enemy will act in a given situation.
 	 * This is affectd by:
