@@ -9,7 +9,7 @@ I built this game because I've always enjoyed adventure games, their stories and
 ## How to Run
 I built and ran Path of Rememberance in the Eclipse IDE. Files in pathProject were simply in the project folder, those in src where in the src folder, and those in thePath were in thePath package folder. MapImage.png must be accesible to the package the java files are stored in from runtime, the other images must be accesible to the .css file which must be accesible to the java files. 
 
-Once the game is running, its rather self explanatory. 
+Once the game is running, it's rather self explanatory. 
 
 ## Code Example
 This code is the resize method I used to adjust the GUI whenever the player affected it (changed text settings, changed font size settings, adjusted the window size, etc.) as many of these actions affected so many parts it was most practical to create a handler like method which could be called should any adjustment need to be made and thus all adjustments that needed to be made surely would be- as they all were.
