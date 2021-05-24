@@ -32,10 +32,22 @@ public class Combat {
 		magicUsed = false;
 	}
 	
-	
+	/**
+	 * This method is used to start and handle fights. It returns an int to indicate the result of a fight (continue, player death, or enemy death).
+	 * It will have lines printed to make clear what is happening.
+	 * <pre>Example:
+	 * {@code combat.fight(hero, 1, 2) will process the current stage of the current turn of combat for the hero object with choice 1 enemy type 2 
+	 * (the enemy type is only used in the first turn of combat to set the enemy, type is stored by combat after)
+	 * }</pre>
+	 * @param hero (Character; the character object engaged in combat, the user representation)
+	 * @param choice (int; the choice the user made for the current stage of the current turn in combat (how to attack, what type of debuff to use, etc.)
+	 * @param type (int; the type of enemy to be fought (0-3))
+	 * @return result (int; the reuslt of combat (0 = defeat, 2 = victory, else = continuation) 
+	 */
 	public int fight(Character hero, int choice, int type) {
 		if (type == 0) {
-			return tutorial(hero, choice);
+			if (hero.isTutorial()) return tutorial(hero, choice);
+			else return 2;
 		}
 		
 		/*
@@ -66,7 +78,7 @@ public class Combat {
 			//combat continues
 			String activeMagic = "";
 			String previous = "";
-			if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendBuff() > 0) {
+			if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendDebuff() > 0) {
 				activeMagic += "(Active Magic:";
 				if (hero.getAttackBuff() > 0) {
 					activeMagic += " AttackBuff(" + hero.getAttackBuff() + ")";
@@ -106,7 +118,7 @@ public class Combat {
 		else if (result == 3) {
 			String activeMagic = "";
 			String previous = "";
-			if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendBuff() > 0) {
+			if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendDebuff() > 0) {
 				activeMagic += "(Active Magic:";
 				if (hero.getAttackBuff() > 0) {
 					activeMagic += " AttackBuff(" + hero.getAttackBuff() + ")";
@@ -139,7 +151,17 @@ public class Combat {
 		
 	}
 
-	
+	/**
+	 * This method is used to process the player turn. Called by the fight method, it will process the player's choices and calculate the results of them.
+	 * Lines are printed to show what is happening and make the player aware of what input is needed.
+	 * <pre>Example:
+	 * {@code processPlayerTurn(hero, 1) will assess choice 1 for player object hero in the current stage of the current turn and return the result
+	 * (the return is still mostly one sides death or continuation, but some continue states print different data from fight)
+	 * }</pre>
+	 * @param hero (Character; the object representing the player character in this combat)
+	 * @param choice (int; the choice the player made in this stage of this current combat)
+	 * @return result (int; the result of the fight)
+	 */
 	public int processPlayerTurn(Character hero, int choice) {
 		//player choice making has just started, must choose base action
 		if (decision == 0) {
@@ -162,7 +184,7 @@ public class Combat {
 					hero.setDefense(hero.getDefense()-1);
 					if (foe.getHP() > 0) {
 						toPrint("You sheathe your sword for a moment so you have your hand free. Holding it out towards your opponent, you think a single word: burn."
-								+ " Your opoonent ignites into flames for a brief moment, causing them to take " + hero.getAttack()+2 + " damage, though they quickly fade leaving your enemy burned.\n");
+								+ " Your opoonent ignites into flames for a brief moment, causing them to take " + (hero.getAttack()+2) + " damage, though they quickly fade leaving your enemy burned.\n");
 					}
 					else {
 						toPrint("You sheathe your sword and lunge at your opoonent. Using your dagger to open their defenses, you place your hand upon it; "
@@ -171,7 +193,10 @@ public class Combat {
 					//damage foe
 					attack = 4;
 				}
-				else return 5;
+				else {
+					toPrint("You cannot kill yourself with magic.\n");
+					return 5;
+				}
 			}
 			else if (choice == 3) {
 				if (!magicUsed && hero.getHP() > 3) {
@@ -188,6 +213,7 @@ public class Combat {
 								+ "3) Cancel\n"
 								+ "\n");
 						decision = 3;
+						return 5;
 					}
 					else {
 						toPrint("Both buffs are active.\n\n");
@@ -195,6 +221,7 @@ public class Combat {
 					}
 					
 				}
+				toPrint("You cannot kill yourself with magic.\n");
 				return 5;
 			}
 			else if (choice == 4) {
@@ -211,12 +238,14 @@ public class Combat {
 								+ "3) Cancel\n"
 								+ "\n");
 						decision = 4;
+						return 5;
 					}
 					else { 
 						toPrint("Both debuffs are active.\n\n");
 						return 1;
 					}
 				}
+				toPrint("You cannot kill yourself with magic.\n");
 				return 5;
 			}
 		}
@@ -492,25 +521,12 @@ public class Combat {
 		}
 		//end combat if foe is defeated
 		else {
-			if (attack == 2) {
-				hero.setDefense(hero.getDefense()-3);
-			}
-			else if (attack == 3) {
-				hero.setDefense(hero.getDefense()+2);
-			}
-			else if (attack == 4) {
-				hero.setDefense(hero.getDefense()+1);
-			}
-			if (hero.getAttackBuff() > 0) {
-				hero.setAttackBuff(0);
-				hero.setAttack(hero.getAttack()-2);
-			}
-			if (hero.getDefendBuff() > 0) {
-				hero.setDefendBuff(0);
-				hero.setDefense(hero.getDefense()-2);
-			}
-			hero.setAttackDebuff(0);
+			hero.setAttack(6);
+			hero.setDefense(2);
+			hero.setAttackBuff(0);
 			hero.setDefendBuff(0);
+			hero.setAttackDebuff(0);
+			hero.setDefendDebuff(0);
 			attack = 0;
 			magicUsed = false;
 			return 2;
@@ -549,13 +565,25 @@ public class Combat {
 		}
 		else {
 			//hero has perished
+			hero.setAttack(6);
+			hero.setDefense(2);
+			hero.setAttackDebuff(0);
+			hero.setDefendDebuff(0);
+			hero.setAttackBuff(0);
+			hero.setDefendBuff(0);
 			attack = 0;
 			magicUsed = false;
 			return 0;
 		}
 	}
 
-
+	/**
+	 * This method is used to handle the tutorial, a unique combat scenario the player encounters when they first play through the game. This can be disabled prior to skip it.
+	 * The tutorial mimics a normal combat but limits the players choices to predetermined actions.
+	 * @param hero (Character; the object represnting the character as they learn about the game via the tutorial)
+	 * @param choice (int; the choice the character made)
+	 * @return (int; the result of the player's choice, it will always be a continuation until the last step. The player cannot die in the tutorial)
+	 */
 	public int tutorial(Character hero, int choice) {
 		if (step == 0) {
 			if (choice == 3) {
@@ -650,6 +678,7 @@ public class Combat {
 				toPrint("You summon that power within you and cause a series of runes and shapes to cover your foe, leaving them weak and open to attack.\n\n");
 				hero.setHP(hero.getHP()-5);
 				hero.setDefendDebuff(1);
+				hero.setHPPotion(3);
 				toPrint("\n(Good job! Now before we finish this weakling off, let's heal with some potions. You can drink as many potions as you want at any time, so stock up on these bad boys. After you're at full health (50) finsih this fight wiht a heavy attack.)\n\n");
 				String activeMagic = "";
 				String previous = "";
@@ -707,8 +736,11 @@ public class Combat {
 				toPrint("You are victorious!\n");
 				toPrint("From the place your foe fell, a ghost-like silver coin floats up and drift towards you, fading with a soft whoosh as it touches you.\n");
 				hero.setCoins(hero.getCoins()+1);
-				toPrint("\n(You did it! Now you know all there is to combat. Good luck and be victorious!)\n\n");
+				toPrint("\n(You did it! Now you know all there is to combat. The message describing the room you were entering will now show and you may continue on with your tale. Good luck and be victorious!)\n\n");
 				hero.setTutorial(false);
+				hero.setDefendBuff(0);
+				hero.setDefendDebuff(0);
+				hero.setDefense(2);
 				init = false;
 				return 2;
 			}

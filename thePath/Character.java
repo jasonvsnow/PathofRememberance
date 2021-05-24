@@ -20,7 +20,6 @@ public class Character {
 	private int attackDebuff;
 	private boolean map;
 	private boolean captainKey;
-	private int foodScrap;
 	private boolean tutorial;
 	
 	/**
@@ -42,7 +41,6 @@ public class Character {
 		attackDebuff = 0;
 		map = false;
 		captainKey = false;
-		foodScrap = 0;
 		tutorial = true;
 	}
 	/**
@@ -174,51 +172,93 @@ public class Character {
 	}
 	
 	
-	
+	/**
+	 * This is the getter method for the defendBuff value of the character, which is a counter used to determine how long a buff has left 
+	 * (also used to determine if it is active at all)
+	 * <pre>Example:
+	 * {@code heor.getDefendBuff() might return 0-3 depending on how many turns the buff has left
+	 * }</pre>
+	 * @return (int; the current rounds left on the defend buff)
+	 */
 	public int getDefendBuff() {
 		return defendBuff;
 	}
-	
-	
+	/**
+	 * This is the setter method for the defendBuff value.
+	 * <pre>Example:
+	 * {@code hero.setDefendBuff(3) will set the defendBuff value to 3
+	 * }</pre>
+	 * @param defendBuff (int; the value to set defendBuff to)
+	 */
 	public void setDefendBuff(int defendBuff) {
 		this.defendBuff = defendBuff;
 	}
 	
+	/**
+	 * This is the getter method for the attackBuff value of the character, which is a counter used to determine how long a buff has left 
+	 * (also used to determine if it is active at all)
+	 * <pre>Example:
+	 * {@code heor.getAttackBuff() might return 0-3 depending on how many turns the buff has left
+	 * }</pre>
+	 * @return (int; the current rounds left on the attack buff)
+	 */
 	public int getAttackBuff () {
 		return attackBuff;
 	}
+	/**
+	 * This is the setter method for the attackBuff value.
+	 * <pre>Example:
+	 * {@code hero.setAttackBuff(3) will set the attackBuff value to 3
+	 * }</pre>
+	 * @param attackBuff (int; the value to set attackBuff to)
+	 */
 	public void setAttackBuff(int attackBuff) {
 		this.attackBuff = attackBuff;
 	}
 	
+	/**
+	 * This is the getter method for the defendDebuff value which determines if the defendDebff is active or not
+	 * <pre>Example:
+	 * {@code hero.getDefendDebuff() might return 0 or 1 (0 is inactive, 1 is active)
+	 * }</pre>
+	 * @return (int; 1 or 0, if the defendDebuff is active or inactive)
+	 */
 	public int getDefendDebuff() {
 		return defendDebuff;
 	}
+	/**
+	 * This is the setter method for the defendDebuff value
+	 * <pre>Example:
+	 * {@code hero.setDefendDebuff(1) will set the defendDebuff value to 1
+	 * }</pre>
+	 * @param defendDebuff (int; the value to set defendDebuff to)
+	 */
 	public void setDefendDebuff(int defendDebuff) {
 		this.defendDebuff = defendDebuff;
 	}
 	
+	/**
+	 * This is the getter method for the attackDebuff value which determines if the attackDebuff is active or not
+	 * <pre>Example:
+	 * {@code hero.getAttackDebuff() might return 0 or 1 (0 is inactive, 1 is active)
+	 * }</pre>
+	 * @return (int; 1 or 0, if the attackDebuff is active or inactive)
+	 */
 	public int getAttackDebuff() {
 		return attackDebuff;
 	}
+	/**
+	 * This is the setter method for the attackDebuff value
+	 * <pre>Example:
+	 * {@code hero.setAttackDebuff(1) will set the attackDebuff value to 1
+	 * }</pre>
+	 * @param attackDebuff (int; the value to set attackDebuff to)
+	 */
 	public void setAttackDebuff(int attackDebuff) {
 		this.attackDebuff = attackDebuff;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * This is the getter method for the map value, which acts as a key checker as well as allows the user to access the map.
 	 * <pre>Example:
@@ -280,14 +320,5 @@ public class Character {
 	public void setTutorial(boolean tutorial) {
 		this.tutorial = tutorial;
 	}
-	public int isFoodScrap() {
-		return foodScrap;
-	}
-	public void setFoodScrap(int foodScrap) {
-		this.foodScrap = foodScrap;
-	}
-	
-	
-	
 	
 }

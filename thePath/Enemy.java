@@ -50,6 +50,17 @@ public class Enemy {
 		}
 	}
 	
+	/**
+	 * This method calls enemyBehavior() to determine what the enemy will do. 
+	 * Then it processes that action modifying the hero object as necessary as well as the held stats, then returns a string representing what happened.
+	 * <pre>Example:
+	 * {@code enemy.enemyAction(hero, 1) will process the enemy actions for if Character object hero made an attack 1 (standard attack) against the foe object.
+	 * It will then return a string such as "The enemy did X" 
+	 * }</pre>
+	 * @param hero (Character; the character object the enemy is fighting, represents the player)
+	 * @param attackChoice (int; the last attack the hero made, determines actions the enemy will take)
+	 * @return toPrint (String; the representation of what occurred on the enemy's turn)
+	 */
 	public String enemyAction(Character hero, int attackChoice) {
 		String toPrint = "";
 		int[] choice = enemyBehavior(hero, attackChoice);
@@ -88,33 +99,40 @@ public class Enemy {
 			//magic
 			if (choice[0] == 0) {
 				//attack buff
-				hp -= 2;
-				buffAttack = 3;
-				attack += 2;
-				toPrint += "The creature shrieks and writhes in pain as glowing green veins appear across its body."
-						+ " It's claws begin to glow with a soft green as it stops and lunges at you once more.\n";
+				if (buffAttack == 0) {
+					hp -= 2;
+					buffAttack = 3;
+					attack += 2;
+					toPrint += "The creature shrieks and writhes in pain as glowing green veins appear across its body."
+							+ " It's claws begin to glow with a soft green as it stops and lunges at you once more.\n";
+				}
 			}
 			else if (choice[0] == 1) {
-				//dispell defense buff
-				hp -= 2;
-				defense += 2;
-				hero.setDefendDebuff(0);
-				toPrint += "The creature snarls at the runes you have caused to appear on it and it slashes at them, cutting into its own skin to ruin the design. "
-						+ "While brutal, it is effective and your debuff upon its defenses comes to an end before it lashes out at you again.\n";
+				if (hero.getDefendDebuff() > 0) {
+					//dispell defense buff
+					hp -= 2;
+					defense += 2;
+					hero.setDefendDebuff(0);
+					toPrint += "The creature snarls at the runes you have caused to appear on it and it slashes at them, cutting into its own skin to ruin the design. "
+							+ "While brutal, it is effective and your debuff upon its defenses comes to an end before it lashes out at you again.\n";
+			
+				}
 			}
 			else if (choice[0] == 2) {
-				//dispell attk buff
-				hp -= 2;
-				attack += 2;
-				hero.setAttackDebuff(0);
-				toPrint += "The creature struggles across the chains that hamper its ability to fight before beginning to glow a soft green."
-						+ " The spectral chains suddenly snap and fall to the floor before the creature lashes out again.\n";
+				if (hero.getAttackDebuff() > 0) {
+					//dispell attk buff
+					hp -= 2;
+					attack += 2;
+					hero.setAttackDebuff(0);
+					toPrint += "The creature struggles across the chains that hamper its ability to fight before beginning to glow a soft green."
+							+ " The spectral chains suddenly snap and fall to the floor before the creature lashes out again.\n";
+				}
 			}
 			int damage = attack-hero.getDefense();
 			if (damage < 0) damage = 0;
 			if (damage > 0) toPrint += "The creature slashes with " + choice[1] + " claws, dealing " + damage + " damage with each one for a total of "
 					+ damage*choice[1] + " damage.\n";
-			else toPrint += "The creature unleashes an assault of " + choice[1] + " four rapid attacks upon you but you fend off any real damage and escape unharmed.\n";
+			else toPrint += "The creature unleashes an assault of " + choice[1] + " rapid attacks upon you but you fend off any real damage and escape unharmed.\n";
 			hero.setHP(hero.getHP()- (damage*choice[1]));
 			defense -= choice[1];
 			if (defense < 0) defense = 0;
@@ -203,8 +221,19 @@ public class Enemy {
 	
 		return toPrint;
 	}
-	
-	public int[] enemyBehavior(Character hero, int attackChoice) {
+	/**
+	 * This method is used to determine how an enemy will act in a given situation.
+	 * This is affectd by:
+	 * Player health, enemy health, debuffs active on both player and enemy, buffs active on both enemy and player, and the player's last attack
+	 * <pre>Example:
+	 * {@code enemyBehavior(hero, 1) will return an array {x, y} 
+	 * Which holds the enemy actions based off Character object hero making an attack type 1 (standard attack)
+	 * }</pre>
+	 * @param hero (Character; the representation of the player the enemy is fighting)
+	 * @param attackChoice (int; the last attack made by the player)
+	 * @return choice (int[]; an array of {x, y} where x is the magic choice, if any, of the enemy and y is the attack choice)
+	 */
+	private int[] enemyBehavior(Character hero, int attackChoice) {
 		int[] choice = {-1, 0};
 		int heavyAttack = 0;
 		int standardAttack = 0;
@@ -258,7 +287,7 @@ public class Enemy {
 			choice[1] = chosen;
 		}
 		else if (type == 2) {
-			int many = (int)((Math.random()*4)+1);
+			int many = (int)((Math.random()*3)+1);
 			choice[1] = many;
 			
 			
@@ -559,40 +588,122 @@ public class Enemy {
 		return reward;
 	}
 	
+	/**
+	 * The getter method for buffAttack, the counter for the attack buff.
+	 * Used to determine how long the buff has left to remain active and if it is active.
+	 * <pre>Example:
+	 * {@code enemy.getBuffAttack() will return 0-3
+	 * }</pre>
+	 * @return buffAttack (int; the counter for the attack buff)
+	 */
 	public int getBuffAttack() {
 		return buffAttack;
 	}
+	/**
+	 * The setter method for buffAttack, will set the value for buffAttack
+	 * <pre>Example:
+	 * {@code enemy.setBuffAttack(1) will set buffAttack to 1
+	 * }</pre>
+	 * @param buffAttack (int; the value to set buffAttack to)
+	 */
 	public void setBuffAttack(int buffAttack) {
 		this.buffAttack = buffAttack;
 	}
 	
+	/**
+	 * The getter method for buffDefense, the counter for the defense buff.
+	 * Used to determine how long the buff has left to remain active and if it is active.
+	 * <pre>Example:
+	 * {@code enemy.getBuffDefense() will return 0-3
+	 * }</pre>
+	 * @return buffDefense (int; the counter for the defense buff)
+	 */
 	public int getBuffDefense() {
 		return buffDefense;
 	}
+	/**
+	 * The setter method for buffDefense, will set the value for buffDefense
+	 * <pre>Example:
+	 * {@code enemy.setBuffDefense(1) will set buffDefense to 1
+	 * }</pre>
+	 * @param buffDefense (int; the value to set buffDefense to)
+	 */
 	public void setBuffDefense(int buffDefense) {
 		this.buffDefense = buffDefense;
 	}
 	
+	/**
+	 * The getter method for debuffDefense, the counter for the defense debuff.
+	 * Used to determine how long the debuff has left to remain active and if it is active.
+	 * <pre>Example:
+	 * {@code enemy.getDebuffDefense() will return 0-3
+	 * }</pre>
+	 * @return debuffDefense (int; the counter for the defense debuff)
+	 */
 	public int getDebuffDefense() {
 		return debuffDefense;
 	}
+	/**
+	 * The setter method for debuffDefense, will set the value for debuffDefense
+	 * <pre>Example:
+	 * {@code enemy.setDebuffDefense(1) will set debuffDefense to 1
+	 * }</pre>
+	 * @param debuffDefense (int; the value to set debuffDefense to)
+	 */
 	public void setDebuffDefense(int debuffDefense) {
 		this.debuffDefense = debuffDefense;
 	}
 	
+	/**
+	 * The getter method for debuffAttack, the counter for the attack debuff.
+	 * Used to determine how long the debuff has left to remain active and if it is active.
+	 * <pre>Example:
+	 * {@code enemy.getDebuffAttack() will return 0-3
+	 * }</pre>
+	 * @return debuffAttack (int; the counter for the attack debuff)
+	 */
 	public int getDebuffAttack() {
 		return debuffAttack;
 	}
+	/**
+	 * The setter method for debuffAttack, will set the value for debuffAttack
+	 * <pre>Example:
+	 * {@code enemy.setDebuffAttack(1) will set debuffAttack to 1
+	 * }</pre>
+	 * @param debuffAttack (int; the value to set debuffAttack to)
+	 */
 	public void setDebuffAttack(int debuffAttack) {
 		this.debuffAttack = debuffAttack;
 	}
 	
+	/**
+	 * The getter method for lastAttack, the attack last made by the enemy
+	 * <pre>Example:
+	 * {@code enemy.getLastAttack() will return 1-3
+	 * }</pre>
+	 * @return lastAttack (int; the attack last made by the enemy)
+	 */
 	public int getLastAttack() {
 		return lastAttack;
 	}
+	/**
+	 * The setter method for the lastAttack value.
+	 * <pre>Example:
+	 * {@code enemy.setLastAttack(1) will set lastAttack value to 1
+	 * }</pre>
+	 * @param lastAttack (int; the value to set lastAttack to)
+	 */
 	public void setLastAttack(int lastAttack) {
 		this.lastAttack = lastAttack;
 	}
+	
+	/**
+	 * The getter method for the enemy type.
+	 * <pre>Example:
+	 * ({@code enemy.getType() will return 0-3
+	 * }</pre>
+	 * @return type (int; the type of enemy the enemy object is)
+	 */
 	public int getType() {
 		return type;
 	}

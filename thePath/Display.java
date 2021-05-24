@@ -31,16 +31,6 @@ import javafx.event.*;
  * @author Jason Snow
  *
  */
-/*
- * + shop description and interactions
- * + enemy actions
- * + redesign tutorial
- * + list the defense and attack values as the result of an attack
- * + list the player damage
- * 
- * 
- * 
- */
 public class Display extends Application {
 	private static TextArea text = new TextArea();
 	private static StatPane stats = new StatPane();
@@ -98,6 +88,7 @@ public class Display extends Application {
 	private static Label txtSize = new Label("Text Size: ");
 	private static Label txtFont = new Label("Text Font: ");
 	private static Label txtSpeed = new Label("Text Speed: ");
+
 	
 	/**
 	 * The setMap method is used to allow the Character class to change the observable property bindMap in the Display class
@@ -432,6 +423,7 @@ public class Display extends Application {
 		});
 		
 		
+		
 		Scene scene = new Scene(tabPane, 700, 500);
 		primaryStage.setTitle("The Path of Rememberance");
 		primaryStage.setScene(scene);
@@ -446,20 +438,57 @@ public class Display extends Application {
 		start.setOnAction(e -> {
 				pane.setBottom(buttonHolder);
 				pane.setTop(stats);
-				if (game.isMap()) game.restart();
-				else game = new Game();
+				if (game.isMap()) {
+					game.restart();
+					game.room(-1, 0);
+				}
+				else {
+					game = new Game();
+					game.room(0, 0);
+				}
 				statUpdate();
-				game.room(-1, 0);
 		});
 		
 		bt1.setOnAction(e -> {
-				if (room != 100) {
+				if (room != 100 && room != 9) {
 					room = game.room(room, 1);
 					statUpdate();
 				}
+				else if (room == 9) {
+					speed = "slow";
+					text.clear();
+					print("You muster your strength as you approach the window. Raising up your blade, you slash and hack away the growths until the window is revealed. " 
+							+ "Light streams in through the window and as you look out you see bright blue skies above. Crawling out of the window, you drop down to the grass below. "
+							+ "You are out. You are free. It's going to be alright.\n"
+							+ "\n"
+							+ "Thank you for playing.");
+					pane.setTop(null);
+					pane.setBottom(null);
+					tabPane.getTabs().remove(mapTab);
+					tabPane.getTabs().remove(settingsTab);
+					stacker.getChildren().add(fadeAway);
+					text.setId("text-area");
+					new Thread(() ->  {
+						try {
+							Thread.sleep(15000);
+						} catch (InterruptedException e1) {
+							
+						}
+						ft.play();
+					}).start();
+					
+					new Thread(() ->  {
+						try {
+							Thread.sleep(20000);
+						} catch (InterruptedException e1) {
+							
+						}
+						System.exit(0);
+					}).start();
+				}
 				else {
 					print("You decide to push on.\n\n");
-					room = 0;
+					room = 1;
 					pane.setTop(null);
 					pane.setBottom(start);
 					
@@ -467,17 +496,44 @@ public class Display extends Application {
 		});
 		
 		bt2.setOnAction(e -> {
-			if (room != 100) {
+			if (room != 100 && room != 9) {
 				room = game.room(room, 2);
 				statUpdate();
+			}
+			else if (room == 9) {
+				speed = "slow";
+				text.clear();
+				print("You turn away from the window, for whatever reason choosing to remain in this place. As you step into the hallway once more, you feel a finality in that choice. You will remain.\n"
+						+ "\n"
+						+ "Thank you for playing.");
+				pane.setTop(null);
+				pane.setBottom(null);
+				tabPane.getTabs().remove(mapTab);
+				tabPane.getTabs().remove(settingsTab);
+				stacker.getChildren().add(fadeAway);
+				text.setId("text-area");
+				new Thread(() ->  {
+					try {
+						Thread.sleep(8000);
+					} catch (InterruptedException e1) {
+						
+					}
+					ft.play();
+				}).start();
+				
+				new Thread(() ->  {
+					try {
+						Thread.sleep(14000);
+					} catch (InterruptedException e1) {
+						
+					}
+					System.exit(0);
+				}).start();
 			}
 			else {
 				text.clear();
 				speed = "slow";
-				print("And so, you give into the darkness. You feel its"
-						+ " "
-						+ "And here we spam a bunch of stuff as a test to see how well this all works but ig the effect is lost with instant text maybe we should remove that tbh.");
-				
+				print("And so, you give into the darkness. You feel yourself slowly surround you, suffocating you, as the fire of your life dims away.");
 				pane.setTop(null);
 				pane.setBottom(null);
 				tabPane.getTabs().remove(mapTab);
@@ -485,9 +541,7 @@ public class Display extends Application {
 				stacker.getChildren().add(fadeAway);
 				text.setId("text-area");
 				ft.play();
-				
-				
-				
+			
 				new Thread(() ->  {
 					try {
 						Thread.sleep(5000);
@@ -523,6 +577,12 @@ public class Display extends Application {
 
 		
 	}
+	/**
+	 * This method is used almost like a handler, called by various watchers or listeners or actions. It sets the GUI to the proper settings and sizes.
+	 * <pre>Example:
+	 * {@code resize() will adjust the stat sizes, the button sizes, make sure font is the right type, etc. etc.
+	 * }</pre>
+	 */
 	public void resize() {
 		Double modifier = 40-buttonSize.getValue();
 		Double setbtSize = height.get()/modifier;
@@ -693,7 +753,6 @@ class StatPane extends HBox {
 	 * @param attack (int; the current attack value of the character object in the game object)
 	 * @param defense (int; the current defense value of the character object in the game object)
 	 * @param hppotions (int: the current number of health potions of the character object in the game object) 
-	 * @param mnpotions (int; the current number of mana potions of the character object in the game object)
 	 */
 	public void setStats(int hp, int coins, int attack, int defense, int hppotions) {
 		hpString = "HP: " + hp;
