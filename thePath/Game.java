@@ -171,7 +171,7 @@ public class Game {
 				
 				hero.setHP(hero.getHP()-1);
 				toPrint("\tYou open your eyes and find yourself laying on a slab of hard material that appears to be obsidian. "
-						+ "The stone walls and floor fo the room are covered in scorch marks ash stains. "
+						+ "The stone walls and floor of the room are covered in scorch marks ash stains. "
 						+ "There is a door out of the room as well as a table nearby with a map and key upon it, as well as a sword and dagger; "
 						+ "both of which are made of the same material as the table upon which you awoke.\n");
 				hero.setRoom(1); //set to awakening room
@@ -384,7 +384,7 @@ public class Game {
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				toPrint("The training room is seperated only by an archway you walk through, having to step over a large, pulsing sack of the green goo taking up much of the space.\n");
+				toPrint("The training room is separated only by an archway you walk through, having to step over a large, pulsing sack of the green goo taking up much of the space.\n");
 				hero.setRoom(7);
 				type = (int)(Math.random()*3);
 				if (type > 0) combatStarter(type);
@@ -399,7 +399,7 @@ public class Game {
 			}
 			else if (choice == 4) {
 				if (hero.isCaptainKey()) {
-					toPrint("Using the key you got from the shop keeper, you slide it into the door and with a click hear it unlock. You push the door opena and step inside.");
+					toPrint("Using the key you got from the shopkeeper, you slide it into the door and with a click hear it unlock. You push the door open and step inside.");
 					type = 3;
 					combatStarter(type);
 				}
@@ -442,7 +442,7 @@ public class Game {
 				else enterRoom();
 			}
 			else if (choice == 2) {
-				toPrint("You serach the area for some food and find some that is, miraculously, still fresh. "
+				toPrint("You search the area for some food and find some that is, miraculously, still fresh. "
 						+ "The hunger in your belly drives you to throw away a little caution and take the risk of eating it.\n");
 				if (hero.getHP() < 25) hero.setHP(25);
 				toPrint("1) Go to the hallway\n"
@@ -494,6 +494,7 @@ public class Game {
 		return reRoom;
 	}
 
+
 		
 	/**
 	 * This method is used when combat begins (typically by entering a room). It will display the opening message as appropriate to the type of enemy being fought and then set the room to room 8, which is the room that handles combat. It then prints the first set of choices for a combat, as the set up of this program requires.
@@ -506,7 +507,7 @@ public class Game {
 		reRoom = 8;
 		if (seed == 0) {
 			toPrint("A noise sounds nearby and you look to see a rotten, shambling body stumble towards you, skin pale and lifeless, eyes sunken and gone.\n"
-					+ "(Combat has started! After an enemy is introduced, the following messsage will display to show you your combat options)"
+					+ "(Combat has started! After an enemy is introduced, the following message will display to show you your combat options)"
 				
 					+ "\n");
 		}
@@ -537,8 +538,9 @@ public class Game {
 				+ "3) Buff yourself(3 hp)\n"
 				+ "4) Debuff enemy(5 hp)\n"
 				+ "\n");
-		if (seed == 0) toPrint("(As you can see, the magic you can use will cost certain amounts of your life. Lets start off using a buff. Click the \"3\" button to proceed)\n");
+		if (seed == 0) toPrint("(As you can see, the magic you can use will cost certain amounts of your life. Let's start off using a buff. Click the \"3\" button to proceed)\n");
 	}
+
 	/**
 	 * This method is a solution to the issues I encountered with loops in the Display class. Past versions of this game had, essentially, a guarded loop that would continue until the player finished. However, if a loop doesn't close the Display class will never update, it just all freezes up.
 	 * As a result, the format requires that any information as a result of a choice (including what options are now available as a result) must be displayed before the next choice can be made. Not super complicated but if two rooms ever led to the same room, both would have to display the same message for entering that room once the player did.
@@ -624,7 +626,7 @@ public class Game {
 					+ "\n");
 		}
 		else if (reRoom == 9) {
-			toPrint("\tAs you enter the captian's chamber, you see a window blocked up by the green material. The well made bed, the cluttered desk, the chest locked in the corner, it all seems to fade away as you gaze upon the window.\n"
+			toPrint("\tAs you enter the captain's chamber, you see a window blocked up by the green material. The well made bed, the cluttered desk, the chest locked in the corner, it all seems to fade away as you gaze upon the window.\n"
 					+ "1) Break out the window, escape.\n"
 					+ "2) Return to the hallway, remain.\n"
 					+ "\n");
@@ -641,6 +643,7 @@ public class Game {
 					+ "\n");
 		}
 	}
+
 	/**
 	 * This method is used to gather all the text this class will need displayed and store it in a variable until it is needed.
 	 * <pre>Example:

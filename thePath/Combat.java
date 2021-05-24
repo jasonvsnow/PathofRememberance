@@ -183,11 +183,11 @@ public class Combat {
 					hero.setHP(hero.getHP()-3);
 					hero.setDefense(hero.getDefense()-1);
 					if (foe.getHP() > 0) {
-						toPrint("You sheathe your sword for a moment so you have your hand free. Holding it out towards your opponent, you think a single word: burn."
-								+ " Your opoonent ignites into flames for a brief moment, causing them to take " + (hero.getAttack()+2) + " damage, though they quickly fade leaving your enemy burned.\n");
+						toPrint("You sheathe your sword for a moment so you have your hand free. Holding it out towards your opponent, you think of a single word: burn."
+								+ " Your opponent ignites into flames for a brief moment, causing them to take " + (hero.getAttack()+2) + " damage, though they quickly fade leaving your enemy burned.\n");
 					}
 					else {
-						toPrint("You sheathe your sword and lunge at your opoonent. Using your dagger to open their defenses, you place your hand upon it; "
+						toPrint("You sheathe your sword and lunge at your opponent. Using your dagger to open their defenses, you place your hand upon it; "
 								+ "your foe bursts into flames, howling as it is consumed by the heat and reduced to ash.\n");
 					}
 					//damage foe
@@ -263,15 +263,15 @@ public class Combat {
 				}
 				else {
 					if (foe.getType() == 1) {
-						toPrint("You bring your sword down upon the zombie's weapon arm, severing it and cuasing the old blade to fall to the floor. "
+						toPrint("You bring your sword down upon the zombie's weapon arm, severing it and causing the old blade to fall to the floor. "
 								+ "The creature is stunned before your dagger jabs into it and finishes the job; the corpse falls back, little more than a body now.\n");
 					}
 					else if (foe.getType() == 2) {
-						toPrint("You slash with your sword which the creature catches with all four arms, seeming rather satisfied with itself, until your bring your dagger up into the side of its head. "
+						toPrint("You slash with your sword which the creature catches with all four arms, seeming rather satisfied with itself, until you bring your dagger up into the side of its head. "
 								+ "The body slowly slumps before crumbling down upon the ground.\n");
 					}
 					else {
-						toPrint("The brute raises its axes to bring a heavy attack down upon you but your interuppt with a slash across the gut, followed by a dagger to the side. "
+						toPrint("The brute raises its axes to bring a heavy attack down upon you but you interrupt with a slash across the gut, followed by a dagger to the side. "
 								+ "The monster is stunned before the marks upon it begin to glow bright; in a flash of green, the figure vanishes.\n");
 					}
 				}
@@ -313,22 +313,22 @@ public class Combat {
 				if (damage < 0) damage = 0;
 				foe.setHP(foe.getHP()-damage); 
 				if (foe.getHP() > 0) {
-					if (damage > 0) toPrint("You thrust foward with your sword, stabbing into the opponent before you for " + damage + " damge, leaving yourself open as you do.\n");
+					if (damage > 0) toPrint("You thrust forward with your sword, stabbing into the opponent before you for " + damage + " damage, leaving yourself open as you do.\n");
 					else toPrint("You thrust forward without regard for your own defense, but your blade does not manage to pierce the defenses of your foe.\n");
 				}
 				else {
 					if (foe.getType() == 1) {
-						toPrint("Giving a shout, you pierce the undead right through the chest, twisting your blade before ripping it out for a deep, devestating cut that leaves the corpse slumped upon the ground."
+						toPrint("Giving a shout, you pierce the undead right through the chest, twisting your blade before ripping it out for a deep, devastating cut that leaves the corpse slumped upon the ground."
 								+ "\n");
 					}
 					else if (foe.getType() == 2) {
-						toPrint("You bring your blade down in a heavy strike. All four arms reach up to stop it but the sheet force of the attack cuts through them before the blade sinks into the creature's head;"
+						toPrint("You bring your blade down in a heavy strike. All four arms reach up to stop it but the sheer force of the attack cuts through them before the blade sinks into the creature's head;"
 								+ " the thing goes limp and is a threat no more."
 								+ "\n");
 					}
 					else {
-						toPrint("Summoning all of your power and energy, you slash across the mosnter's leg, causing it to drop to one knee in pain. "
-								+ "With the head now in easy reach, it takes only one quick swipe to seperate it from the shoulders. "
+						toPrint("Summoning all of your power and energy, you slash across the monster's leg, causing it to drop to one knee in pain. "
+								+ "With the head now in easy reach, it takes only one quick swipe to separate it from the shoulders. "
 								+ "The tattoos of your foe's corpse glow before the entire form fades away, vanished into thin air.\n");
 					}
 				}
@@ -375,7 +375,7 @@ public class Combat {
 			else if (choice == 2) {
 				if (hero.getDefendBuff() == 0) {
 					//player has chosen to buff their defense
-					toPrint("You cross your blades and convert some of your life into a fainy, shimmering red field around you that will aid to defend you.\n\n");
+					toPrint("You cross your blades and convert some of your life into a faint, shimmering red field around you that will aid to defend you.\n\n");
 					//set stats
 					hero.setHP(hero.getHP()-3);
 					hero.setDefendBuff(3);
@@ -499,7 +499,7 @@ public class Combat {
 			if (foe.getDebuffDefense() > 0) {
 				foe.setDebuffDefense(foe.getDebuffDefense()-1);
 				if (foe.getDebuffDefense() == 0) {
-					toPrint("Your feet suddenly feel lighter and you can move more nimbly to avoid daamge, the magic having worn off.\n");
+					toPrint("Your feet suddenly feel lighter and you can move more nimbly to avoid damage, the magic having worn off.\n");
 					hero.setDefense(hero.getDefense()+2);
 				}
 			}
@@ -592,7 +592,7 @@ public class Combat {
 						+ "2) Buff defense\n"
 						+ "3) Cancel\n"
 						+ "\n");
-				toPrint("\n(Good job! Now you can choose a buff to apply, or you can cancel and make a different choice. Let's choose to buff our defense so when the enemy attacks we're well protected)\n\n");
+				toPrint("\n(Good job! Now you can choose a buff to apply, or you can cancel and make a different choice. Let's choose to buff our defense so when the enemy attacks we’re well protected)\n\n");
 				step += 1;
 				return 1;
 			}
@@ -601,7 +601,7 @@ public class Combat {
 		
 		if (step == 1) {
 			if (choice == 2) {
-				toPrint("You cross your blades and convert some of your life into a fainy, shimmering red field around you that will aid to defend you.\n\n");
+				toPrint("You cross your blades and convert some of your life into a faint, shimmering red field around you that will aid to defend you.\n\n");
 				hero.setDefense(hero.getDefense()+2);
 				hero.setDefendBuff(3);
 				hero.setHP(hero.getHP()-3);
@@ -653,7 +653,7 @@ public class Combat {
 						+ "3) Buff yourself(3 hp)\n"
 						+ "4) Debuff enemy(5 hp)\n"
 						+ "\n");
-				toPrint("\n(Since a turn passed, you're that much closer to your defense buff going away. Keep that in mind! For now, lets debuff the enemies defense so we can kill it more quickly (debuffs will not go away unless your enemy uses magic to dispell it, which will cost it life and use up its chance to do magic that turn))\n\n");
+				toPrint("\n(Since a turn passed, you're that much closer to your defense buff going away. Keep that in mind! For now, lets debuff the enemies defense so we can kill it more quickly (debuffs will not go away unless your enemy uses magic to dispel it, which will cost it life and use up its chance to do magic that turn))\n\n");
 				step += 1;
 				return 1;
 			}
@@ -679,7 +679,7 @@ public class Combat {
 				hero.setHP(hero.getHP()-5);
 				hero.setDefendDebuff(1);
 				hero.setHPPotion(3);
-				toPrint("\n(Good job! Now before we finish this weakling off, let's heal with some potions. You can drink as many potions as you want at any time, so stock up on these bad boys. After you're at full health (50) finsih this fight wiht a heavy attack.)\n\n");
+				toPrint("\n(Good job! Now before we finish this weakling off, let's heal with some potions. You can drink as many potions as you want at any time, so stock up on these bad boys. After you're at full health (50) finish this fight with a heavy attack.)\n\n");
 				String activeMagic = "";
 				String previous = "";
 				if (hero.getDefendBuff() > 0 || hero.getAttackBuff() > 0 || hero.getAttackDebuff() > 0 || hero.getDefendBuff() > 0) {
@@ -750,6 +750,7 @@ public class Combat {
 			return 5;
 		}
 	}
+
 	
 	/**
 	 * This is the getter method for the init value (short for initiative) which represents whether a fight has started or not.
